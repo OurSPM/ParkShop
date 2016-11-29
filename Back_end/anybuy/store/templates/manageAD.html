@@ -1,0 +1,226 @@
+{% extends "sellerbase.html" %}
+{% block title %}Manage Advertisement{% endblock %}
+
+{% block sellercontent %}
+
+<script type="text/javascript">
+    function changestate(id) {
+        xmlhttp=new XMLHttpRequest();
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+{#                $('#item'+id.toString()).fadeOut();#}
+            }
+        }
+        xmlhttp.open("GET","/seller/changead?id="+id.toString(),true);
+        xmlhttp.send();
+    }
+
+    function applyhomeadv(id, kind) {
+        xmlhttp=new XMLHttpRequest();
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+{#                $('#item'+id.toString()).fadeOut();#}
+            }
+        }
+        if (kind == 'c') {
+            xmlhttp.open("GET","/seller/applyhomecommodityadv?id="+id.toString(),true);
+        }
+        else
+            xmlhttp.open("GET","/seller/applyhomeshopadv?id="+id.toString(),true);
+        xmlhttp.send();
+    }
+</script>
+
+<div class="col-md-10 column">
+	<div class="page-header">
+		<h3 style="color:#3a87ad">
+			Manage Advertisement
+		</h3>
+		</div>
+		<div class="tabbable" id="tabs-630860">
+			<ul class="nav nav-tabs">
+				<li class="active">
+					<a href="#panel-14830" data-toggle="tab">Commodity</a>
+				</li>
+{#				<li>#}
+{#					<a href="#panel-14831" data-toggle="tab">Shop</a>#}
+{#				</li>#}
+                <li>
+					<a href="#panel-14832" data-toggle="tab">Advertise in Homepage</a>
+				</li>
+			</ul>
+
+			</div>
+			<div class="tab-content">
+		    <div class="tab-pane active" id="panel-14830">
+			<table class="table" >
+				<thead>
+					<tr>
+						<th>
+							Commodity
+						</th>
+						<th>
+							Advertise
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for commodity in commoditylist %}
+                    <tr>
+						<td>
+                            <div class="row">
+								<div class="col-sm-2 hidden-xs"><a href="/commodity/id/{{ commodity.id }}" style = "color:#3299CC"><img src="/file/{{ commodity.CommodityImage }}" alt="..." class="img-responsive"/></a></div>
+									<div class="col-sm-10">
+										<a href="/commodity/id/{{ commodity.id }}" style = "color:#3299CC">
+                                            <h4 class="nomargin">{{ commodity.CommodityName }}</h4>
+                                        </a>
+										<p>{{ commodity.CommodityDescription }}</p>
+									</div>
+								</div>
+						</td>
+						<td>
+                            {% if commodity.IsAdv %}
+							<input type="checkbox" onclick="changestate({{ commodity.id }})" checked />
+                            {% else %}
+                            <input type="checkbox" onclick="changestate({{ commodity.id }})"/>
+                            {% endif %}
+						</td>
+					</tr>
+                    {% endfor %}
+				</tbody>
+			</table>
+			</div>
+			<div class="tab-pane" id="panel-14831">
+			    <table class="table" >
+				<thead>
+					<tr>
+						<th>
+							Shop
+						</th>
+						<th>
+							Advertise
+						</th>
+					</tr>
+				</thead>
+					{% for shop in shoplist %}
+                    <tr>
+						<td>
+                            <div class="row">
+								<div class="col-sm-2 hidden-xs">
+{#                                    <a href="/commodity/id/{{ commodity.CommodityID.id }}" style = "color:#3299CC">#}
+                                        <img src="/file/{{ shop.ShopImage }}" alt="..." class="img-responsive"/>
+{#                                    </a>#}
+                                </div>
+								<div class="col-sm-10">
+{#									<a href="/commodity/id/{{ commodity.CommodityID.id }}" style = "color:#3299CC">#}
+                                        <h4 class="nomargin">{{ shop.ShopName }}</h4>
+{#                                    </a>#}
+			    					<p>{{ shop.ShopDescription }}</p>
+								</div>
+							</div>
+						</td>
+						<td>
+							<input type="checkbox"  />
+						</td>
+					</tr>
+                    {% endfor %}
+{#				<tbody>#}
+{#					<tr>#}
+{##}
+{#						<td>#}
+{#							Lacoste Blue Sevrin 3 SRM Trainers#}
+{#						</td>#}
+{##}
+{#						<td>#}
+{#    							<input type="checkbox" checked />#}
+{#						</td>#}
+{#					</tr>#}
+{##}
+{#				</tbody>#}
+			</table>
+			</div>
+            <div class="tab-pane" id="panel-14832">
+			    <table class="table" >
+                <thead>
+					<tr>
+						<th>
+							Shop
+						</th>
+						<th>
+							Apply for Advertise
+						</th>
+					</tr>
+				</thead>
+					{% for shop in shoplist %}
+                    <tr>
+						<td>
+                            <div class="row">
+								<div class="col-sm-2 hidden-xs">
+{#                                    <a href="/commodity/id/{{ commodity.CommodityID.id }}" style = "color:#3299CC">#}
+                                        <img src="/file/{{ shop.ShopImage }}" alt="..." class="img-responsive"/>
+{#                                    </a>#}
+                                </div>
+								<div class="col-sm-10">
+{#									<a href="/commodity/id/{{ commodity.CommodityID.id }}" style = "color:#3299CC">#}
+                                        <h4 class="nomargin">{{ shop.ShopName }}</h4>
+{#                                    </a>#}
+			    					<p>{{ shop.ShopDescription }}</p>
+								</div>
+							</div>
+						</td>
+						<td>
+                            {% if shop.IsHomeAdv %}
+							<input type="checkbox" onclick="applyhomeadv({{ shop.id }}, 's')" checked />
+                            {% else %}
+                            <input type="checkbox" onclick="applyhomeadv({{ shop.id }}, 's')"  />
+                            {% endif %}
+						</td>
+					</tr>
+                    {% endfor %}
+
+			</table>
+            <table class="table" >
+				<thead>
+					<tr>
+						<th>
+							Commodity
+						</th>
+						<th>
+							Advertise
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for commodity in commoditylist %}
+                    <tr>
+						<td>
+                            <div class="row">
+								<div class="col-sm-2 hidden-xs"><a href="/commodity/id/{{ commodity.id }}" style = "color:#3299CC"><img src="/file/{{ commodity.CommodityImage }}" alt="..." class="img-responsive"/></a></div>
+									<div class="col-sm-10">
+										<a href="/commodity/id/{{ commodity.id }}" style = "color:#3299CC">
+                                            <h4 class="nomargin">{{ commodity.CommodityName }}</h4>
+                                        </a>
+										<p>{{ commodity.CommodityDescription }}</p>
+									</div>
+								</div>
+						</td>
+						<td>
+                            {% if commodity.IsHomeAdv %}
+							<input type="checkbox" onclick="applyhomeadv({{ commodity.id }}, 'c')" checked />
+                            {% else %}
+                            <input type="checkbox" onclick="applyhomeadv({{ commodity.id }}, 'c')"/>
+                            {% endif %}
+						</td>
+					</tr>
+                    {% endfor %}
+				</tbody>
+			</table>
+			</div>
+			</div>
+		</div>
+
+{% endblock %}
