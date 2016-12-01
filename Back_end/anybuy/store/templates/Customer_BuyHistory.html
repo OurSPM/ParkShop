@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}BuysHistory{% endblock %}
+
+{% block content %}
+
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			
+				
+			<h2 class="text-left">
+				Buys History
+			</h2>
+			<hr>
+			<a href="/customer/statistics/all"><button class='btn btn-info btn-xs'>All Buys</button></a>
+			<a href="/customer/statistics/year"><button class='btn btn-info btn-xs'>Year Buys</button></a>
+			<a href="/customer/statistics/month"><button class='btn btn-info btn-xs'>Month Buys</button></a>
+            <a href="/customer/statistics/day"><button class='btn btn-info btn-xs'>Weekly Buys</button></a>
+			<a href="/customer/statistics/day"><button class='btn btn-info btn-xs'>Day Buys</button></a>
+			<br>
+			<br>
+			<div class="row clearfix">
+				<div class="col-md-12 column">   
+        			<div class="row col-md-13">
+			<table class="table table-striped custab">
+				<thead>
+					<tr class="yanse">
+						<th>OrderNo.</th>
+						<th>
+							CommodityName
+						</th>
+						<th>
+							UnitPrice
+						</th>
+						<th>
+							OrderTime
+						</th>
+						<th>
+							Counts
+						</th>						
+						<th>
+							ActualPayments
+						</th>
+						<th>
+							Status
+						</th>
+					</tr>
+				</thead>
+				{% for buysHistory in BuysHistoryList %}
+				<tr class="yanse" id="item{{buysHistory.CommodityID.id}}">
+					<td>{{buysHistory.id}}</td>
+					<td>{{buysHistory.CommodityID.CommodityName}}</td>
+					<td>{{buysHistory.CommodityID.SellPrice}}$</td>
+					<td>{{buysHistory.OrderListDate}}</td>
+					<td>{{buysHistory.OrderAmount}}</td>
+					<td>{% widthratio buysHistory.CommodityID.SellPrice 1 buysHistory.OrderAmount %}$</td>
+					{% if buysHistory.OrderListState == 0 %}
+					<td>paying</td>
+					{% endif %}
+					{% if buysHistory.OrderListState == 1 %}
+					<td>shipping<br>ShipNo:{{ buysHistory.ShipNo }}</td>
+					{% endif %}
+					{% if buysHistory.OrderListState == 2 %}
+					<td>signing</td>
+					{% endif %}
+					{% if buysHistory.OrderListState == 3 %}
+					<td>commenting</td>
+					{% endif %}
+					{% if buysHistory.OrderListState == 4 %}
+					<td>refunding</td>
+					{% endif %}
+					{% if buysHistory.OrderListState == 5 %}
+					<td>refunded</td>
+					{% endif %}
+					{% if buysHistory.OrderListState == 6 %}
+					<td>refused refunded</td>
+					{% endif %}
+					{% if buysHistory.OrderListState == 7 %}
+					<td>finish</td>
+					{% endif %}
+					{% if buysHistory.OrderListState == 8 %}
+					<td>commented</td>
+					{% endif %}
+				</tr>
+				{% endfor %}				
+			</table>
+			<b>Total Value: {{totalvalue}}$	<b>
+			<br>
+			<br>
+		</div>
+		</div>
+		</div>
+         <br /> <br /> <br /> <br /> <br /> <br /> <br />
+	</div>
+	</div>
+</div>
+{% endblock %}
+					

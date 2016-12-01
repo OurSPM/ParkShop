@@ -1,0 +1,250 @@
+#encoding:utf-8
+from django.db import models
+
+
+# Create your models here.
+
+class HelpCenter(models.Model):
+	HelpCenterName = models.CharField(max_length=64)
+	HelpCenterContent = models.TextField(blank=True)
+	def __unicode__(self):
+		return '%s %s' %(self.id, self.HelpCenterName)
+
+class Seller(models.Model):
+	SellerTypeChoices=(
+		('l','limited user'),
+		('n','normal user'),
+	)
+	SellerAccount = models.CharField(max_length=64)
+	SellerPassword = models.CharField(max_length=32)
+	SellerName = models.CharField(max_length=64)
+	SellerType = models.CharField(max_length=1,choices=SellerTypeChoices,blank=True)
+	SellerRealName = models.CharField(max_length=64,null=True)
+	SellerRealID = models.IntegerField(null=True)
+	SellerTelephone = models.CharField(max_length=64,blank=True)
+	SellerEmail = models.EmailField(blank=True)
+	SellerAddress = models.CharField(max_length=64,blank=True)
+
+	def __unicode__(self):
+		return '%s %s %s' %(self.id, self.SellerAccount, self.SellerName)
+
+class Shop(models.Model):
+	States=(
+		(0, 'checking'),
+		(1, 'open'),
+		(2, 'close')
+	)
+	ShopDescription = models.TextField(blank=True)
+	SellerID = models.ForeignKey(Seller)
+	ShopName = models.CharField(max_length=64,blank=True)
+	#店铺状态：0-待审核，1-营业，2-歇业
+	ShopState = models.IntegerField(choices=States)
+	BigImage = models.ImageField(upload_to='images',max_length=255,blank=True,null=True)
+	ShopImage = models.ImageField(upload_to='images',max_length=255,blank=True,null=True)
+	IsAdv = models.BooleanField()
+	IsHomeAdv = models.BooleanField()
+	Authorization=models.NullBooleanField(blank=True)
+	def __unicode__(self):
+		return '%s %s' %(self.id, self.ShopName)
+
+class Commodity(models.Model):
+	CommodityTypeChoices=(
+		('TH','TV & Home Theater'),
+		('CT','Computers & Tablets'),
+		('CP','Cell Phones'),
+		('CC','Cameras & Camcorders'),
+		('A','Audio'),
+		('CG','Car Electronics & GPS'),
+		('VM','Video,Games,Movies & Music'),
+		('HS','Health,Fitness & Sports'),
+		('HO','Home & Office'),
+		('O','Others')
+	)
+	CommodityName = models.CharField(max_length=64)
+	CommodityDescription = models.TextField(blank=True)
+	CommodityAmount = models.IntegerField(blank=True,null=True)
+	SoldAmount = models.IntegerField(blank=True)
+	PurchasePrice = models.FloatField(blank=True)
+	SellPrice = models.FloatField(blank=True)
+	CommodityType = models.CharField(max_length=1,choices=CommodityTypeChoices,blank=True)
+	CommodityImage = models.ImageField(upload_to='images',max_length=255,blank=True,null=True)
+	CommodityDiscount = models.FloatField(null=True,blank=True)
+	ShopID = models.ForeignKey(Shop)
+	IsAdv = models.BooleanField()
+	IsHomeAdv = models.BooleanField()
+	def __unicode__(self):
+		return '%s %s %s %s' %(self.id, self.CommodityName, self.CommodityType, self.CommodityAmount)
+
+class Administrator(models.Model):
+	AdministratorAccount = models.CharField(max_length=64)
+	AdministratorName = models.CharField(max_length=64)
+	AdministratorPassword = models.CharField(max_length=16)
+	AdministratorTelephone = models.CharField(max_length=64,blank=True)
+	AdministratorEmail = models.EmailField()
+	def __unicode__(self):
+		return '%s %s' %(self.id, self.AdministratorName)
+
+class ShopAdv(models.Model):
+	ShopID = models.ForeignKey(Shop)
+	OwnerID = models.ForeignKey(Seller)
+	AdvertisementContent = models.TextField()
+	def __unicode__(self):
+		return '%s %s' %(self.id, self.AdvertisementContent)
+
+class CommodityAdv(models.Model):
+	CommodityID = models.ForeignKey(Commodity)
+	OwnerID = models.ForeignKey(Seller)
+	AdvertisementContent = models.TextField()
+	def __unicode__(self):
+		return '%s %s' %(self.id, self.AdvertisementContent)
+
+class HomeShopAdv(models.Model):
+	ShopID = models.ForeignKey(Shop)
+	OwnerID = models.ForeignKey(Administrator)
+	AdvertisementContent = models.TextField()
+	ApplyState = models.BooleanField()
+	def __unicode__(self):
+		return '%s %s' %(self.id, self.AdvertisementContent)
+
+class HomeCommodityAdv(models.Model):
+	CommodityID = models.ForeignKey(Commodity)
+	OwnerID = models.ForeignKey(Administrator)
+	AdvertisementContent = models.TextField()
+	ApplyState = models.BooleanField()
+	def __unicode__(self):
+		return '%s %s' %(self.id, self.AdvertisementContent)
+
+class System(models.Model):
+	BulletinBoardContent = models.CharField(max_length=64,blank=True)
+	BulletinBoardDescription = models.TextField(blank=True)
+	BulletinBoardDate = models.DateField(blank=True)
+	ComissionRate = models.FloatField(blank=True)
+	def __unicode__(self):
+		return '%s %s %s' %(self.id, self.BulletinBoardDate,self.BulletinBoardContent)
+
+class BlacklistSeller(models.Model):
+	BlacklistSellerReason = models.TextField()
+	SellerID = models.ForeignKey(Seller)
+	AdministratorID = models.ForeignKey(Administrator)
+	def __unicode__(self):
+		return '%s %s' %(self.id, self.BlacklistSellerReason)
+
+class Discount(models.Model):
+	DiscountRate = models.FloatField(blank=True)
+	SellerID = models.ForeignKey(Seller)
+	ShopID = models.ForeignKey(Shop)
+	def __unicode__(self):
+		return '%s %s' %(self.id, self.DiscountRate)
+
+class ShopOrder(models.Model):
+	StateChoices=(
+		(0, 'paying'),
+		(1, 'shipping'),
+		(2, 'signing'),
+		(3, 'commenting'),
+		(4, 'refunding'),
+		(5, 'refunded'),
+		(6, 'refund refuded'),
+		(7, 'finish'),
+		(8, 'commented')
+	)
+	ShopOrderState = models.IntegerField(choices=StateChoices)
+	ShopOrderDate = models.DateField()
+	ShopID = models.ForeignKey(Shop)
+	def __unicode__(self):
+		return '%s %s %s' %(self.id, self.ShopOrderDate, self.ShopOrderState)
+
+class Customer(models.Model):
+	CustomerTypeChoices=(
+		('l','limited user'),
+		('n','normal user'),
+	)
+	CustomerAccount = models.CharField(max_length=64)
+	CustomerName = models.CharField(max_length=64)
+	CustomerPassword = models.CharField(max_length=32)
+	CustomerType = models.CharField(max_length=1,choices=CustomerTypeChoices,blank=True)
+	CustomerTelephone = models.CharField(max_length=64,blank=True)
+	CustomerEmail = models.EmailField()
+	CustomerAddress = models.TextField(blank=True)
+	def __unicode__(self):
+		return u'%s %s %s' %(self.id, self.CustomerAccount, self.CustomerName)
+
+class CustomerOrder(models.Model):
+	StateChoices=(
+		(0, 'paying'),
+		(1, 'shipping'),
+		(2, 'signing'),
+		(3, 'commenting'),
+		(4, 'refunding'),
+		(5, 'refunded'),
+		(6, 'refund refuded'),
+		(7, 'finish'),
+		(8, 'commented')
+	)
+	CustomerOrderState = models.IntegerField(choices=StateChoices)
+	CustomerOrderDate = models.DateField()
+	CustomerID = models.ForeignKey(Customer)
+	def __unicode__(self):
+		return '%s %s %s' %(self.id, self.CustomerOrderState, self.CustomerOrderDate)
+
+class OrderList(models.Model):
+	#OrderListAccount = models.CharField(max_length=64)
+	#订单状态：0-待付款，1-已付款待发货，2-待签收，
+	# 3-待评价，4-待退款，5-退款成功，6-卖家拒绝退款
+	# 7-交易完成
+	StateChoices=(
+		(0, 'paying'),
+		(1, 'shipping'),
+		(2, 'signing'),
+		(3, 'commenting'),
+		(4, 'refunding'),
+		(5, 'refunded'),
+		(6, 'refused refunded'),
+		(7, 'finish'),
+		(8, 'commented')
+	)
+	OrderListState = models.IntegerField(choices=StateChoices)
+	OrderListDate = models.DateField()
+	OrderAmount = models.IntegerField(blank=True, null=True)
+	ShipNo = models.CharField(max_length = 64)
+	#SellerID = models.ForeignKey(Seller)
+	ShopOrderID = models.ForeignKey(ShopOrder)
+	CustomerOrderID = models.ForeignKey(CustomerOrder)
+	CommodityID = models.ForeignKey(Commodity)
+	def __unicode__(self):
+		return '%s %s %s' %(self.id, self.OrderListDate, self.OrderListState)
+
+class Comment(models.Model):
+	CommentContent = models.TextField(blank=True)
+	CustomerID = models.ForeignKey(Customer)
+	CommodityID = models.ForeignKey(Commodity)
+	def __unicode__(self):
+		return '%s %s' %(seld.id, self.CommentContent)
+
+class Cart(models.Model):
+	CartDate = models.DateField()
+	CustomerID = models.ForeignKey(Customer)
+	CommodityID = models.ForeignKey(Commodity)
+	CartCommodityAmount = models.IntegerField(blank=True, default=1)
+	def __unicode__(self):
+		return '%s %s %s' %(self.id, self.CartCommodityAmount, self.CartDate)
+
+class Favorite(models.Model):
+	FavoriteDate = models.DateField()
+	CustomerID = models.ForeignKey(Customer)
+	CommodityID = models.ForeignKey(Commodity)
+	def __unicode__(self):
+		return '%s %s' %(self.id, self.FavoriteDate)
+
+
+class BlacklistCustomer(models.Model):
+	BlacklistCustomerReason = models.TextField()
+	AdministratorID = models.ForeignKey(Administrator)
+	CustomerID = models.ForeignKey(Customer)
+	def __unicode__(self):
+		return '%s %s' %(self.id, self.BlacklistCustomerReason)
+
+class Income(models.Model):
+	IncomeAmount = models.FloatField()
+	def __unicode__(self):
+		return '%s %s' %(self.id, self.IncomeAmount)
