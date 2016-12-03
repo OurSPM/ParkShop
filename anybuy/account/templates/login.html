@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<div class="row clearfix">
+            <div class="col-md-4 column">
+            </div>
+				<div class="col-md-4 column"> <br>
+                    <h2 class="text-center text-default" style="color:#3a87ad">
+                    Please Login
+                    </h2>
+                    {% if wrongpw %}
+                    Wrong account or password!
+                    {% endif %}
+                    <div class="text-center">
+                    <form method = 'post' enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{uf.as_p}}
+                        <div class="text-center">
+                        <button type="submit" class="btn btn-primary ">Login</button>
+                        </div>
+                    </form>
+                    No account? <a href="/register/">Register</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

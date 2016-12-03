@@ -1,0 +1,101 @@
+{% extends "sellerbase.html" %}
+{% block title %}Checking Order{% endblock %}
+
+{% block sellercontent %}
+
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-10 column">
+
+			<h3 style="color: #3a87ad;">
+				Checking Order
+			</h3> 
+			<hr>
+
+			<div class="row clearfix">
+				<div class="col-md-12 column">   
+					<div class="row col-md-10">
+						<table class="table table-striped custab">
+						<thead>
+							<tr class="yanse">
+							<th >OrderNo.</th>
+							<th >CommodityPicture</th>
+							<th >CommodityName</th>
+							<th >UnitPrice</th>
+							<th >Counts</th>
+							<th >TotalMoney</th>
+							<th >OrderTime</th>
+							<th >CustomerInfo</th>
+							<th >Status</th>
+							<th class="text-center">Action</th>
+							</tr>
+						</thead>
+						<script type="text/javascript">
+						function confirmOrder(id1,id2){
+							xmlhttp= new XMLHttpRequest();
+							xmlhttp.onreadystatechange=function()
+							{
+								if(xmlhttp.readyState==4 && xmlhttp.status==200)
+								{
+									document.getElementById("myText"+id2).disabled=true
+									$('#item'+id).fadeOut()
+								}
+							}
+							content = document.getElementById("myText"+id2).value;
+							xmlhttp.open("GET","/removeOrderList?id="+id1 + "&content="+content,true);
+							xmlhttp.send();
+						}
+						</script>
+						{% for ol in orderList %}
+						<tr class="yanse" id="item{{ ol.CommodityID.id }}">
+						<td>{{ ol.id }}</td>
+						<td><a href="/commodity/id/{{ ol.CommodityID.id }}" style = "color:#3299CC"><img src="/file/{{ ol.CommodityID.CommodityImage }}" style = "height:90px;"/></a></td>
+						<td><a href="/commodity/id/{{ ol.CommodityID.id }}" style = "color:#3299CC">{{ ol.CommodityID.CommodityName }}</a></td>
+						<td>{{ ol.CommodityID.SellPrice }}$</td>
+						<td>{{ ol.OrderAmount }}</td>
+						<td>{% widthratio ol.CommodityID.SellPrice 1 ol.OrderAmount %}$</td>
+						<td>{{ ol.OrderListDate }}</td>
+						<td>Name:{{ ol.CustomerOrderID.CustomerID.CustomerName}}<br>
+							Tel:{{ ol.CustomerOrderID.CustomerID.CustomerTelephone}}<br>
+							Email:{{ ol.CustomerOrderID.CustomerID.CustomerEmail}}<br>
+							Addr:{{ ol.CustomerOrderID.CustomerID.CustomerAddress }}</td>
+
+						{% if ol.OrderListState == 0 %}
+						<td>paying</td>
+						{% endif %}
+						{% if ol.OrderListState == 1 %}
+						<td>shipping<br>ShipNo:{{ ol.ShipNo }}</td>
+						{% endif %}
+						{% if ol.OrderListState == 2 %}
+						<td>signing</td>
+						{% endif %}
+						{% if ol.OrderListState == 3 %}
+						<td>commenting</td>
+						{% endif %}
+						{% if ol.OrderListState == 4 %}
+						<td>refunding</td>
+						{% endif %}
+						{% if ol.OrderListState == 5 %}
+						<td>refunded</td>
+						{% endif %}
+						{% if ol.OrderListState == 6 %}
+						<td>refused refunded</td>
+						{% endif %}
+						{% if ol.OrderListState == 7 %}
+						<td>finish</td>
+						{% endif %}
+						{% if ol.OrderListState == 8 %}
+						<td>commented</td>
+						{% endif %}
+
+						<td class="text-center"><input type="text" id='myText{{ ol.CommodityID.id }}'size="10" placeholder="Input ShipNo" /><br><br><a class='btn btn-info btn-xs' onclick="confirmOrder('{{ol.id}}','{{ ol.CommodityID.id }}')"><span class="glyphicon"><b>Confirm</b></span></a></td>
+						{% endfor %}
+						</table>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

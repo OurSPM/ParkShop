@@ -1,0 +1,107 @@
+{% extends "sellerbase.html" %}
+{% block title %}Return&Refund{% endblock %}
+
+{% block sellercontent %}
+
+
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-10 column">
+				<h3 style="color: #3a87ad;">
+					Return and refund
+				</h3>
+			<hr>
+
+			<div class="row clearfix">
+				<div class="col-md-12 column">   
+					<div class="row col-md-13">
+						<table class="table table-striped custab">
+							<thead>
+								<tr class="yanse">
+									<th>
+										OrderNo.
+									</th>
+									<th>
+										CommodityName
+									</th>
+									<th>
+										OrderTime
+									</th>
+									<th>Counts</th>
+									<th>
+										TotalMoney
+									</th>
+									<th>CustomerInfo</th>
+									<th class="text-center">
+									Accept
+									</th>
+									<th class="text-center">
+									Deny
+									</th>
+								</tr>
+							</thead>
+
+				   <script type="text/javascript">
+						function success(id){
+							xmlhttp= new XMLHttpRequest();
+							xmlhttp.onreadystatechange=function()
+							{
+								if(xmlhttp.readyState==4 && xmlhttp.status==200)
+								{
+									$('#item'+id).fadeOut()
+								}
+							}
+							xmlhttp.open("GET","/modifyOrderList1?id="+id,true);
+							xmlhttp.send();
+						}
+					</script>
+
+					<script type="text/javascript">
+						function failure(id){
+							xmlhttp= new XMLHttpRequest();
+							xmlhttp.onreadystatechange=function()
+							{
+								if(xmlhttp.readyState==4 && xmlhttp.status==200)
+								{
+									$('#item'+id).fadeOut()
+								}
+							}
+							xmlhttp.open("GET","/modifyOrderList2?id="+id,true);
+							xmlhttp.send();
+						}
+					</script>
+				    
+				    {% for order in orderList %}					
+					<tr class="yanse" id="item{{ order.CommodityID.id }}">
+
+					    <td>
+							{{ order.id }}
+						</td>
+						<td>
+							<a href="/commodity/id/{{ order.CommodityID.id }}" style = "color:#3299CC">{{ order.CommodityID.CommodityName }}</a>
+						</td>
+						<td>
+							{{order.OrderListDate}}
+						</td>
+						<td>{{ order.OrderAmount }} </td>
+						<td>
+							{% widthratio order.CommodityID.SellPrice 1 order.OrderAmount %}$
+						</td>
+						<td>Name:{{ order.CustomerOrderID.CustomerID.CustomerName}}<br>
+							Tel:{{ order.CustomerOrderID.CustomerID.CustomerTelephone}}<br>
+							Email:{{ order.CustomerOrderID.CustomerID.CustomerEmail}}<br>
+							Addr:{{ order.CustomerOrderID.CustomerID.CustomerAddress }}</td>
+						<td class="text-center"><a class='btn btn-info btn-xs' onclick="success('{{order.id}}')"><span class="glyphicon"><b>Accept</b>
+						</td>
+						<td class="text-center"><a class='btn btn-info btn-xs' onclick="failure('{{order.id}}')"><span class="glyphicon"><b>Deny</b>
+						</td>
+						</tr>
+						{% endfor %}
+					</table>
+			   		</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
