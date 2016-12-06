@@ -11,13 +11,13 @@ a.out
 #Mac os X中的文件
 .DS_Store
 #vim的暂存文件
-*.swp
+#*.swp
 #ctags生成的tags文件
-tags
-*.pyc
-*~
-*.ids
-*.xml
-*.png
-*.jpg
-*.sqlite3
+#tags
+#*.pyc
+#*~
+#*.ids
+#*.xml
+#*.png
+#*.jpg
+#*.sqlite3
