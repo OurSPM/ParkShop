@@ -24,7 +24,6 @@ class Seller(models.Model):
 	SellerTelephone = models.CharField(max_length=64,blank=True)
 	SellerEmail = models.EmailField(blank=True)
 	SellerAddress = models.CharField(max_length=64,blank=True)
-
 	def __unicode__(self):
 		return '%s %s %s' %(self.id, self.SellerAccount, self.SellerName)
 
@@ -43,21 +42,20 @@ class Shop(models.Model):
 	ShopImage = models.ImageField(upload_to='images',max_length=255,blank=True,null=True)
 	IsAdv = models.BooleanField()
 	IsHomeAdv = models.BooleanField()
-	Authorization=models.NullBooleanField(blank=True)
 	def __unicode__(self):
 		return '%s %s' %(self.id, self.ShopName)
 
 class Commodity(models.Model):
 	CommodityTypeChoices=(
-		('TH','TV & Home Theater'),
-		('CT','Computers & Tablets'),
-		('CP','Cell Phones'),
-		('CC','Cameras & Camcorders'),
-		('A','Audio'),
-		('CG','Car Electronics & GPS'),
-		('VM','Video,Games,Movies & Music'),
-		('HS','Health,Fitness & Sports'),
-		('HO','Home & Office'),
+		('C','Clothing'),
+		('A','Accesory'),
+		('S','Sport'),
+		('J','Jewelry'),
+		('D','Digit'),
+		('H','Household appliances'),
+		('M','Makeup'),
+		('F','Food'),
+		('E','Entertainment'),
 		('O','Others')
 	)
 	CommodityName = models.CharField(max_length=64)

@@ -12,10 +12,17 @@ import datetime
 from PIL import Image
 import hashlib
 # Create your views here.
-
-## Customer module
 def helpcenter(request):
-    return HttpResponse('Under Development!')
+    if request.session.get('UserID', False):
+        UserID = request.session['UserID']
+        UserType = request.session['UserType']
+        UserAccount = request.session['UserAccount']
+        UserName = UserAccount
+    else:
+        UserID = None
+        UserType = None
+        UserAccount = None
+    return render_to_response('helpcenter.html', locals())
 
 def getCommodity(request, cid):
     if request.session.get('UserID', False):
@@ -37,7 +44,19 @@ def getCommodity(request, cid):
     return render_to_response('Customer_CommodityInfo.html', locals())
 
 def getShop(request, cid):
-    return HttpResponse('Under Development!')
+    if request.session.get('UserID', False):
+        UserID = request.session['UserID']
+        UserType = request.session['UserType']
+        UserAccount = request.session['UserAccount']
+        UserName = UserAccount
+    else:
+        UserID = None
+        UserType = None
+        UserAccount = None
+    shop = Shop.objects.get(id=cid)
+    commodityList = Commodity.objects.filter(ShopID = shop)
+    shopList = Shop.objects.filter(SellerID = shop.SellerID)
+    return render_to_response('Customer_EnterShop.html', locals())
 
 def favorite(request):
     if request.session.get('UserID', False):
@@ -53,10 +72,45 @@ def favorite(request):
     return render_to_response('Customer_Favorite.html', locals())
 
 def cart(request):
-    return HttpResponse('Under Development!')
+    if request.session.get('UserID', False):
+        UserID = request.session['UserID']
+        UserType = request.session['UserType']
+        UserAccount = request.session['UserAccount']
+        UserName = UserAccount
+    else:
+        UserID = None
+        UserType = None
+        UserAccount = None
+    cartList = Cart.objects.filter(CustomerID = UserID)
+    total=0
+    for cart in cartList:
+        total = total+cart.CartCommodityAmount*cart.CommodityID.SellPrice
+    return render_to_response('Customer_MyCart.html', locals())
 
 def add_to_cart(request, cid, amount, source):
-    return HttpResponse('Under Development!')
+    if request.session.get('UserID', False):
+        UserID = request.session['UserID']
+        UserType = request.session['UserType']
+        UserAccount = request.session['UserAccount']
+        UserName = UserAccount
+        user = Customer.objects.get(id=UserID)
+        commodity = Commodity.objects.get(id = cid)
+    else:
+        UserID = None
+        UserType = None
+        UserAccount = None
+    try:
+        cart = Cart.objects.get(CustomerID = user, CommodityID = commodity)
+        cart.CartCommodityAmount = cart.CartCommodityAmount+1
+        cart.save()
+    except Cart.DoesNotExist:
+        date = time.strftime('%Y-%m-%d',time.localtime(time.time()))
+        Cart.objects.create(CartDate=date, CustomerID = user, CommodityID = commodity, CartCommodityAmount = int(amount))
+    if source == 'commodity':
+        return HttpResponseRedirect('/commodity/id/'+cid)
+    else:
+        return HttpResponseRedirect('/favorite/')
+    #return render_to_response('Customer_CommodityInfo.html', locals())
 
 def add_to_favorite(request):
     if request.session.get('UserID', False):
@@ -76,13 +130,68 @@ def add_to_favorite(request):
     return HttpResponse('You add: '+commodity.CommodityName)
 
 def rm_from_cart(request):
-    return HttpResponse('Under Development!')
+    if request.session.get('UserID', False):
+        UserID = request.session['UserID']
+        UserType = request.session['UserType']
+        UserAccount = request.session['UserAccount']
+        UserName = UserAccount
+        user = Customer.objects.get(id=UserID)
+    else:
+        UserID = None
+        UserType = None
+        UserAccount = None
+        user = None
+    if 'id' in request.GET:
+        commodity = Commodity.objects.get(id = request.GET['id'])
+        Cart.objects.get(CustomerID = user, CommodityID = commodity).delete()
+    else:
+        commodity = None
+    return HttpResponse('You removed: '+commodity.CommodityName)
 
 def refreshcart(request):
-    return HttpResponse('Under Development!')
+    if request.session.get('UserID', False):
+        UserID = request.session['UserID']
+        UserType = request.session['UserType']
+        UserAccount = request.session['UserAccount']
+        UserName = UserAccount
+        user = Customer.objects.get(id=UserID)
+    else:
+        UserID = None
+        UserType = None
+        UserAccount = None
+        user = None
+    if 'id' in request.GET:
+        commodity = Commodity.objects.get(id = request.GET['id'])
+        cart = Cart.objects.get(CustomerID = user, CommodityID = commodity)
+        cart.CartCommodityAmount = int(request.GET['amount'])
+        cart.save()
+    else:
+        commodity = None
+    return HttpResponse('You refresh: '+commodity.CommodityName)
 
 def checkoutcart(request):
-    return HttpResponse('Under Development!')
+    if request.session.get('UserID', False):
+        UserID = request.session['UserID']
+        UserType = request.session['UserType']
+        UserAccount = request.session['UserAccount']
+        UserName = UserAccount
+        user = Customer.objects.get(id=UserID)
+    else:
+        UserID = None
+        UserType = None
+        UserAccount = None
+        user = None
+    date = time.strftime('%Y-%m-%d',time.localtime(time.time()))
+    cutomerorder = CustomerOrder.objects.create(CustomerOrderState=0, CustomerOrderDate=date, CustomerID=user)
+    # 从购物车中删除，现在是将checkbox注释了，所以这里是删除购物车中所有物品
+    commoditylist = Cart.objects.filter(CustomerID=user)
+    shoporder = ShopOrder.objects.create(ShopOrderState=0, ShopOrderDate=date, ShopID=commoditylist[0].CommodityID.ShopID)
+    for commodity in commoditylist:
+        orderlist = OrderList.objects.create(OrderListState=0, OrderListDate=date, OrderAmount = 1, CustomerOrderID=cutomerorder, ShopOrderID=shoporder, CommodityID = commodity.CommodityID, )
+        # 从购物车中删除，现在是将checkbox注释了，所以这里是删除购物车中所有物品
+    Cart.objects.filter(CustomerID = user).delete()
+    return HttpResponseRedirect('/bank')
+    # return HttpResponse('You checked out your cart')
 
 def bank(request):
     if request.session.get('UserID', False):
@@ -146,10 +255,6 @@ def search(request, keyword):  #/search/keyword/ 以keyword为关键字进行搜
     commodityList_by_counterprice = commodityList.order_by('-SellPrice')
     return render_to_response('Customer_CommodityList.html', locals())
 
-
-## Shop Owner module
-## By huangchaomin
-
 def sellerentershop(request): #需要返回shoplist，shopadvlist，commodityadvlist
     if request.session.get('UserID', False):
         UserID = request.session['UserID']
@@ -168,43 +273,157 @@ def sellerentershop(request): #需要返回shoplist，shopadvlist，commodityadv
     # commodity = commoditylist[0]
     # shop = shopadvlist[0]
     # return HttpResponse(commoditylist[0].CommodityName)
-    if shop and shop.Authorization:
-        return render_to_response('Seller_EnterShop.html', locals())
-    else:
-        return HttpResponse('Under Authorization!')
+    return render_to_response('Seller_EnterShop.html', locals())
+
 def delfromshop(request, cid):
     Commodity.objects.get(id = cid).delete()
     return HttpResponse('You have deleted a commodity!!!')
 
 #查看购买历史
 def buysHistory(request, time):
-    return HttpResponse('Under Development!')
+    if request.session.get('UserID', False):
+        UserID = request.session['UserID']
+        UserType = request.session['UserType']
+        UserAccount = request.session['UserAccount']
+        UserName = UserAccount
+    else:
+        UserID = None
+        UserType = None
+        UserAccount = None
+    # shopID = Customer.objects.get(Customer = UserID)
+    shopOrder = CustomerOrder.objects.filter(CustomerID = UserID)
+    BuysHistoryList = []
+    now = datetime.datetime.now()
+    for so in shopOrder:
+        BuyList = OrderList.objects.filter(CustomerOrderID = so)
+        for sl in BuyList:
+            if time == "all":
+                BuysHistoryList.append(sl)
+            elif time == "year":
+                if sl.OrderListDate.year == now.year:
+                    BuysHistoryList.append(sl)
+            elif time == "month":
+                if sl.OrderListDate.month == now.month and sl.OrderListDate.year == now.year:
+                    BuysHistoryList.append(sl)
+            elif time == "day":
+                if sl.OrderListDate.day == now.day and sl.OrderListDate.month == now.month and sl.OrderListDate.year == now.year:
+                    BuysHistoryList.append(sl)
+    totalvalue = 0
+    for shl in BuysHistoryList:
+        totalvalue = totalvalue + shl.CommodityID.SellPrice * shl.OrderAmount
+    return render_to_response('Customer_BuyHistory.html', locals())
 
 def manageAD(request):
-    return HttpResponse('Under Development!')
+    if request.session.get('UserID', False):
+        UserID = request.session['UserID']
+        UserType = request.session['UserType']
+        UserAccount = request.session['UserAccount']
+        UserName = UserAccount
+    else:
+        return HttpResponseRedirect('/login/')
+    seller = Seller.objects.get(id=UserID)
+    try:
+        shop = Shop.objects.get(SellerID = seller)
+        commoditylist = Commodity.objects.filter(ShopID = shop)
+        shopadvlist = Shop.objects.filter(SellerID = seller, IsAdv = True)
+        commodityadvlist = Commodity.objects.filter(ShopID = shop, IsAdv = True)
+    except:
+        shop = None
+    # commodity = commoditylist[0]
+    shoplist = Shop.objects.filter(SellerID = seller)
+    # shop = shopadvlist[0]
+    commoditylist = Commodity.objects.filter(ShopID = shop)
+    # return HttpResponse(shopadvlist[0])
+    return render_to_response('manageAD.html', locals())
 
 def changead(request):
-    return HttpResponse('Under Development!')
-
+    if request.session.get('UserID', False):
+        UserID = request.session['UserID']
+        UserType = request.session['UserType']
+        UserAccount = request.session['UserAccount']
+        UserName = UserAccount
+    else:
+        return HttpResponseRedirect('/login/')
+    seller = Seller.objects.get(id=UserID)
+    try:
+        shop = Shop.objects.get(SellerID = seller)
+        commoditylist = Commodity.objects.filter(ShopID = shop)
+        shopadvlist = Shop.objects.filter(SellerID = seller, IsAdv = True)
+        commodityadvlist = Commodity.objects.filter(ShopID = shop, IsAdv = True)
+    except:
+        shop = None
+    cid = request.GET['id']
+    commodity = Commodity.objects.get(id=cid)
+    isadv = commodity.IsAdv
+    if isadv:
+        commodity.IsAdv = False
+    else:
+        commodity.IsAdv = True
+    commodity.save()
+    return HttpResponse("You change the ad state")
 
 def applyhomeshopadv(request):
-    return HttpResponse('Under Development!')
+    if request.session.get('UserID', False):
+        UserID = request.session['UserID']
+        UserType = request.session['UserType']
+        UserAccount = request.session['UserAccount']
+        UserName = UserAccount
+    else:
+        return HttpResponseRedirect('/login/')
+    seller = Seller.objects.get(id=UserID)
+    try:
+        shop = Shop.objects.get(SellerID = seller)
+    except:
+        shop = None
+    ishomeadv = shop.IsHomeAdv
+    if ishomeadv:
+        shop.IsHomeAdv = False
+        HomeShopAdv.objects.get(ShopID=shop).delete()
+    else:
+        shop.IsHomeAdv = True
+        admin=Administrator.objects.get(id=1)
+        HomeShopAdv.objects.create(ShopID=shop, OwnerID=admin, AdvertisementContent=shop.ShopName, ApplyState=False)
+    shop.save()
+    return HttpResponse("You apply the home shop ad state")
 
 def applyhomecommodityadv(request):
-    return HttpResponse('Under Development!')
+    if request.session.get('UserID', False):
+        UserID = request.session['UserID']
+        UserType = request.session['UserType']
+        UserAccount = request.session['UserAccount']
+        UserName = UserAccount
+    else:
+        return HttpResponseRedirect('/login/')
+    seller = Seller.objects.get(id=UserID)
+    try:
+        shop = Shop.objects.get(SellerID = seller)
+    except:
+        shop = None
+    cid = request.GET['id']
+    commodity = Commodity.objects.get(id=cid)
+    ishomeadv = commodity.IsHomeAdv
+    if ishomeadv:
+        commodity.IsHomeAdv = False
+        HomeCommodityAdv.objects.get(CommodityID=commodity).delete()
+    else:
+        commodity.IsHomeAdv = True
+        admin=Administrator.objects.get(id=1)
+        HomeCommodityAdv.objects.create(CommodityID=commodity, OwnerID=admin, AdvertisementContent=commodity.CommodityName, ApplyState=False)
+    commodity.save()
+    return HttpResponse("You change the ad state")
 
 #定义表单模型
 CommodityTypeChoices=(
-    ('TH', 'TV & Home Theater'),
-    ('CT', 'Computers & Tablets'),
-    ('CP', 'Cell Phones'),
-    ('CC', 'Cameras & Camcorders'),
-    ('A', 'Audio'),
-    ('CG', 'Car Electronics & GPS'),
-    ('VM', 'Video,Games,Movies & Music'),
-    ('HS', 'Health,Fitness & Sports'),
-    ('HO', 'Home & Office'),
-    ('O', 'Others')
+    ('C','Clothing'),
+    ('A','Accessory'),
+    ('S','Sport'),
+    ('J','Jewelry'),
+    ('D','Digit'),
+    ('H','Household appliances'),
+    ('M','Makeup'),
+    ('F','Food'),
+    ('E','Entertainment'),
+    ('O','Others')
 )
 
 
@@ -258,7 +477,7 @@ def add_and_modify(request, cid): # cid==0时添加新项目， !=0时修改cid�
             commodity.IsHomeAdv = True
             commodity.ShopID = shop
             # image = request.FILES["CommodityImage"]
-            commodity.save()
+            commodity.save() 
             return HttpResponseRedirect('/seller/home')
     else:
         cf = CommodityForm()
@@ -294,7 +513,7 @@ def add_and_modify_shop(request): # cid==0时添加新项目， !=0时修改cid�
         UserName = UserAccount
     else:
         return HttpResponseRedirect('/login/')
-    seller = Seller.objects.get(id=UserID)
+    seller = Seller.objects.get(id=UserID) 
     if request.method == 'POST':
         sf = ShopForm(request.POST, request.FILES)
         if sf.is_valid():
@@ -308,7 +527,6 @@ def add_and_modify_shop(request): # cid==0时添加新项目， !=0时修改cid�
             shop.IsAdv = True
             shop.IsHomeAdv = True
             shop.ShopState = 1
-            shop.Authorization=False
             shop.save()
             return HttpResponseRedirect('/seller/home')
     else:
@@ -318,18 +536,121 @@ def add_and_modify_shop(request): # cid==0时添加新项目， !=0时修改cid�
 
 #顾客管理订单（查看订单，申请退款，添加评论，修改评论。）
 def manageOrder(request):
-    return HttpResponse('Under Development!')
-
+    if request.session.get('UserID', False):
+        UserID = request.session['UserID']
+        UserType = request.session['UserType']
+        UserAccount = request.session['UserAccount']
+        UserName = UserAccount
+    else:
+        UserID = None
+        UserType = None
+        UserAccount = None
+    customerOrder = CustomerOrder.objects.filter(CustomerID = UserID)
+    orderList = []
+    for so in customerOrder:
+        List = OrderList.objects.filter(CustomerOrderID = so)
+        for ol in List:
+            orderList.append(ol)
+    #return HttpResponse(orderList[0])
+    return render_to_response('manageOrder.html', locals())
 
 def apply_refund(request):
-    return HttpResponse('Under Development!')
+    if request.session.get('UserID', False):
+        UserID = request.session['UserID']
+        UserType = request.session['UserType']
+        UserAccount = request.session['UserAccount']
+        UserName = UserAccount
+    else:
+        UserID = None
+        UserType = None
+        UserAccount = None
+    if 'id' in request.GET:
+        ol = OrderList.objects.get(id = request.GET['id'])
+        ol.OrderListState = 4
+        ol.save()
+        so = ShopOrder.objects.get(id = ol.ShopOrderID.id)
+        so.ShopOrderState = 4
+        so.save()
+        co = CustomerOrder.objects.get(id = ol.CustomerOrderID.id)
+        co.CustomerOrderState = 4
+        co.save()
+    else:
+        ol = None
+    return HttpResponse("You modified: "+ ol.CommodityID.CommodityName+"from Orderlist")
 
 def cancel_refund(request):
-    return HttpResponse('Under Development!')
+    if request.session.get('UserID', False):
+        UserID = request.session['UserID']
+        UserType = request.session['UserType']
+        UserAccount = request.session['UserAccount']
+        UserName = UserAccount
+    else:
+        UserID = None
+        UserType = None
+        UserAccount = None
+    if 'id' in request.GET:
+        ol = OrderList.objects.get(id = request.GET['id'])
+        ol.OrderListState = 7
+        ol.save()
+        so = ShopOrder.objects.get(id = ol.ShopOrderID.id)
+        so.ShopOrderState = 7
+        so.save()
+        co = CustomerOrder.objects.get(id = ol.CustomerOrderID.id)
+        co.CustomerOrderState = 7
+        co.save()
+    else:
+        ol = None
+    return HttpResponse("You modified: "+ ol.CommodityID.CommodityName+"from Orderlist")
 
 def add_comment(request):
-    return HttpResponse('Under Development!')
+    if request.session.get('UserID', False):
+        UserID = request.session['UserID']
+        UserType = request.session['UserType']
+        UserAccount = request.session['UserAccount']
+        UserName = UserAccount
+    else:
+        UserID = None
+        UserType = None
+        UserAccount = None
+    if 'id' in request.GET:
+        ol = OrderList.objects.get(id = request.GET['id'])
+        ol.OrderListState = 8
+        ol.save()
+        so = ShopOrder.objects.get(id = ol.ShopOrderID.id)
+        so.ShopOrderState = 8
+        so.save()
+        co = CustomerOrder.objects.get(id = ol.CustomerOrderID.id)
+        co.CustomerOrderState = 8
+        co.save()
+        content = request.GET['content']
+        Comment.objects.create(CommentContent = content, CustomerID = ol.CustomerOrderID.CustomerID, CommodityID = ol.CommodityID)
+    else:
+        ol = None
+    return HttpResponse("You comment: "+ ol.CommodityID.CommodityName+"from Orderlist")
 
 def confirm(request):
-    return HttpResponse('Under Development!')
+    if request.session.get('UserID', False):
+        UserID = request.session['UserID']
+        UserType = request.session['UserType']
+        UserAccount = request.session['UserAccount']
+        UserName = UserAccount
+    else:
+        UserID = None
+        UserType = None
+        UserAccount = None
+    if 'id' in request.GET:
+        ol = OrderList.objects.get(id = request.GET['id'])
+        ol.OrderListState = 7 # change to 7 for easy operation
+        ol.save()
+        so = ShopOrder.objects.get(id = ol.ShopOrderID.id)
+        so.ShopOrderState = 7
+        so.save()
+        co = CustomerOrder.objects.get(id = ol.CustomerOrderID.id)
+        co.CustomerOrderState = 7
+        co.save()
+        content = request.GET['content']
+        Comment.objects.create(CommentContent = content, CustomerID = ol.CustomerOrderID.CustomerID, CommodityID = ol.CommodityID)
+    else:
+        ol = None
+    return HttpResponse("You comment: "+ ol.CommodityID.CommodityName+"from Orderlist")
 

@@ -238,13 +238,8 @@ pre code {
  * Footer
  */
 
-.footer{
-  position: fixed;
-  right: 0;
-  left: 0;
-  /*z-index: 1030;*/
-  bottom: 0;
-  margin-bottom: 0;
+.footer p {
+  margin-bottom: .5rem;
 }
 
 .quick-links {

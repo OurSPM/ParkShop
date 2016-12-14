@@ -98,7 +98,6 @@ def register(request):
 
 #/myinfo
 def info(request):
-	return HttpResponse('Under Development!')
 	UserID = request.session['UserID']
 	UserType = request.session['UserType']
 	#UserName = request.session['UserName']
@@ -240,25 +239,199 @@ def logout(request):
 
 #查看销售历史
 def salesHistory(request, time):
-	return HttpResponse('Under Development!')
+	if request.session.get('UserID', False):
+		UserID = request.session['UserID']
+		UserType = request.session['UserType']
+		UserAccount = request.session['UserAccount']
+		UserName = UserAccount
+	else:
+		UserID = None
+		UserType = None
+		UserAccount = None
+	shopID = Shop.objects.get(SellerID = UserID)
+	shopOrder = ShopOrder.objects.filter(ShopID = shopID)
+	SalesHistoryList = []
+	now = datetime.datetime.now()
+	for so in shopOrder:
+		SaleList = OrderList.objects.filter(ShopOrderID = so, OrderListState__gte = 7)
+		for sl in SaleList:
+			if time == "all":
+				SalesHistoryList.append(sl)
+			elif time == "year":
+				if sl.OrderListDate.year == now.year:
+					SalesHistoryList.append(sl)
+			elif time == "month":
+				if sl.OrderListDate.month == now.month and sl.OrderListDate.year == now.year:
+					SalesHistoryList.append(sl)
+			elif time == "day":
+				if sl.OrderListDate.day == now.day and sl.OrderListDate.month == now.month and sl.OrderListDate.year == now.year:
+					SalesHistoryList.append(sl)
+	totalvalue = 0
+	for shl in SalesHistoryList:
+		totalvalue = totalvalue + shl.CommodityID.SellPrice * shl.OrderAmount
+
+	SalesHistoryList1 = []
+	for so in shopOrder:
+		SaleList = OrderList.objects.filter(ShopOrderID = so, OrderListState__in = [1,2,3,4,5,6])
+		for sl in SaleList:
+			SalesHistoryList1.append(sl)
+	totalvalue1 = 0
+	for shl1 in SalesHistoryList1:
+		totalvalue1 = totalvalue1 + shl1.CommodityID.SellPrice * shl1.OrderAmount
+
+
+	seller = Seller.objects.get(id=UserID)
+	try:
+		shop = Shop.objects.get(SellerID = seller)
+		commoditylist = Commodity.objects.filter(ShopID = shop)
+		shopadvlist = Shop.objects.filter(SellerID = seller, IsAdv = True)
+		commodityadvlist = Commodity.objects.filter(ShopID = shop, IsAdv = True)
+	except:
+		shop = None
+	return render_to_response('SellerSaleHistory.html', locals())
 
 
 #店铺管理订单（查看订单并确认）
 def checkOrder(request):
-	return HttpResponse('Under Development!')
+	if request.session.get('UserID', False):
+		UserID = request.session['UserID']
+		UserType = request.session['UserType']
+		UserAccount = request.session['UserAccount']
+		UserName = UserAccount
+	else:
+		UserID = None
+		UserType = None
+		UserAccount = None
+	shopID = Shop.objects.get(SellerID = UserID)
+	shopOrder = ShopOrder.objects.filter(ShopID = shopID, ShopOrderState = 0)
+	orderList = []
+	for so in shopOrder:
+		List = OrderList.objects.filter(ShopOrderID = so, OrderListState = 0)
+		for ol in List:
+			orderList.append(ol)
+	seller = Seller.objects.get(id=UserID)
+	try:
+		shop = Shop.objects.get(SellerID = seller)
+		commoditylist = Commodity.objects.filter(ShopID = shop)
+		shopadvlist = Shop.objects.filter(SellerID = seller, IsAdv = True)
+		commodityadvlist = Commodity.objects.filter(ShopID = shop, IsAdv = True)
+	except:
+		shop = None
+	#return HttpResponse(orderList[0])
+	return render_to_response('checkOrder.html', locals())
 
 
 def removeOrderList(request):
-	return HttpResponse('Under Development!')
+	if request.session.get('UserID', False):
+		UserID = request.session['UserID']
+		UserType = request.session['UserType']
+		UserAccount = request.session['UserAccount']
+		UserName = UserAccount
+	else:
+		UserID = None
+		UserType = None
+		UserAccount = None
+	if 'id' in request.GET:
+		content = request.GET['content']
+		ol = OrderList.objects.get(id = request.GET['id'])
+		ol.OrderListState = 1
+		ol.ShipNo = content
+		ol.save()
+		so = ShopOrder.objects.get(id = ol.ShopOrderID.id)
+		so.ShopOrderState = 1
+		so.save()
+		co = CustomerOrder.objects.get(id = ol.CustomerOrderID.id)
+		co.CustomerOrderState = 1
+		co.save()
+		income = 0
+		income = income + ol.CommodityID.SellPrice * ol.OrderAmount
+		incomeAmount = income * System.objects.get(id = 1).ComissionRate
+		tmp = Income.objects.get(id = 1)
+		tmp.IncomeAmount = tmp.IncomeAmount + incomeAmount
+		tmp.save()
+	else:
+		ol = None
+	return HttpResponse("You modified: "+ ol.CommodityID.CommodityName+"from Orderlist")
+
 
 def refund(request):
-	return HttpResponse('Under Development!')
+	if request.session.get('UserID', False):
+		UserID = request.session['UserID']
+		UserType = request.session['UserType']
+		UserAccount = request.session['UserAccount']
+		UserName = UserAccount
+	else:
+		UserID = None
+		UserType = None
+		UserAccount = None
+	shopID = Shop.objects.get(SellerID = UserID)
+	shopOrder = ShopOrder.objects.filter(ShopID = shopID, ShopOrderState = 4)
+	orderList = []
+	for so in shopOrder:
+		List = OrderList.objects.filter(ShopOrderID = so, OrderListState = 4)
+		for ol in List:
+			orderList.append(ol)
+	seller = Seller.objects.get(id=UserID)
+	try:
+		shop = Shop.objects.get(SellerID = seller)
+		commoditylist = Commodity.objects.filter(ShopID = shop)
+		shopadvlist = Shop.objects.filter(SellerID = seller, IsAdv = True)
+		commodityadvlist = Commodity.objects.filter(ShopID = shop, IsAdv = True)
+	except:
+		shop = None
+	#return HttpResponse(orderList[0])
+	return render_to_response('Seller_ReturnAndRefund.html', locals())
+
+
 
 def modifyOrderList1(request):
-	return HttpResponse('Under Development!')
+	if request.session.get('UserID', False):
+		UserID = request.session['UserID']
+		UserType = request.session['UserType']
+		UserAccount = request.session['UserAccount']
+		UserName = UserAccount
+	else:
+		UserID = None
+		UserType = None
+		UserAccount = None
+	if 'id' in request.GET:
+		ol = OrderList.objects.get(id = request.GET['id'])
+		ol.OrderListState = 5
+		ol.save()
+		so = ShopOrder.objects.get(id = ol.ShopOrderID.id)
+		so.ShopOrderState = 5
+		so.save()
+		co = CustomerOrder.objects.get(id = ol.CustomerOrderID.id)
+		co.CustomerOrderState = 5
+		co.save()
+	else:
+		ol = None
+	return HttpResponse("You modified: "+ ol.CommodityID.CommodityName+"from Orderlist")
 
 def modifyOrderList2(request):
-	return HttpResponse('Under Development!')
+	if request.session.get('UserID', False):
+		UserID = request.session['UserID']
+		UserType = request.session['UserType']
+		UserAccount = request.session['UserAccount']
+		UserName = UserAccount
+	else:
+		UserID = None
+		UserType = None
+		UserAccount = None
+	if 'id' in request.GET:
+		ol = OrderList.objects.get(id = request.GET['id'])
+		ol.OrderListState = 7
+		ol.save()
+		so = ShopOrder.objects.get(id = ol.ShopOrderID.id)
+		so.ShopOrderState = 7
+		so.save()
+		co = CustomerOrder.objects.get(id = ol.CustomerOrderID.id)
+		co.CustomerOrderState = 7
+		co.save()
+	else:
+		ol = None
+	return HttpResponse("You modified: "+ ol.CommodityID.CommodityName+"from Orderlist")
+
 
 def adminIncome(request, time):
 	#comission money
