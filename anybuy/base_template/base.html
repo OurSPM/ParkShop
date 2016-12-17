@@ -99,10 +99,16 @@
               <input type="text" id="keyword" class="form-control">
             </div>
             <script language="javascript">
-            function searchForCommodity() {
-            keyword = document.getElementById("keyword").value;
-            location.href='/search/'+keyword;
+             function searchForCommodity() {
+            if($.trim(document.getElementById("keyword").value)==""){
+              alert("Search Content Should Not Be Empty!")
             }
+            else{
+              keyword = document.getElementById("keyword").value;
+              location.href='search/'+keyword;
+              }
+            }
+
             </script>
             <button type="button" onclick="searchForCommodity()" id="search" class="btn btn-default">Search</button>
             </form>
