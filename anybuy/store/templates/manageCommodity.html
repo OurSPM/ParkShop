@@ -2,13 +2,64 @@
 {% block title %}Modify Commodity{% endblock %}
 
 {% block sellercontent %}
-<div class="col-md-10 column">
-<h3>Commodity Infomation</h3>
-    <hr>
-<form method = 'post' enctype="multipart/form-data">
-{% csrf_token %}
-{{cf.as_p}}
-<input type="submit" value = "Save" />
-</form>
+<div class="col-md-6 column">
+	<h3>Commodity Infomation</h3>
+	<hr>
+	<form method = 'post' enctype="multipart/form-data">
+		{% csrf_token %}
+		<div class="form-group">
+			<label for="id_CommodityName">Commodity Name:</label>
+			<input class="form-control" name="CommodityName" id="id_CommodityName" type="text" />
+		</div>
+		<div class="form-group">
+			<label for="id_CommodityDescription">Description:</label>
+			<input class="form-control" name="CommodityDescription" id="id_CommodityDescription" type="text" />
+		</div>
+		<div class="form-group">
+			<label for="id_CommodityAmount">Amount:</label>
+			<input class="form-control" name="CommodityAmount" id="id_CommodityAmount" type="text" />
+		</div>
+		<div class="form-group">
+			<label for="id_SoldAmount">Sold Amount:</label>
+			<input class="form-control" id="id_SoldAmount" name="SoldAmount" type="text" />
+		</div>
+		<div class="form-group">
+			<label for="id_PurchasePrice">Purchase Price:</label>
+			<input class="form-control" id="id_PurchasePrice" name="PurchasePrice" type="text" />
+		</div>
+		<div class="form-group">
+			<label for="id_SellPrice">Sell Price:</label>
+			<input class="form-control" id="id_SellPrice" name="SellPrice" type="text" />
+		</div>
+		<div class="form-group">
+			<label for="id_CommodityType">Type:</label>
+			<select class="form-control span1" data-style="btn-primary" id="id_CommodityType" name="CommodityType">
+				<option value="C">Clothing</option>
+				<option value="A">Accessory</option>
+				<option value="S">Sport</option>
+				<option value="J">Jewelry</option>
+				<option value="D">Digit</option>
+				<option value="H">Household appliances</option>
+				<option value="M">Makeup</option>
+				<option value="F">Food</option>
+				<option value="E">Entertainment</option>
+				<option value="O">Others</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="id_CommodityImage">Image</label>
+			<input id="id_CommodityImage" name="CommodityImage" type="file">
+			<p class="help-block">Image.</p>
+		</div>
+		<div class="form-group">
+			<label for="id_CommodityDiscount">Discount:</label>
+			<input class="form-control" id="id_CommodityDiscount" name="CommodityDiscount" type="text" />
+		</div>
+		<div class="form-group">
+			<input id="id_IsAdv" name="IsAdv" type="checkbox" />
+			<label for="id_IsAdv">Is Adv?</label>
+		</div>
+		<input class="btn btn-primary" type="submit" value = "Save" />
+	</form>
 </div>
 {% endblock %}
