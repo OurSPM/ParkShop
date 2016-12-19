@@ -99,10 +99,17 @@
               <input type="text" id="keyword" class="form-control">
             </div>
             <script language="javascript">
+            /*删除两端的空格
+             function trimStr(str){return str.replace(/(^\s*)|(\s*$)/g,"");}
+             */
             function searchForCommodity() {
-            keyword = document.getElementById("keyword").value;
-            location.href='/search/'+keyword;
-            }
+             keyword = document.getElementById("keyword").value.replace(/\s/ig,'');
+ 
+             if(keyword=="")
+               alert("Search Content Should Not Be Empty!")
+             else
+               location.href='/search/'+keyword;
+              }
             </script>
             <button type="button" onclick="searchForCommodity()" id="search" class="btn btn-default">Search</button>
             </form>

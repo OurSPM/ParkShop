@@ -27,8 +27,11 @@
                         <div class="row clearfix">
                             <div class="col-md-3 column"></div>
                             <div class="col-md-6 column">
-                            {% if duplicate %}
+                            {% if AccountDuplicate %}
                                     <p style="color: red">This account is used! Choose another one.</p>
+                                {% endif %}
+                            {% if EmailDuplicate %}
+                                <p style="color: red">This Email is used! Choose another one.</p>
                                 {% endif %}
                                 <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
@@ -60,7 +63,7 @@
                                     <div class="form-group">
                                         <label for="id_CustomerPassword2" class="col-sm-2 control-label">Repassword</label>
                                         <div class="col-sm-10">
-                                            <input type="password" class="form-control" name="CustomerPassword2" id="id_CustomerPassword2" placeholder="RePassword"></div>
+                                            <input type="password" class="form-control" name="CustomerPassword2" id="id_CustomerPassword2" placeholder="RePassword" onblur="chick()"></div>
                                     </div>
                                     <div class="form-group">
                                         <label for="id_CustomerTelephone" class="col-sm-2 control-label">User Tel.</label>
@@ -96,5 +99,13 @@
     </div>
 </div>
 </div>
+<script type="text/javascript">
+    function chick() {
+        if ($("#id_CustomerPassword2").val()!=$("#id_CustomerPassword").val()) {
+            $("#id_CustomerPassword2").val("");
+            alert("password not equals");
+        }
+    }
+</script>
 
 {% endblock %}
