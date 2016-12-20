@@ -12,6 +12,7 @@
 	<table id="order" class="table table-hover table-condensed">
 		<thead>
 			<tr class="yanse">
+			<th>OrderNo.</th>
 			<th >CommodityPicture</th>
 			<th >CommodityName</th>
 			<th >OrderTime</th>
@@ -88,12 +89,13 @@
 
 		{% for ol in orderList %}
 		<tr class="yanse" id="item{{ ol.CommodityID.id }}">
+		<td>{{ ol.id }}</td>
 		<td><a href="/commodity/id/{{ ol.CommodityID.id }}" style = "color:#3299CC"><img src="/file/{{ ol.CommodityID.CommodityImage }}" style = "height:90px;"/></a></td>
 		<td><a href="/commodity/id/{{ ol.CommodityID.id }}" style = "color:#3299CC">{{ ol.CommodityID.CommodityName }}</a></td>
 		<td>{{ ol.OrderListDate }}</td>
-		<td>{{ ol.CommodityID.SellPrice }} $</td>
+		<td>{{ ol.CommodityID.SellPrice }} HDK</td>
 		<td>{{ ol.OrderAmount}}</td>
-		<td>{% widthratio ol.CommodityID.SellPrice 1 ol.OrderAmount %} $</td>
+		<td>{% widthratio ol.CommodityID.SellPrice 1 ol.OrderAmount %} HDK</td>
 
 		{% if ol.OrderListState == 0 %}
 		<td>paying</td>
@@ -149,6 +151,7 @@
 		{% else %}
             <td><br><a class="btn btn-primary" onclick="confirm('{{ol.id}}')"><b>Confirm and pay</b></a></td>
         {% endif %}
+    </tr>
 		{% endfor %}
 	</table>
 </div>

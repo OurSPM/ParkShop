@@ -161,6 +161,7 @@ def refreshcart(request):
         UserAccount = None
         user = None
     if 'id' in request.GET:
+        print request.GET['amount']
         commodity = Commodity.objects.get(id = request.GET['id'])
         cart = Cart.objects.get(CustomerID = user, CommodityID = commodity)
         cart.CartCommodityAmount = int(request.GET['amount'])
@@ -431,9 +432,9 @@ class CommodityForm(forms.Form):
     CommodityName = forms.CharField(label='CommodityName', max_length=64)
     CommodityDescription = forms.CharField(label='Description')
     CommodityAmount = forms.IntegerField(label='Amount')
-    SoldAmount = forms.IntegerField(label='Sold Amount')
+    SoldAmount = forms.IntegerField(label='SoldAmount')
     PurchasePrice = forms.FloatField(label='PurchasePrice')
-    SellPrice = forms.FloatField(label='Sell Price')
+    SellPrice = forms.FloatField(label='SellPrice')
     CommodityType = forms.ChoiceField(label='Type', choices=CommodityTypeChoices)
     CommodityImage = forms.ImageField(label='Image', required=False)  #,upload_to='images',max_length=255)
     CommodityDiscount = forms.FloatField(label='Discount')
@@ -457,10 +458,8 @@ def add_and_modify(request, cid): # cid==0时添加新项目， !=0时修改cid�
     except:
         shop = None
     if request.method == 'POST':
-        print "receive post"
         cf = CommodityForm(request.POST, request.FILES)
         if cf.is_valid():
-            print "get form"
             if int(cid) == 0:
                 commodity = Commodity()
             else:
@@ -481,7 +480,6 @@ def add_and_modify(request, cid): # cid==0时添加新项目， !=0时修改cid�
             commodity.save() 
             return HttpResponseRedirect('/seller/home')
     else:
-        print "Form not good"
         cf = CommodityForm()
         if int(cid) != 0: # 如果cid!=0 就代表要修改的CommodityID
             commodity = Commodity.objects.get(id = cid)

@@ -58,9 +58,9 @@
 					<td>{{ salesHistory.id }}</td>
 					<td>{{ salesHistory.CommodityID.CommodityName }}</td>
 					<td>{{ salesHistory.OrderListDate }}</td>
-					<td>{{ salesHistory.CommodityID.SellPrice }}$</td>
+					<td>{{ salesHistory.CommodityID.SellPrice }}HDK</td>
 					<td>{{ salesHistory.OrderAmount }}</td>
-					<td>{% widthratio salesHistory.CommodityID.SellPrice 1 salesHistory.OrderAmount %}$</td>
+					<td>{% widthratio salesHistory.CommodityID.SellPrice 1 salesHistory.OrderAmount %}HDK</td>
 					<td>Name:{{ salesHistory.CustomerOrderID.CustomerID.CustomerName}}<br>
 						Tel:{{ salesHistory.CustomerOrderID.CustomerID.CustomerTelephone}}<br>
 						Email:{{ salesHistory.CustomerOrderID.CustomerID.CustomerEmail}}<br>
@@ -95,7 +95,7 @@
 				</tr>
 				{% endfor %}				
 			</table>
-			<b>Total Value: {{totalvalue}}$	</b>
+			<b>Total Value: {{totalvalue}}HDK	</b>
 			<br>
 			<br>
 		</div>
@@ -145,9 +145,9 @@
 					<td>{{ salesHistory.id }}</td>
 					<td>{{ salesHistory.CommodityID.CommodityName }}</td>
 					<td>{{ salesHistory.OrderListDate }}</td>
-					<td>{{ salesHistory.CommodityID.SellPrice }}$</td>
+					<td>{{ salesHistory.CommodityID.SellPrice }}HDK</td>
 					<td>{{ salesHistory.OrderAmount }}</td>
-					<td>{% widthratio salesHistory.CommodityID.SellPrice 1 salesHistory.OrderAmount %}$</td>
+					<td>{% widthratio salesHistory.CommodityID.SellPrice 1 salesHistory.OrderAmount %}HDK</td>
 					<td>Name:{{ salesHistory.CustomerOrderID.CustomerID.CustomerName}}<br>
 						Tel:{{ salesHistory.CustomerOrderID.CustomerID.CustomerTelephone}}<br>
 						Email:{{ salesHistory.CustomerOrderID.CustomerID.CustomerEmail}}<br>
@@ -183,7 +183,7 @@
 				</tr>
 				{% endfor %}				
 			</table>
-			<b>Total Value: {{totalvalue1}}$	</b>
+			<b>Total Value: {{totalvalue1}}HDK	</b>
 			<br>
 			<br>
 		</div>
