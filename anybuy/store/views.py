@@ -54,7 +54,7 @@ def getShop(request, cid):
         UserType = None
         UserAccount = None
     shop = Shop.objects.get(id=cid)
-    commodityList = Commodity.objects.filter(ShopID = shop)
+    commodityList = Commodity.objects.filter(ShopID = shop,IsAdv=True)
     shopList = Shop.objects.filter(SellerID = shop.SellerID)
     return render_to_response('Customer_EnterShop.html', locals())
 
