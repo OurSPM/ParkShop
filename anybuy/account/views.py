@@ -130,7 +130,7 @@ def mail_verification(request):
 		request.session['UserID'] = CustomerList.id
 		return HttpResponseRedirect('/')
 	else:
-		return HttpResponse("Verification Failed!")
+		return render_to_response('cuole.html')
 #/myinfo
 def info(request):
 	UserID = request.session['UserID']

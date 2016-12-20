@@ -92,6 +92,7 @@
 					{% if salesHistory.OrderListState == 8 %}
 					<td>commented</td>
 					{% endif %}
+					<td>0</td>
 				</tr>
 				{% endfor %}				
 			</table>
@@ -179,7 +180,17 @@
 					{% if salesHistory.OrderListState == 8 %}
 					<td>commented</td>
 					{% endif %}
-					
+					<td></td>
+					<script>
+
+						var myDate = new Date();
+						myDate.getDate();
+						
+						var x = 7-myDate.getDate()+{{ salesHistory.OrderListDate.day}};
+						$('td:last').append(x);
+						
+					</script>
+
 				</tr>
 				{% endfor %}				
 			</table>
