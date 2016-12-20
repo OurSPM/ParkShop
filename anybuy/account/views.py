@@ -6,8 +6,11 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse,HttpResponseRedirect
 from django.template import RequestContext
 from system.models import *
+from django.core.mail import send_mail
 import hashlib
 import datetime
+import random
+import string
 
 #定义表单模型
 IDENTITY = (
@@ -43,7 +46,8 @@ class UserForm(forms.Form):
 # Create your views here.
 
 def register(request):
-	duplicate=False
+	AccountDuplicate=False
+	EmailDuplicate=False
 	if request.method == "POST":
 		cf = CustomerForm(request.POST)
 		if cf.is_valid():
@@ -51,23 +55,37 @@ def register(request):
 			if cf.cleaned_data['identity'] == 'C':
 				customer = Customer()
 				customer.CustomerAccount = cf.cleaned_data['CustomerAccount']
-				cu=Customer.objects.filter(CustomerAccount=customer.CustomerAccount)
-				if len(cu) == 1:
-					duplicate=True
+				customer.CustomerEmail = cf.cleaned_data['CustomerEmail']
+				AccountD=Customer.objects.filter(CustomerAccount=customer.CustomerAccount)
+				EmailD=Customer.objects.filter(CustomerEmail=customer.CustomerEmail)	
+				if len(AccountD) == 1:
+					AccountDuplicate=True
+				if len(EmailD) == 1:
+					EmailDuplicate=True
+				if AccountD or EmailD:
 					return render_to_response('register.html',locals(), context_instance=RequestContext(request))
 				customer.CustomerName = cf.cleaned_data['CustomerName']
 				pw = cf.cleaned_data['CustomerPassword']
 				pw_md5 = hashlib.md5(pw).hexdigest()
 				customer.CustomerPassword = pw_md5
-				customer.CustomerEmail = cf.cleaned_data['CustomerEmail']
+				
 				customer.CustomerAddress = cf.cleaned_data['CustomerAddress']
 				customer.CustomerTelephone = cf.cleaned_data['CustomerTelephone']
+				randomCode=string.join(random.sample(['z','y','x','w','v','u','t','s','r','q','p','o','n','m','l','k','j','i','h','g','f','e','d','c','b','a'], 8)).replace(' ','')
+				
+				customer.CustomerEmailCode=randomCode
+				customer.CustomerEmailCodeFlag=False
 				#write into db
+				customer_href="http://localhost:8000/verification/"+randomCode+"/"+customer.CustomerEmail
+				# message=<a href=customer_href>Click the link to verifivation!</a>
+				send_mail(u'parknshop confirm', customer_href, '352754106@qq.com',
+    [customer.CustomerEmail], fail_silently=False)
 				customer.save()
 				request.session['UserType'] = cf.cleaned_data['identity']
 				request.session['UserAccount'] = cf.cleaned_data['CustomerAccount']
 				request.session['UserID'] = customer.id
-				return HttpResponseRedirect('/')
+				
+				return HttpResponseRedirect('https://mail.qq.com/')
 				# return render_to_response('Homepage.html', locals(), context_instance=RequestContext(request))
 			else: 
 			#返回注册成功页面
@@ -96,6 +114,23 @@ def register(request):
 		#cf = CustomerForm(request.POST)
 	return render_to_response('register.html',{'cf':cf}, context_instance=RequestContext(request))
 
+
+#/verifiacation
+def mail_verification(request):
+	usr_url=request.get_full_path()
+	urlList=usr_url.split("/")
+	CustomerList=Customer.objects.get(CustomerEmail=urlList[3])
+	if CustomerList.CustomerEmailCode==urlList[2]:
+		CustomerList.CustomerEmailCodeFlag=True
+		randomCode=string.join(random.sample(['z','y','x','w','v','u','t','s','r','q','p','o','n','m','l','k','j','i','h','g','f','e','d','c','b','a'], 8)).replace(' ','')
+		CustomerList.CustomerEmailCode=randomCode
+		CustomerList.save()
+		request.session['UserType'] = 'C'
+		request.session['UserAccount'] = CustomerList.CustomerAccount
+		request.session['UserID'] = CustomerList.id
+		return HttpResponseRedirect('/')
+	else:
+		return HttpResponse("Verification Failed!")
 #/myinfo
 def info(request):
 	UserID = request.session['UserID']
@@ -135,6 +170,7 @@ def info(request):
 	else:
 		if UserType == 'C':
 			user = Customer.objects.get(id=UserID)
+			shop=""
 			UserAccount = user.CustomerAccount
 			UserEmail = user.CustomerEmail
 			UserAddress = user.CustomerAddress
@@ -177,12 +213,14 @@ def login(request):
 			if uf.cleaned_data['identity'] == 'C':
 				try:
 					user = Customer.objects.get(CustomerAccount__exact = UserAccount, CustomerPassword__exact = UserPassword)
-					if user:
+					if user and user.CustomerEmailCodeFlag:
 						request.session['UserType'] = uf.cleaned_data['identity']
 						request.session['UserAccount'] = UserAccount
 						request.session['UserID'] = user.id
 						#return render_to_response('Homepage.html', locals(), context_instance=RequestContext(request))
 						return HttpResponseRedirect('/index/')
+					elif user:
+						return HttpResponse("You have not activate your account! Please click the verification link which is in you Email!")
 					else:
 						wrongpw = True
 						return render_to_response('login.html', locals(), context_instance=RequestContext(request))

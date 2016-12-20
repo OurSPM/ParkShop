@@ -105,3 +105,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'files')
 #os.path.join(BASE_DIR, '/files')
 #'D:/GitHub/SPM/parknshop/Pro/anybuy/files'
 
+EMAIL_HOST = 'smtp.qq.com'                   
+
+EMAIL_PORT =587                                      
+
+EMAIL_HOST_USER = '352754106@qq.com'       
+
+EMAIL_HOST_PASSWORD = 'axstihidonefbggi'  
+#passwd:axstihidonefbggi                
+
+EMAIL_SUBJECT_PREFIX = u'[Parkning]'           
+
+EMAIL_USE_TLS = True                            
+
+SERVER_EMAIL = '352754106@qq.com' 

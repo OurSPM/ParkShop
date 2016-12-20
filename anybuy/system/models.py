@@ -24,6 +24,7 @@ class Seller(models.Model):
 	SellerTelephone = models.CharField(max_length=64,blank=True)
 	SellerEmail = models.EmailField(blank=True)
 	SellerAddress = models.CharField(max_length=64,blank=True)
+	
 	def __unicode__(self):
 		return '%s %s %s' %(self.id, self.SellerAccount, self.SellerName)
 
@@ -163,7 +164,10 @@ class Customer(models.Model):
 	CustomerType = models.CharField(max_length=1,choices=CustomerTypeChoices,blank=True)
 	CustomerTelephone = models.CharField(max_length=64,blank=True)
 	CustomerEmail = models.EmailField()
+	CustomerEmailCode=models.TextField(blank=True)
+	CustomerEmailCodeFlag=models.BooleanField(blank=True)
 	CustomerAddress = models.TextField(blank=True)
+	
 	def __unicode__(self):
 		return u'%s %s %s' %(self.id, self.CustomerAccount, self.CustomerName)
 

@@ -24,8 +24,11 @@
                             <div class="row clearfix">
                                 <div class="col-md-3 column"></div>
                                 <div class="col-md-6 column">
-                                    {% if duplicate %}
+                                    {% if AccountDuplicate %}
                                     <p style="color: red">This account is used! Choose another one.</p>
+                                    {% endif %}
+                                    {% if EmailDuplicate %}
+                                    <p style="color: red">This Email is used! Choose another one.</p>
                                     {% endif %}
                                     <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
                                         {% csrf_token %}

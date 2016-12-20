@@ -14,10 +14,10 @@ a.out
 #*.swp
 #ctags生成的tags文件
 #tags
-#*.pyc
-#*~
-#*.ids
-#*.xml
-#*.png
-#*.jpg
-#*.sqlite3
+*.pyc
+*~
+*.ids
+*.xml
+*.png
+*.jpg
+*.sqlite3

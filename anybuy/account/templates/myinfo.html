@@ -19,16 +19,17 @@
 				</div>
 				<div class="row clearfix">
 					<div class="col-md-12 column">
-						{% for shop in shopList %}
-						<h3 style="color:#3a87ad">My Photo</h3>
-						<a href="/shop/id/{{ shop.id }}" style = "color:#3299CC">
-							<img class="img-thumbnail" alt="140x140" src="/file/{{ shop.ShopImage }}" style = "height:270px;"/>
+						{% if shop %}
+
+						<h3 style="color:#3a87ad">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;My Photo</h3>
+						<a href="/shop/id/{{ shop.id }}" style = "width:200px;height:160px;float:right;color:#3299CC">
+							<img class="img-thumbnail" alt="140x140" src="/file/{{ shop.ShopImage }}"/>
 						</a>
-						{% endfor %}
+						{% endif %}
 					</div>
 				</div>
 			</div>
-
+			<br><br><br><br>
 		</div>
 	</div>
 </div>

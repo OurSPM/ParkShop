@@ -102,20 +102,13 @@
             /*删除两端的空格
              function trimStr(str){return str.replace(/(^\s*)|(\s*$)/g,"");}
              */
-              function searchForCommodity() {
-             keyword = document.getElementById("keyword").value;
-             //location.href='search/'+keyword;
-            //删除所有的空格
+            function searchForCommodity() {
              keyword = document.getElementById("keyword").value.replace(/\s/ig,'');
  
-                if(keyword==""){
-                    alert("Search Content Should Not Be Empty!");
-                    return;
-                }
-                else{
-
+             if(keyword=="")
+               alert("Search Content Should Not Be Empty!")
+             else
                location.href='/search/'+keyword;
-                }
               }
             </script>
             <button type="button" onclick="searchForCommodity()" id="search" class="btn btn-default">Search</button>
