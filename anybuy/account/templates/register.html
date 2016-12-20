@@ -2,99 +2,105 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
-
 <div class="container">
-<div class="row clearfix">
-    <div class="col-md-12 column">
-        <div class="tabbable" id="tabs-890436">
-            
-            <div class="tab-content">
-                <div class="tab-pane active" id="panel-849926">
-                    <div class="container">
-                        <div class="row clearfix">
-                            <div class="col-md-12 column">
-                                <div class="row clearfix">
-                                    <div class="col-md-12 column">
-                                        <h1  class="text-center text-success" style="color:#3a87ad"> <strong>Shopping Mall Seller System</strong>
-                                        </h1>
-                                        <h3  class="text-center text-default" style="color:#3a87ad">
-                                            <strong>Register</strong>
-                                        </h3>
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <div class="tabbable" id="tabs-890436">
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="panel-849926">
+                        <div class="container">
+                            <div class="row clearfix">
+                                <div class="col-md-12 column">
+                                    <div class="row clearfix">
+                                        <div class="col-md-12 column">
+                                            
+                                            <h2  class="text-center text-default" style="color:#3a87ad"> <strong>Register</strong>
+                                            </h2>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-md-3 column"></div>
-                            <div class="col-md-6 column">
-                            {% if duplicate %}
+                            <div class="row clearfix">
+                                <div class="col-md-3 column"></div>
+                                <div class="col-md-6 column">
+                                    {% if duplicate %}
                                     <p style="color: red">This account is used! Choose another one.</p>
-                                {% endif %}
-                                <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                
-                                    
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">Account</label>
-                                        <div class="col-sm-10">
-                                            <input type="radio" name="identity" value="C" checked="checked">&nbsp;&nbsp;Customer
+                                    {% endif %}
+                                    <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">AccountType</label>
+                                            <div class="col-sm-10">
+                                                <input type="radio" name="identity" value="C" checked="checked">
+                                                &nbsp;&nbsp;Customer
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            <input type="radio" name="identity" value="S">&nbsp;&nbsp;Seller
+                                                <input type="radio" name="identity" value="S">&nbsp;&nbsp;Seller</div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="id_CustomerAccount" class="col-sm-2 control-label">Account</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="CustomerAccount" id="id_CustomerAccount" placeholder="Account"></div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="id_CustomerName" class="col-sm-2 control-label">Realname</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="CustomerName" id="id_CustomerName" placeholder="Realname"></div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="id_CustomerPassword" class="col-sm-2 control-label">Password</label>
-                                        <div class="col-sm-10">
-                                            <input type="password" class="form-control" id="id_CustomerPassword" name="CustomerPassword" placeholder="Password"></div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="id_CustomerPassword2" class="col-sm-2 control-label">Repassword</label>
-                                        <div class="col-sm-10">
-                                            <input type="password" class="form-control" name="CustomerPassword2" id="id_CustomerPassword2" placeholder="RePassword"></div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="id_CustomerTelephone" class="col-sm-2 control-label">User Tel.</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="CustomerTelephone" id="id_CustomerTelephone" placeholder="User Tel."></div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="id_CustomerEmail" class="col-sm-2 control-label">Email</label>
-                                        <div class="col-sm-10">
-                                            <input type="email" class="form-control" id="id_CustomerEmail" name="CustomerEmail" placeholder="Email Address"></div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="id_CustomerAddress" class="col-sm-2 control-label">UserAdd.</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="CustomerAddress" id="id_CustomerAddress" placeholder="User Add."></div>
-                                    </div>
-                                    
-                                    
-                                    <div class="form-group">
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Register</button>
+                                        <div class="form-group">
+                                            <label for="id_CustomerAccount" class="col-sm-2 control-label">Account</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" name="CustomerAccount" id="id_CustomerAccount" placeholder="Account"></div>
                                         </div>
-                                    </div>
-                                </form>
+                                        <div class="form-group">
+                                            <label for="id_CustomerName" class="col-sm-2 control-label">Realname</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" name="CustomerName" id="id_CustomerName" placeholder="Realname"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="id_CustomerPassword" class="col-sm-2 control-label">Password</label>
+                                            <div class="col-sm-10">
+                                                <input type="password" class="form-control" id="id_CustomerPassword" name="CustomerPassword" placeholder="Password"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="id_CustomerPassword2" class="col-sm-2 control-label">Repassword</label>
+                                            <div class="col-sm-10">
+                                                <input type="password" class="form-control" name="CustomerPassword2" id="id_CustomerPassword2" placeholder="RePassword"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="id_CustomerTelephone" class="col-sm-2 control-label">User Tel.</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" name="CustomerTelephone" id="id_CustomerTelephone" placeholder="User Tel."></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="id_CustomerEmail" class="col-sm-2 control-label">Email</label>
+                                            <div class="col-sm-10">
+                                                <input type="email" class="form-control" id="id_CustomerEmail" name="CustomerEmail" placeholder="Email Address"></div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="id_CustomerAddress" class="col-sm-2 control-label">UserAdd.</label>
+                                            <div class="col-sm-10">
+                                            <select class="form-control span1" data-style="btn-primary" id="id_CustomerAddress" name="CustomerAddress">
+                                                <option value="Central and Western District">Central and Western District</option>
+                                                <option value="Eastern District">Eastern District</option>
+                                                <option value="Southern District">Southern District</option>
+                                                <option value="Wan Chai District">Wan Chai District</option>
+                                                <option value="Kowloon City District">Kowloon City District</option>
+                                                <option value="Kwun Tong District">Kwun Tong District</option>
+                                                <option value="Sham Shui Po District">Sham Shui Po District</option>
+                                                <option value="Wong Tai Sin District">Wong Tai Sin District</option>
+                                                <option value="Yau Tsim Mong District">Yau Tsim Mong District</option>
+                                            </select>
+                                            </div>
+                                            
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="text-center">
+                                                <button type="submit" class="btn btn-primary">Register</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-md-3 column"></div>
                             </div>
-                            <div class="col-md-3 column"></div>
                         </div>
                     </div>
+
                 </div>
-                
             </div>
         </div>
     </div>
 </div>
-</div>
-
 {% endblock %}

@@ -120,6 +120,7 @@ def info(request):
 				return render_to_response('success.html',{'UserType':'C','UserName':customer.CustomerName})
 			else: 
 				seller = Seller.objects.get(id = UserID)
+
 				seller.SellerAccount = cf.cleaned_data['CustomerAccount']
 				seller.SellerName = cf.cleaned_data['CustomerName']
 				pw = cf.cleaned_data['CustomerPassword']
@@ -141,6 +142,7 @@ def info(request):
 			UserName = user.CustomerName
 		else:
 			user = Seller.objects.get(id=UserID)
+			shop=Shop.objects.get(SellerID=user)
 			UserAccount = user.SellerAccount
 			UserEmail = user.SellerEmail
 			UserAddress = user.SellerAddress

@@ -2,11 +2,67 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
-<h1>Change your info here:</h1>
-
-<form method = 'post' enctype="multipart/form-data">
-{% csrf_token %}
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<div class="row clearfix">
+				<div class="col-md-3 column"></div>
+				<div class="col-md-6 column">
+					<h2 class="text-center text-default" style="color:#3a87ad">Change your info here:</h2>
+					<div class="text-center">
+						<form class="form-horizontal" method = 'post' enctype="multipart/form-data">
+							{% csrf_token %}
 {{cf.as_p}}
-<input type="submit" value = "modify" />
-</form>
+							<button id="id_btn" class="btn btn-primary" type="submit">submit</button>
+						</form>
+					</div>
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-12 column">
+						{% for shop in shopList %}
+						<h3 style="color:#3a87ad">My Photo</h3>
+						<a href="/shop/id/{{ shop.id }}" style = "color:#3299CC">
+							<img class="img-thumbnail" alt="140x140" src="/file/{{ shop.ShopImage }}" style = "height:270px;"/>
+						</a>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	var p = document.getElementsByTagName("p");
+	var ine = p[0].innerHTML.split('</label>')[1];
+	
+	var length = p.length;
+	var parent = p[0].parentNode;
+
+	for (var i = 0; i < length; i++) {
+		var ine = p[i].innerHTML.split('</label>')[1];
+		var div = document.createElement('div');
+		var div2 = document.createElement('div');
+		div.innerHTML = p[i].innerHTML;
+		div2.innerHTML = ine;
+		$(div).attr('class', 'form-group');
+		$('div').children('label').attr('class','col-sm-2 control-label');
+		$(div2).attr('class', 'col-sm-10');
+		$(div).children().last().remove();
+		div.appendChild(div2);
+		parent.appendChild(div);
+	}
+	var input = document.getElementsByTagName("input");
+	for (var i = 0; i < length; i++) {
+		parent.removeChild(p[0]);
+	}
+	for (var i = 2; i < length+2; i++) {
+		$(input[i]).attr('class', 'form-control');
+	}
+	$('label:eq(5)').attr('class', 'col-sm-2 control-label');
+	var btn = document.getElementById("id_btn");
+	parent.appendChild(btn);
+	var x = $("form > ul");
+	x.remove();
+</script>
 {% endblock %}

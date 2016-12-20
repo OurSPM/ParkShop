@@ -26,27 +26,30 @@
 			<table class="table table-striped custab">
 				<thead>
 					<tr class="yanse">
-						<th>OrderNo.</th>
+						<th>Order No.</th>
 						<th>
-							CommodityName
+							Commodity Name
 						</th>
 						<th>
-							OrderTime
+							Order Time
 						</th>
 						<th>
-							UnitPrice
+							Unit Price
 						</th>
 						<th>
 							Counts
 						</th>						
 						<th>
-							ActualMoney
+							Actual Money
 						</th>	
 						<th>
-							CustomerInfo
+							Customer Info
 						</th>
 						<th>
 							Status
+						</th>
+						<th>
+							Remaining Time
 						</th>
 					</tr>
 				</thead>
@@ -110,27 +113,30 @@
 			<table class="table table-striped custab">
 				<thead>
 					<tr class="yanse">
-						<th>OrderNo.</th>
+						<th>Order No.</th>
 						<th>
-							CommodityName
+							Commodity Name
 						</th>
 						<th>
-							OrderTime
+							Order Time
 						</th>
 						<th>
-							UnitPrice
+							Unit Price
 						</th>
 						<th>
 							Counts
 						</th>						
 						<th>
-							ActualMoney
+							Actual Money
 						</th>	
 						<th>
-							CustomerInfo
+							Customer Info
 						</th>
 						<th>
 							Status
+						</th>
+						<th>
+							Remaining Time
 						</th>
 					</tr>
 				</thead>
@@ -173,6 +179,7 @@
 					{% if salesHistory.OrderListState == 8 %}
 					<td>commented</td>
 					{% endif %}
+					
 				</tr>
 				{% endfor %}				
 			</table>

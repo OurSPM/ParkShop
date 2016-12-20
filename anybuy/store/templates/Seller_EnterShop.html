@@ -45,7 +45,7 @@
                                     </script>
                                         {% for commodity in commoditylist %}
                                         <div id="item{{ commodity.id }}" style="width: 280px; height: 290px; float: left;">
-                                            <a href="/commodity/id/{{ commodity.id }}" style = "color:#3299CC"><img class="img-thumbnail" alt="140x140" src="/file/{{ commodity.CommodityImage }}" style = "width:270px;"/></a>
+                                            <a href="/commodity/id/{{ commodity.id }}" style = "color:#3299CC"><img class="img-thumbnail" alt="140x140" src="/file/{{ commodity.CommodityImage }}" style = "height:240px;width:270px;"/></a>
                                             <a href="/seller/modify/{{ commodity.id }}">Modify</a>
                                             <a onclick="del({{ commodity.id }})">Delete</a>
                                         </div>

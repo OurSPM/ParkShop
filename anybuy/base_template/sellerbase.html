@@ -24,11 +24,14 @@
 <div class="container">
 	<div class="row clearfix">
 		<div class="col-md-12 column">
-			<ul class="nav nav-tabs">
+			<!-- <ul class="nav nav-tabs">
 				<li class="active">
 					<a href="#"><h4 style="color:#3a87ad">Recommend Shop</h4></a>
 				</li>
-			</ul>
+			</ul> -->
+			<h2 class="text-primary">
+								{{ shop.ShopName }}
+							</h2>
 			<div class="carousel slide" id="carousel-112879">
 {#				<ol class="carousel-indicators">#}
 {#					<li class="active" data-target="#carousel-112879" data-slide-to="0">#}
@@ -44,10 +47,8 @@
 					<div class="item">
 						<img alt="" src="/file/{{ shop.BigImage }}" />
 						<div class="carousel-caption">
-							<h4>
-								{{ shop.ShopName }}
-							</h4>
-							<p>
+							
+							<p class="text-info">
 								{{ shop.ShopDescription }}
 							</p>
 						</div>
@@ -55,7 +56,7 @@
 
 					{% endfor%}
 				</div>
-                <a class="left carousel-control" href="#carousel-112879" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#carousel-112879" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                <!-- <a class="left carousel-control" href="#carousel-112879" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#carousel-112879" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a> -->
 			</div>
          </div>
      </div>
