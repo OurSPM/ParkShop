@@ -3,21 +3,21 @@
 # Sean Guo
 
 #编译生成的中间文件.o文件
-*.o
+#*.o
 #简单编译生成的可执行文件
-a.out
+#a.out
 #Mac os X生成的调试信息
-*.dSYM/
+#*.dSYM/
 #Mac os X中的文件
-.DS_Store
+#.DS_Store
 #vim的暂存文件
 #*.swp
 #ctags生成的tags文件
 #tags
-*.pyc
-*~
-*.ids
-*.xml
-*.png
-*.jpg
-*.sqlite3
+#*.pyc
+#*~
+#*.ids
+#*.xml
+#*.png
+#*.jpg
+#*.sqlite3
