@@ -417,16 +417,16 @@ def applyhomecommodityadv(request):
 
 #定义表单模型
 CommodityTypeChoices=(
-    ('C','Clothing'),
-    ('A','Accessory'),
-    ('S','Sport'),
-    ('J','Jewelry'),
-    ('D','Digit'),
-    ('H','Household appliances'),
-    ('M','Makeup'),
-    ('F','Food'),
-    ('E','Entertainment'),
-    ('O','Others')
+        ('C','TV& Home Theater'),
+        ('A','Computers & Tablets'),
+        ('S','Cell Phones'),
+        ('J','Cameras & Camcorders'),
+        ('D','Audio'),
+        ('H','Car Electronics & GPS'),
+        ('M','Video, Games, Movies & Music'),
+        ('F','Health, Fitness & Sports'),
+        ('E','Home & Office'),
+        ('O','Others')
 )
 
 

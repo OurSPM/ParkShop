@@ -49,19 +49,20 @@
 {#				</div> <a class="list-group-item ">Help</a>#}
 			</div>
 		</div> -->
-		<div class="col-md-10 column">
+		<div class="col-md-12 column">
         <!-- <h1>{{ shop.ShopName }}</h1>
         <p>
             {{ shop.ShopDescription }}
 		</p> -->
+		<h3 class="text-primary">HOT SELLER<span style="font-size:40px;color:red">!!!</span></h3>
 			{% for commodity in commodityList %}
+
             <a href="/commodity/id/{{ commodity.id }}" style = "color:#3299CC"><img class="img-thumbnail" alt="140x140" src="/file/{{ commodity.CommodityImage }}" style = "height:240px;width:270px;"/></a>
             {% endfor %}
 		</div>
 	</div>
 	<div class="row clearfix">
-		<div class="col-md-4 column">
-		</div>
+		
 		<!--<div class="col-md-4 column">
 			<ul class="pagination">
 				<li>
@@ -87,8 +88,7 @@
 				</li>
 			</ul>
 		</div>-->
-		<div class="col-md-4 column">
-		</div>
+		
 	</div>
     <!-- <div class="row clearfix">
     		<div class="col-md-12 column">

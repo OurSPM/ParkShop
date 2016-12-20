@@ -51,9 +51,9 @@
 						<td>{{ ol.id }}</td>
 						<td><a href="/commodity/id/{{ ol.CommodityID.id }}" style = "color:#3299CC"><img src="/file/{{ ol.CommodityID.CommodityImage }}" style = "height:90px;"/></a></td>
 						<td><a href="/commodity/id/{{ ol.CommodityID.id }}" style = "color:#3299CC">{{ ol.CommodityID.CommodityName }}</a></td>
-						<td>{{ ol.CommodityID.SellPrice }}HDK</td>
+						<td>{{ ol.CommodityID.SellPrice }}HK$</td>
 						<td>{{ ol.OrderAmount }}</td>
-						<td>{% widthratio ol.CommodityID.SellPrice 1 ol.OrderAmount %}HDK</td>
+						<td>{% widthratio ol.CommodityID.SellPrice 1 ol.OrderAmount %}HK$</td>
 						<td>{{ ol.OrderListDate }}</td>
 						<td>Name:{{ ol.CustomerOrderID.CustomerID.CustomerName}}<br>
 							Tel:{{ ol.CustomerOrderID.CustomerID.CustomerTelephone}}<br>

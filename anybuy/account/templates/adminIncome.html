@@ -114,9 +114,9 @@
                 <td>{{ ol.id }}</td>
                 <td><a href="/commodity/id/{{ ol.CommodityID.id }}" style = "color:#3299CC"><img src="/file/{{ ol.CommodityID.CommodityImage }}" style = "height:90px;"/></a></td>
                 <td><a href="/commodity/id/{{ ol.CommodityID.id }}" style = "color:#3299CC">{{ ol.CommodityID.CommodityName }}</a></td>
-                <td>{{ ol.CommodityID.SellPrice }}HDK</td>
+                <td>{{ ol.CommodityID.SellPrice }}HK$</td>
                 <td>{{ ol.OrderAmount }}</td>
-                <td>{% widthratio ol.CommodityID.SellPrice 1 ol.OrderAmount %}HDK</td>
+                <td>{% widthratio ol.CommodityID.SellPrice 1 ol.OrderAmount %}HK$</td>
                 <td>{{ ol.OrderListDate }}</td>
                 <td>Name:{{ ol.CustomerOrderID.CustomerID.CustomerName}}<br>
                     Tel:{{ ol.CustomerOrderID.CustomerID.CustomerTelephone}}<br>
@@ -153,10 +153,10 @@
 
                 {% endfor %}
             </table>
-            <b>Total Value: {{totalvalue}} HDK </b>
+            <b>Total Value: {{totalvalue}} HK$ </b>
             <br>
             <br>
-            <b><h3>Total Comission: {{ totalcomission }} HDK</h3></b>
+            <b><h3>Total Comission: {{ totalcomission }} HK$</h3></b>
         <hr>
         <hr>
         </div>
@@ -185,10 +185,10 @@
                 <td>{{ s.SellerID.SellerTelephone }}</td>
                 <td>{{ s.SellerID.SellerEmail }}</td>
                 <td>{{ s.SellerID.SellerAddress }}</td>
-                <td>2000.0HDK</td>
+                <td>2000.0HK$</td>
                 {% endfor %}
             </table>
-            <b>Total Shop Adv Income : {{ shopAdvIncome }}HDK</b>
+            <b>Total Shop Adv Income : {{ shopAdvIncome }}HK$</b>
             <hr>
 
             <h4 style="color:#3a87ad">Commodity Adv Income</h4>
@@ -215,17 +215,17 @@
                 <td>{{ c.ShopID.SellerID.SellerName }}</td>
                 <td><a href="/commodity/id/{{ c.id }}" style = "color:#3299CC"><img src="/file/{{ c.CommodityImage }}" style = "height:90px;"/></a></td>
                 <td><a href="/commodity/id/{{ c.id }}" style = "color:#3299CC">{{ c.CommodityName }}</a></td>
-                <td>{{ c.SellPrice }}HDK</td>
+                <td>{{ c.SellPrice }}HK$</td>
                 <td>{{ c.ShopID.SellerID.SellerTelephone }}</td>
                 <td>{{ c.ShopID.SellerID.SellerEmail }}</td>
                 <td>{{ c.ShopID.SellerID.SellerAddress }}</td>
-                <td>2000.0HDK</td>
+                <td>2000.0HK$</td>
                 {% endfor %}
             </table>
-            <b>Total Commodity Adv Income : {{ commodityAdvIncome }}HDK</b>
+            <b>Total Commodity Adv Income : {{ commodityAdvIncome }}HK$</b>
             <br>
             <br>
-            <b><h3>Total Adv Income : {{totalIncome}}HDK</h3></b>
+            <b><h3>Total Adv Income : {{totalIncome}}HK$</h3></b>
             <br>
             <br>
             <br>
@@ -251,9 +251,9 @@
                 <td>{{ ol.id }}</td>
                 <td><a href="/commodity/id/{{ ol.CommodityID.id }}" style = "color:#3299CC"><img src="/file/{{ ol.CommodityID.CommodityImage }}" style = "height:90px;"/></a></td>
                 <td><a href="/commodity/id/{{ ol.CommodityID.id }}" style = "color:#3299CC">{{ ol.CommodityID.CommodityName }}</a></td>
-                <td>{{ ol.CommodityID.SellPrice }}HDK</td>
+                <td>{{ ol.CommodityID.SellPrice }}HK$</td>
                 <td>{{ ol.OrderAmount }}</td>
-                <td>{% widthratio ol.CommodityID.SellPrice 1 ol.OrderAmount %}HDK</td>
+                <td>{% widthratio ol.CommodityID.SellPrice 1 ol.OrderAmount %}HK$</td>
                 <td>{{ ol.OrderListDate }}</td>
                 <td>Name:{{ ol.CustomerOrderID.CustomerID.CustomerName}}<br>
                     Tel:{{ ol.CustomerOrderID.CustomerID.CustomerTelephone}}<br>

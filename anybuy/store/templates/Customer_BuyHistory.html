@@ -50,10 +50,10 @@
 				<tr class="yanse" id="item{{buysHistory.CommodityID.id}}">
 					<td>{{buysHistory.id}}</td>
 					<td>{{buysHistory.CommodityID.CommodityName}}</td>
-					<td>{{buysHistory.CommodityID.SellPrice}}HDK</td>
+					<td>{{buysHistory.CommodityID.SellPrice}}HK$</td>
 					<td>{{buysHistory.OrderListDate}}</td>
 					<td>{{buysHistory.OrderAmount}}</td>
-					<td>{% widthratio buysHistory.CommodityID.SellPrice 1 buysHistory.OrderAmount %}HDK</td>
+					<td>{% widthratio buysHistory.CommodityID.SellPrice 1 buysHistory.OrderAmount %}HK$</td>
 					{% if buysHistory.OrderListState == 0 %}
 					<td>paying</td>
 					{% endif %}
@@ -84,7 +84,7 @@
 				</tr>
 				{% endfor %}				
 			</table>
-			<b>Total Value: {{totalvalue}}HDK	</b>
+			<b>Total Value: {{totalvalue}}HK$	</b>
 			<br>
 			<br>
 		</div>

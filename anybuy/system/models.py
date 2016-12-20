@@ -48,15 +48,15 @@ class Shop(models.Model):
 
 class Commodity(models.Model):
 	CommodityTypeChoices=(
-		('C','Clothing'),
-		('A','Accesory'),
-		('S','Sport'),
-		('J','Jewelry'),
-		('D','Digit'),
-		('H','Household appliances'),
-		('M','Makeup'),
-		('F','Food'),
-		('E','Entertainment'),
+		('C','TV& Home Theater'),
+		('A','Computers & Tablets'),
+		('S','Cell Phones'),
+		('J','Cameras & Camcorders'),
+		('D','Audio'),
+		('H','Car Electronics & GPS'),
+		('M','Video, Games, Movies & Music'),
+		('F','Health, Fitness & Sports'),
+		('E','Home & Office'),
 		('O','Others')
 	)
 	CommodityName = models.CharField(max_length=64)
