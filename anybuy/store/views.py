@@ -54,7 +54,7 @@ def getShop(request, cid):
         UserType = None
         UserAccount = None
     shop = Shop.objects.get(id=cid)
-    commodityList = Commodity.objects.filter(ShopID = shop)
+    commodityList = Commodity.objects.filter(ShopID = shop,IsAdv=True)
     shopList = Shop.objects.filter(SellerID = shop.SellerID)
     return render_to_response('Customer_EnterShop.html', locals())
 
@@ -166,8 +166,10 @@ def refreshcart(request):
         cart = Cart.objects.get(CustomerID = user, CommodityID = commodity)
         cart.CartCommodityAmount = int(request.GET['amount'])
         cart.save()
+        print "commodity amount has change!"
     else:
         commodity = None
+    print "This will return a message"
     return HttpResponse('You refresh: '+commodity.CommodityName)
 
 def checkoutcart(request):
@@ -188,7 +190,7 @@ def checkoutcart(request):
     commoditylist = Cart.objects.filter(CustomerID=user)
     shoporder = ShopOrder.objects.create(ShopOrderState=0, ShopOrderDate=date, ShopID=commoditylist[0].CommodityID.ShopID)
     for commodity in commoditylist:
-        orderlist = OrderList.objects.create(OrderListState=0, OrderListDate=date, OrderAmount = 1, CustomerOrderID=cutomerorder, ShopOrderID=shoporder, CommodityID = commodity.CommodityID, )
+        orderlist = OrderList.objects.create(OrderListState=0, OrderListDate=date, OrderAmount = commodity.CartCommodityAmount, CustomerOrderID=cutomerorder, ShopOrderID=shoporder, CommodityID = commodity.CommodityID, )
         # 从购物车中删除，现在是将checkbox注释了，所以这里是删除购物车中所有物品
     Cart.objects.filter(CustomerID = user).delete()
     return HttpResponseRedirect('/bank')
