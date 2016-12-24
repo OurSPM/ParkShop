@@ -200,6 +200,11 @@ def getCommodity(request, id):  #/commodity/id/ 返回ID=id 的Commodity
 	commodity = Commodity.objects.get(id = int(id))
 	return render_to_response('Customer_CommodityInfo.html', {'commodity': commodity})
 
+def addr(request):  
+	
+	
+	return render_to_response('Customer_addr.html',context_instance=RequestContext(request))
+
 def login(request):
 	wrongpw = False  #wrongpw == True 代表密码错误
 	if request.method == 'POST':
@@ -220,7 +225,7 @@ def login(request):
 						#return render_to_response('Homepage.html', locals(), context_instance=RequestContext(request))
 						return HttpResponseRedirect('/index/')
 					elif user:
-						return HttpResponse("You have not activate your account! Please click the verification link which is in you Email!")
+						return render_to_response('cuole.html')
 					else:
 						wrongpw = True
 						return render_to_response('login.html', locals(), context_instance=RequestContext(request))
