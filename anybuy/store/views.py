@@ -12,6 +12,8 @@ import datetime
 from PIL import Image
 import hashlib
 # Create your views here.
+def addr(request):
+    return render_to_response('Customer_addr.html', context_instance=RequestContext(request))
 def helpcenter(request):
     if request.session.get('UserID', False):
         UserID = request.session['UserID']

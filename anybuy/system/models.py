@@ -170,7 +170,16 @@ class Customer(models.Model):
 	
 	def __unicode__(self):
 		return u'%s %s %s' %(self.id, self.CustomerAccount, self.CustomerName)
+		
 
+class CommodityReceiveAddress(models.Model):
+	CustomerAccount=models.ForeignKey(Customer)
+	CommodityAddress=models.TextField(blank=True)
+	CommodityTelephone = models.CharField(max_length=64,blank=True)
+	
+	def __unicode__(self):
+		return u'%s %s %s %s' %(self.id, self.CustomerAccount, self.CommodityAddress,self.CommodityTelephone)
+		
 class CustomerOrder(models.Model):
 	StateChoices=(
 		(0, 'paying'),
