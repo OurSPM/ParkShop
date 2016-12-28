@@ -84,7 +84,10 @@ def register(request):
 				request.session['UserType'] = cf.cleaned_data['identity']
 				request.session['UserAccount'] = cf.cleaned_data['CustomerAccount']
 				request.session['UserID'] = customer.id
-				
+
+				CommodityReceiveAddress.objects.create(CustomerID = customer, CommodityAddress = 'xian', CommodityTelephone='18717310592')
+				CommodityReceiveAddress.objects.create(CustomerID = customer, CommodityAddress = 'shenzheng', CommodityTelephone='18717310592')
+				CommodityReceiveAddress.objects.create(CustomerID = customer, CommodityAddress = 'xiameng', CommodityTelephone='18717310592')
 				return HttpResponseRedirect('https://mail.qq.com/')
 				# return render_to_response('Homepage.html', locals(), context_instance=RequestContext(request))
 			else: 
@@ -220,7 +223,7 @@ def login(request):
 						#return render_to_response('Homepage.html', locals(), context_instance=RequestContext(request))
 						return HttpResponseRedirect('/index/')
 					elif user:
-						return HttpResponse("You have not activate your account! Please click the verification link which is in you Email!")
+						return render_to_response('cuole.html')
 					else:
 						wrongpw = True
 						return render_to_response('login.html', locals(), context_instance=RequestContext(request))

@@ -12,8 +12,28 @@ import datetime
 from PIL import Image
 import hashlib
 # Create your views here.
+
 def addr(request):
-    return render_to_response('Customer_addr.html', context_instance=RequestContext(request))
+    print 'in to addr function'
+    if request.session.get('UserID', False):
+            UserID = request.session['UserID']
+            UserType = request.session['UserType']
+            UserAccount = request.session['UserAccount']
+            UserName = UserAccount
+    else:
+        return HttpResponseRedirect('/login/')
+    if request.method=='POST':
+        addrList=request.POST.getlist('cont')
+        for addr in addrList:
+            print addr
+        return HttpResponseRedirect('/bank/')
+    else:
+        AddrList=CommodityReceiveAddress.objects.filter(CustomerID=UserID)
+        rootAddr=Customer.objects.filter(CustomerAccount=UserName)
+        for addr in AddrList:
+            print addr.CommodityAddress
+            print addr.CommodityTelephone
+        return render_to_response('Customer_addr.html', locals(),context_instance=RequestContext(request))
 def helpcenter(request):
     if request.session.get('UserID', False):
         UserID = request.session['UserID']
@@ -175,6 +195,7 @@ def refreshcart(request):
     return HttpResponse('You refresh: '+commodity.CommodityName)
 
 def checkoutcart(request):
+    print 'in to checkoutcart'
     if request.session.get('UserID', False):
         UserID = request.session['UserID']
         UserType = request.session['UserType']
@@ -187,16 +208,16 @@ def checkoutcart(request):
         UserAccount = None
         user = None
     date = time.strftime('%Y-%m-%d',time.localtime(time.time()))
-    cutomerorder = CustomerOrder.objects.create(CustomerOrderState=0, CustomerOrderDate=date, CustomerID=user)
+    xianAddress=CommodityReceiveAddress.objects.get(id=1)
+    cutomerorder = CustomerOrder.objects.create(CommodityAddressID=xianAddress,CustomerOrderState=0, CustomerOrderDate=date, CustomerID=user)
     # 从购物车中删除，现在是将checkbox注释了，所以这里是删除购物车中所有物品
     commoditylist = Cart.objects.filter(CustomerID=user)
-    shoporder = ShopOrder.objects.create(ShopOrderState=0, ShopOrderDate=date, ShopID=commoditylist[0].CommodityID.ShopID)
+    shoporder = ShopOrder.objects.create(CommodityAddressID=xianAddress,ShopOrderState=0, ShopOrderDate=date, ShopID=commoditylist[0].CommodityID.ShopID)
     for commodity in commoditylist:
-        orderlist = OrderList.objects.create(OrderListState=0, OrderListDate=date, OrderAmount = commodity.CartCommodityAmount, CustomerOrderID=cutomerorder, ShopOrderID=shoporder, CommodityID = commodity.CommodityID, )
+        orderlist = OrderList.objects.create(CommodityAddressID=xianAddress,OrderListState=0, OrderListDate=date, OrderAmount = commodity.CartCommodityAmount, CustomerOrderID=cutomerorder, ShopOrderID=shoporder, CommodityID = commodity.CommodityID, )
         # 从购物车中删除，现在是将checkbox注释了，所以这里是删除购物车中所有物品
     Cart.objects.filter(CustomerID = user).delete()
-    return HttpResponseRedirect('/bank')
-    # return HttpResponse('You checked out your cart')
+    return HttpResponseRedirect('/')
 
 def bank(request):
     if request.session.get('UserID', False):
@@ -260,7 +281,29 @@ def search(request, keyword):  #/search/keyword/ 以keyword为关键字进行搜
     commodityList_by_counterprice = commodityList.order_by('-SellPrice')
     return render_to_response('Customer_CommodityList.html', locals())
 
+def searchInShop(request, lkeyword):
+    print "get little search!"
+    if request.session.get('UserID', False):
+        UserID = request.session['UserID']
+        UserType = request.session['UserType']
+        UserAccount = request.session['UserAccount']
+    else:
+        UserID = None
+        UserType = None
+        UserAccount = None
+        return HttpResponseRedirect('/login/')
+    seller = Seller.objects.get(id=UserID)
+    try:
+        shop = Shop.objects.get(SellerID = seller)
+        commoditylist = Commodity.objects.filter(ShopID = shop,CommodityName__contains=lkeyword)
+        shopadvlist = Shop.objects.filter(SellerID = seller, IsAdv = True)
+        commodityadvlist = Commodity.objects.filter(ShopID = shop, IsAdv = True)
+    except:
+        shop = None
+    return render_to_response('Seller_EnterShop.html', locals())
+
 def sellerentershop(request): #需要返回shoplist，shopadvlist，commodityadvlist
+    print 'go into enter shop'
     if request.session.get('UserID', False):
         UserID = request.session['UserID']
         UserType = request.session['UserType']
@@ -275,9 +318,6 @@ def sellerentershop(request): #需要返回shoplist，shopadvlist，commodityadv
         commodityadvlist = Commodity.objects.filter(ShopID = shop, IsAdv = True)
     except:
         shop = None
-    # commodity = commoditylist[0]
-    # shop = shopadvlist[0]
-    # return HttpResponse(commoditylist[0].CommodityName)
     return render_to_response('Seller_EnterShop.html', locals())
 
 def delfromshop(request, cid):
