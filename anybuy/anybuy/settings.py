@@ -111,7 +111,7 @@ EMAIL_PORT =587
 
 EMAIL_HOST_USER = '352754106@qq.com'       
 
-EMAIL_HOST_PASSWORD = 'axstihidonefbggi'  
+EMAIL_HOST_PASSWORD = 'ctawngrrwlcfbjih'  
 #passwd:axstihidonefbggi                
 
 EMAIL_SUBJECT_PREFIX = u'[Parkning]'           
