@@ -29,6 +29,9 @@ def addr(request):
         print 'not in post'
         AddrList=CommodityReceiveAddress.objects.filter(CustomerID=UserID)
         rootAddr=Customer.objects.get(CustomerAccount=UserName)
+        for addr in AddrList:
+            print addr.CommodityAddress
+            print addr.CommodityTelephone
         return render_to_response('Customer_addr.html', locals(),context_instance=RequestContext(request))
 
 def helpcenter(request):
