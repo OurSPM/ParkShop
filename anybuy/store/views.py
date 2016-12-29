@@ -14,7 +14,6 @@ import hashlib
 # Create your views here.
 
 def addr(request):
-    print 'in to addr function'
     if request.session.get('UserID', False):
             UserID = request.session['UserID']
             UserType = request.session['UserType']
@@ -23,16 +22,15 @@ def addr(request):
     else:
         return HttpResponseRedirect('/login/')
     if request.method=='POST':
+        print 'in post'
         addrList=request.POST.getlist('cont')
         for addr in addrList:
             print addr
-        return HttpResponseRedirect('/bank/')
+        return HttpResponseRedirect('/bankaccount',locals())
     else:
+        print 'not in post'
         AddrList=CommodityReceiveAddress.objects.filter(CustomerID=UserID)
         rootAddr=Customer.objects.filter(CustomerAccount=UserName)
-        for addr in AddrList:
-            print addr.CommodityAddress
-            print addr.CommodityTelephone
         return render_to_response('Customer_addr.html', locals(),context_instance=RequestContext(request))
 def helpcenter(request):
     if request.session.get('UserID', False):
@@ -235,6 +233,7 @@ def bank(request):
 
 def bankaccount(request):
     if request.session.get('UserID', False):
+
         UserID = request.session['UserID']
         UserType = request.session['UserType']
         UserAccount = request.session['UserAccount']

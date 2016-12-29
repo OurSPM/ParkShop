@@ -56,9 +56,9 @@
 						<td>{% widthratio ol.CommodityID.SellPrice 1 ol.OrderAmount %}HK$</td>
 						<td>{{ ol.OrderListDate }}</td>
 						<td>Name:{{ ol.CustomerOrderID.CustomerID.CustomerName}}<br>
-							Tel:{{ ol.CustomerOrderID.CustomerID.CustomerTelephone}}<br>
+							Tel:{{ ol.CustomerOrderID.CommodityAddressID.CommodityTelephone}}<br>
 							Email:{{ ol.CustomerOrderID.CustomerID.CustomerEmail}}<br>
-							Addr:{{ ol.CustomerOrderID.CustomerID.CustomerAddress }}</td>
+							Addr:{{ ol.CustomerOrderID.CommodityAddressID.CommodityAddress }}</td>
 
 						{% if ol.OrderListState == 0 %}
 						<td>paying</td>
