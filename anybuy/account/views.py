@@ -84,7 +84,10 @@ def register(request):
 				request.session['UserType'] = cf.cleaned_data['identity']
 				request.session['UserAccount'] = cf.cleaned_data['CustomerAccount']
 				request.session['UserID'] = customer.id
-				
+
+				CommodityReceiveAddress.objects.create(CustomerID = customer, CommodityAddress = 'xian', CommodityTelephone='18717310592')
+				CommodityReceiveAddress.objects.create(CustomerID = customer, CommodityAddress = 'shenzheng', CommodityTelephone='18717310592')
+				CommodityReceiveAddress.objects.create(CustomerID = customer, CommodityAddress = 'xiameng', CommodityTelephone='18717310592')
 				return HttpResponseRedirect('https://mail.qq.com/')
 				# return render_to_response('Homepage.html', locals(), context_instance=RequestContext(request))
 			else: 
@@ -199,11 +202,6 @@ def getCommodity(request, id):  #/commodity/id/ 返回ID=id 的Commodity
 	
 	commodity = Commodity.objects.get(id = int(id))
 	return render_to_response('Customer_CommodityInfo.html', {'commodity': commodity})
-
-def addr(request):  
-	
-	
-	return render_to_response('Customer_addr.html',context_instance=RequestContext(request))
 
 def login(request):
 	wrongpw = False  #wrongpw == True 代表密码错误

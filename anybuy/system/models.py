@@ -4,6 +4,7 @@ from django.db import models
 
 # Create your models here.
 
+
 class HelpCenter(models.Model):
 	HelpCenterName = models.CharField(max_length=64)
 	HelpCenterContent = models.TextField(blank=True)
@@ -43,7 +44,7 @@ class Shop(models.Model):
 	ShopImage = models.ImageField(upload_to='images',max_length=255,blank=True,null=True)
 	IsAdv = models.BooleanField()
 	IsHomeAdv = models.BooleanField()
-	def __unicode__(self):
+	def __unicode__(self): 
 		return '%s %s' %(self.id, self.ShopName)
 
 class Commodity(models.Model):
@@ -135,23 +136,7 @@ class Discount(models.Model):
 	def __unicode__(self):
 		return '%s %s' %(self.id, self.DiscountRate)
 
-class ShopOrder(models.Model):
-	StateChoices=(
-		(0, 'paying'),
-		(1, 'shipping'),
-		(2, 'signing'),
-		(3, 'commenting'),
-		(4, 'refunding'),
-		(5, 'refunded'),
-		(6, 'refund refuded'),
-		(7, 'finish'),
-		(8, 'commented')
-	)
-	ShopOrderState = models.IntegerField(choices=StateChoices)
-	ShopOrderDate = models.DateField()
-	ShopID = models.ForeignKey(Shop)
-	def __unicode__(self):
-		return '%s %s %s' %(self.id, self.ShopOrderDate, self.ShopOrderState)
+
 
 class Customer(models.Model):
 	CustomerTypeChoices=(
@@ -170,15 +155,16 @@ class Customer(models.Model):
 	
 	def __unicode__(self):
 		return u'%s %s %s' %(self.id, self.CustomerAccount, self.CustomerName)
-		
+
+
 
 class CommodityReceiveAddress(models.Model):
-	CustomerAccount=models.ForeignKey(Customer)
+	CustomerID=models.ForeignKey(Customer)
 	CommodityAddress=models.TextField(blank=True)
 	CommodityTelephone = models.CharField(max_length=64,blank=True)
-	
 	def __unicode__(self):
-		return u'%s %s %s %s' %(self.id, self.CustomerAccount, self.CommodityAddress,self.CommodityTelephone)
+		return u'%s %s %s' %(self.id,self.CommodityAddress,self.CommodityTelephone)
+
 		
 class CustomerOrder(models.Model):
 	StateChoices=(
@@ -195,8 +181,29 @@ class CustomerOrder(models.Model):
 	CustomerOrderState = models.IntegerField(choices=StateChoices)
 	CustomerOrderDate = models.DateField()
 	CustomerID = models.ForeignKey(Customer)
+	CommodityAddressID=models.ForeignKey(CommodityReceiveAddress)
 	def __unicode__(self):
 		return '%s %s %s' %(self.id, self.CustomerOrderState, self.CustomerOrderDate)
+
+class ShopOrder(models.Model):
+	StateChoices=(
+		(0, 'paying'),
+		(1, 'shipping'),
+		(2, 'signing'),
+		(3, 'commenting'),
+		(4, 'refunding'),
+		(5, 'refunded'),
+		(6, 'refund refuded'),
+		(7, 'finish'),
+		(8, 'commented')
+	)
+	ShopOrderState = models.IntegerField(choices=StateChoices)
+	ShopOrderDate = models.DateField()
+	ShopID = models.ForeignKey(Shop)
+	CommodityAddressID=models.ForeignKey(CommodityReceiveAddress)
+	def __unicode__(self):
+		return '%s %s %s' %(self.id, self.ShopOrderDate, self.ShopOrderState)
+
 
 class OrderList(models.Model):
 	#OrderListAccount = models.CharField(max_length=64)
@@ -221,6 +228,7 @@ class OrderList(models.Model):
 	#SellerID = models.ForeignKey(Seller)
 	ShopOrderID = models.ForeignKey(ShopOrder)
 	CustomerOrderID = models.ForeignKey(CustomerOrder)
+	CommodityAddressID=models.ForeignKey(CommodityReceiveAddress)
 	CommodityID = models.ForeignKey(Commodity)
 	def __unicode__(self):
 		return '%s %s %s' %(self.id, self.OrderListDate, self.OrderListState)

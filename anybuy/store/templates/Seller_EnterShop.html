@@ -40,9 +40,9 @@
 {##}
 {#                                        </div>#}
                                     <script type="text/javascript">
-                                        function del(id) {
-                                            xmlhttp=new XMLHttpRequest();
-                                            xmlhttp.onreadystatechange=function()
+                                    function del(id) {
+                                        xmlhttp=new XMLHttpRequest();
+                                        xmlhttp.onreadystatechange=function()
                                             {
                                                 if (xmlhttp.readyState==4 && xmlhttp.status==200)
                                                 {
@@ -54,16 +54,24 @@
                                             xmlhttp.send();
                                         }
 
+                                    function searchInShop() {
+                                    lkeyword = document.
+                                    getElementById("little_search").
+                                    value.replace(/\s/ig,'');
+                                    alert(lkeyword);
+                                    if(lkeyword=="")
+                                    alert("Search Content Should Not Be Empty!");
+                                    else{
+                                    alert(top.location.href='/searchInShop/'+lkeyword);
+                                        }
+                                    }
                                     </script>
                                         <div class="col-md-10 column">
-                                        <form class="navbar-form" style="margin-left:-30px">
+                                        <form class="navbar-form" style="margin-left:-30px" action='/searchInShop/'>
                                             <div class="form-group">
-                                            <input class="form-control" type="text" name="search">
+                                            <input class="form-control" type="text" id="little_search" name="search" onblur="searchInShop()" placeholder="search in shop">
                                             </div>
-                                            <div class="form-group">
-                                            <button class="btn btn-default" type="submit">find in my shop</button>
-                                            </div>
-                                        </form>
+                                                                                    </form>
                                        
 </div>
 <input type='hidden' id='current_page' />
