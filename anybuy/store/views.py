@@ -24,14 +24,13 @@ def addr(request):
     if request.method=='POST':
         print 'in post'
         addrList=request.POST.getlist('cont')
-        for addr in addrList:
-            print addr
         return HttpResponseRedirect('/bankaccount',locals())
     else:
         print 'not in post'
         AddrList=CommodityReceiveAddress.objects.filter(CustomerID=UserID)
-        rootAddr=Customer.objects.filter(CustomerAccount=UserName)
+        rootAddr=Customer.objects.get(CustomerAccount=UserName)
         return render_to_response('Customer_addr.html', locals(),context_instance=RequestContext(request))
+
 def helpcenter(request):
     if request.session.get('UserID', False):
         UserID = request.session['UserID']

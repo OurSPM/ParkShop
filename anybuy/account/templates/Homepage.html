@@ -102,7 +102,34 @@
 		</div>
 	</div>
 	
-	
+	<div class="col-md-8 column mycenter">
+				<div class="tabbable" id="tabs-412305">
+					<ul class="nav nav-tabs">
+						<li class="active">
+							<a href="#panel-22874" data-toggle="tab">Top 10 Commodities</a>
+						</li>
+						<li>
+							<a href="#panel-71918" data-toggle="tab">Top 10 Shops</a>
+						</li>
+					</ul>
+					<div id="top" class="tab-content">
+						<div class="tab-pane active" id="panel-22874">      <!--TP 10 商品-->
+							{% for commodityadv in homecommodityadv %}
+                                <a href = "/commodity/id/{{ commodityadv.CommodityID.id }}/">
+                                    <img src="/file/{{ commodityadv.CommodityID.CommodityImage }}" class="logo">
+                                </a>
+                            {% endfor %}
+						</div>
+						<div class="tab-pane" id="panel-71918">			    <!--TP 10 店铺-->
+                            {% for shopadv in homeshopadv %}
+                                <a href = "/shop/id/{{ shopadv.ShopID.id }}">
+                                    <img src="/file/{{ shopadv.ShopID.ShopImage }}" class="logo">
+                                </a>
+                            {% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
 	
 
 	

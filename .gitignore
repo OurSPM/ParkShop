@@ -14,7 +14,7 @@
 #*.swp
 #ctags生成的tags文件
 #tags
-#*.pyc
+*.pyc
 #*~
 #*.ids
 #*.xml
