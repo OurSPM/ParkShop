@@ -21,17 +21,27 @@ def addr(request):
             UserName = UserAccount
     else:
         return HttpResponseRedirect('/login/')
+
+    currentCustomer=Customer.objects.get(CustomerAccount=UserName)
     if request.method=='POST':
         print 'in post'
-        addrList=request.POST.getlist('cont')
-        return HttpResponseRedirect('/bankaccount',locals())
+        content=request.POST.get('cont').split('.')
+        if len(content)==2:
+            address=content[0]
+            telephone=content[1]
+            exist=CommodityReceiveAddress.objects.filter(CustomerID=UserID,CommodityAddress=address,CommodityTelephone=telephone)
+            AddressID=-1
+            if len(exist)==0:
+                AddressID=CommodityReceiveAddress.objects.create(CustomerID=currentCustomer,CommodityAddress=address,CommodityTelephone=telephone).id
+            else:
+                for onlyID in exist:
+                    AddressID=onlyID.id
+        print "AddressID:%s" %AddressID
+        return render_to_response('bankaccount.html', locals())
     else:
         print 'not in post'
         AddrList=CommodityReceiveAddress.objects.filter(CustomerID=UserID)
-        rootAddr=Customer.objects.get(CustomerAccount=UserName)
-        for addr in AddrList:
-            print addr.CommodityAddress
-            print addr.CommodityTelephone
+        rootAddr=currentCustomer
         return render_to_response('Customer_addr.html', locals(),context_instance=RequestContext(request))
 
 def helpcenter(request):
@@ -194,8 +204,9 @@ def refreshcart(request):
     print "This will return a message"
     return HttpResponse('You refresh: '+commodity.CommodityName)
 
-def checkoutcart(request):
+def checkoutcart(request,cid):
     print 'in to checkoutcart'
+    print 'AddressID:%s' %cid
     if request.session.get('UserID', False):
         UserID = request.session['UserID']
         UserType = request.session['UserType']
@@ -208,13 +219,13 @@ def checkoutcart(request):
         UserAccount = None
         user = None
     date = time.strftime('%Y-%m-%d',time.localtime(time.time()))
-    xianAddress=CommodityReceiveAddress.objects.get(id=1)
-    cutomerorder = CustomerOrder.objects.create(CommodityAddressID=xianAddress,CustomerOrderState=0, CustomerOrderDate=date, CustomerID=user)
+    AddressID=CommodityReceiveAddress.objects.get(id=cid)
+    cutomerorder = CustomerOrder.objects.create(CommodityAddressID=AddressID,CustomerOrderState=0, CustomerOrderDate=date, CustomerID=user)
     # 从购物车中删除，现在是将checkbox注释了，所以这里是删除购物车中所有物品
     commoditylist = Cart.objects.filter(CustomerID=user)
-    shoporder = ShopOrder.objects.create(CommodityAddressID=xianAddress,ShopOrderState=0, ShopOrderDate=date, ShopID=commoditylist[0].CommodityID.ShopID)
+    shoporder = ShopOrder.objects.create(CommodityAddressID=AddressID,ShopOrderState=0, ShopOrderDate=date, ShopID=commoditylist[0].CommodityID.ShopID)
     for commodity in commoditylist:
-        orderlist = OrderList.objects.create(CommodityAddressID=xianAddress,OrderListState=0, OrderListDate=date, OrderAmount = commodity.CartCommodityAmount, CustomerOrderID=cutomerorder, ShopOrderID=shoporder, CommodityID = commodity.CommodityID, )
+        orderlist = OrderList.objects.create(CommodityAddressID=AddressID,OrderListState=0, OrderListDate=date, OrderAmount = commodity.CartCommodityAmount, CustomerOrderID=cutomerorder, ShopOrderID=shoporder, CommodityID = commodity.CommodityID, )
         # 从购物车中删除，现在是将checkbox注释了，所以这里是删除购物车中所有物品
     Cart.objects.filter(CustomerID = user).delete()
     return HttpResponseRedirect('/')
@@ -234,6 +245,7 @@ def bank(request):
     return render_to_response('bank.html',locals())
 
 def bankaccount(request):
+    print "in to bankaccount"
     if request.session.get('UserID', False):
 
         UserID = request.session['UserID']
