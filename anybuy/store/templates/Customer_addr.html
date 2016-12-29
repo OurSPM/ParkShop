@@ -12,40 +12,46 @@
 					<h2 class="text-center text-default" style="color:#3a87ad">Please Choose Address</h2>
 					<div class="text-center">
 
-						<form class="form-horizontal" method = 'post'>
+						<form class="form-horizontal" method = 'post' enctype="multipart/form-data">
 						{% csrf_token %}
+						{% for addr in rootAddr %}
 							<div class="form-group">
 								<label for="id_Address" class="col-sm-2 control-label">
-									<input type="radio" name="cont" value="{{ rootAddr.CustomerAddress }}"></label>
-								<div class="col-sm-10">
+									<input type="radio" name="cont" value="{{ addr.CustomerAddress }}.{{addr.CustomerAddress}}"></label>
+								<div class="col-sm-6">
 									<input type="text" 
 									class="form-control"
-									id="id_Address"
-									placeholder="your address"
-									value="{{ rootAddr.CustomerAddress }}"
+									value="{{ addr.CustomerAddress }}"
+									></div>
+								<div class="col-sm-4">
+									<input type="text" 
+									class="form-control"
+									value="{{ addr.CustomerAddress }}"
 									></div>
 							</div>
+						{% endfor %}
 							<div class="form-group">
-								<label for="id_Address" class="col-sm-2 control-label">
-									<input type="radio" name="cont" value="2"></label>
-								<div class="col-sm-10">
+								<label class="col-sm-2 control-label">
+									<input id="address" type="radio" name="cont"></label>
+								<div class="col-sm-6">
 									<input type="text" 
 									class="form-control" 
-									id="id_Address"  
 									placeholder="your address"
+									id="add" 
 									></div>
-							</div>
-							<div class="form-group">
-								<label for="id_Address" class="col-sm-2 control-label">
-									<input type="radio" name="cont" value="3"></label>
-								<div class="col-sm-10">
+								<div class="col-sm-4">
 									<input type="text" 
 									class="form-control" 
-									id="id_Address"  
-									placeholder="your address"
+									placeholder="your phonenumber"
+									id="phone" 
+									onblur="add_Address()" 
 									></div>
 							</div>
-							
+							<script>
+							function add_Address() {
+								$('#address').val($('#add').val()+'.'+$('#phone').val());
+							}
+							</script>
 							
 							
 							<div class="form-group">
