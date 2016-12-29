@@ -14,19 +14,37 @@
 
 						<form class="form-horizontal" method = 'post' enctype="multipart/form-data">
 						{% csrf_token %}
-						{% for addr in rootAddr %}
+						<div class="form-group">
+							<label for="id_Address" class="col-sm-2 control-label">
+								<input type="radio" name="cont" value="{{ rootAddr.CustomerAddress }}.{{rootAddr.CustomerTelephone}}"></label>
+							<div class="col-sm-6">
+								<input type="text" 
+								class="form-control"
+								value="{{ rootAddr.CustomerAddress }}"
+								readonly="true" 
+								></div>
+							<div class="col-sm-4">
+								<input type="text" 
+								class="form-control"
+								value="{{ rootAddr.CustomerTelephone }}"
+								readonly="true"
+								></div>
+						</div>
+						{% for addr in AddrList %}
 							<div class="form-group">
 								<label for="id_Address" class="col-sm-2 control-label">
-									<input type="radio" name="cont" value="{{ addr.CustomerAddress }}.{{addr.CustomerAddress}}"></label>
+									<input type="radio" name="cont" value="{{ addr.CommodityAddress }}.{{addr.CommodityTelephone}}"></label>
 								<div class="col-sm-6">
 									<input type="text" 
 									class="form-control"
-									value="{{ addr.CustomerAddress }}"
+									value="{{ addr.CommodityAddress }}"
+									readonly="true"
 									></div>
 								<div class="col-sm-4">
 									<input type="text" 
 									class="form-control"
-									value="{{ addr.CustomerAddress }}"
+									value="{{ addr.CommodityTelephone }}"
+									readonly="true"
 									></div>
 							</div>
 						{% endfor %}

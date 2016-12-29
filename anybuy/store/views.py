@@ -29,7 +29,7 @@ def addr(request):
         return HttpResponseRedirect('/bank/')
     else:
         AddrList=CommodityReceiveAddress.objects.filter(CustomerID=UserID)
-        rootAddr=Customer.objects.filter(CustomerAccount=UserName)
+        rootAddr=Customer.objects.get(CustomerAccount=UserName)
         for addr in AddrList:
             print addr.CommodityAddress
             print addr.CommodityTelephone
