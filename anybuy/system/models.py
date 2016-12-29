@@ -20,12 +20,14 @@ class Seller(models.Model):
 	SellerPassword = models.CharField(max_length=32)
 	SellerName = models.CharField(max_length=64)
 	SellerType = models.CharField(max_length=1,choices=SellerTypeChoices,blank=True)
-	SellerRealName = models.CharField(max_length=64,null=True)
-	SellerRealID = models.IntegerField(null=True)
+	SellerRealName = models.CharField(max_length=64,null=True,blank=True)
+	SellerRealID = models.IntegerField(null=True,blank=True)
 	SellerTelephone = models.CharField(max_length=64,blank=True)
+	SellerEmailCode=models.TextField(blank=True)
+	SellerEmailCodeFlag=models.BooleanField(blank=True)
 	SellerEmail = models.EmailField(blank=True)
 	SellerAddress = models.CharField(max_length=64,blank=True)
-	
+	Authorzation=models.BooleanField(default=False)
 	def __unicode__(self):
 		return '%s %s %s' %(self.id, self.SellerAccount, self.SellerName)
 

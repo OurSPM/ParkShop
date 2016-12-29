@@ -76,7 +76,7 @@ def register(request):
 				customer.CustomerEmailCode=randomCode
 				customer.CustomerEmailCodeFlag=False
 				#write into db
-				customer_href="http://localhost:8000/verification/"+randomCode+"/"+customer.CustomerEmail
+				customer_href="http://10.170.66.177:8000/verification/"+randomCode+"/c/"+customer.CustomerEmail
 				# message=<a href=customer_href>Click the link to verifivation!</a>
 				send_mail(u'parknshop confirm', customer_href, '352754106@qq.com',
     [customer.CustomerEmail], fail_silently=False)
@@ -84,7 +84,6 @@ def register(request):
 				request.session['UserType'] = cf.cleaned_data['identity']
 				request.session['UserAccount'] = cf.cleaned_data['CustomerAccount']
 				request.session['UserID'] = customer.id
-
 				CommodityReceiveAddress.objects.create(CustomerID = customer, CommodityAddress = 'xian', CommodityTelephone='18717310592')
 				CommodityReceiveAddress.objects.create(CustomerID = customer, CommodityAddress = 'shenzheng', CommodityTelephone='18717310592')
 				CommodityReceiveAddress.objects.create(CustomerID = customer, CommodityAddress = 'xiameng', CommodityTelephone='18717310592')
@@ -94,9 +93,14 @@ def register(request):
 			#返回注册成功页面
 				seller = Seller()
 				seller.SellerAccount = cf.cleaned_data['CustomerAccount']
-				cu=Seller.objects.filter(SellerAccount=seller.SellerAccount)
-				if len(cu) == 1:
-					duplicate=True
+				seller.SellerEmail = cf.cleaned_data['CustomerEmail']
+				AccountD=Seller.objects.filter(SellerAccount=seller.SellerAccount)
+				EmailD=Seller.objects.filter(SellerEmail=seller.SellerEmail)
+				if len(AccountD) == 1:
+					AccountDuplicate=True
+				if len(EmailD) == 1:
+					EmailDuplicate=True
+				if AccountD or EmailD:
 					return render_to_response('register.html',locals(), context_instance=RequestContext(request))
 				seller.SellerName = cf.cleaned_data['CustomerName']
 				pw = cf.cleaned_data['CustomerPassword']
@@ -106,6 +110,14 @@ def register(request):
 				seller.SellerAddress = cf.cleaned_data['CustomerAddress']
 				seller.SellerTelephone = cf.cleaned_data['CustomerTelephone']
 				#write into db
+				randomCode=string.join(random.sample(['z','y','x','w','v','u','t','s','r','q','p','o','n','m','l','k','j','i','h','g','f','e','d','c','b','a'], 8)).replace(' ','')
+				seller.SellerEmailCode=randomCode
+				seller.SellerEmailCodeFlag=False
+				#write into db
+				customer_href="http://10.170.66.177:8000/verification/"+randomCode+"/s/"+seller.SellerEmail
+				# message=<a href=customer_href>Click the link to verifivation!</a>
+				send_mail(u'parknshop confirm', customer_href, '352754106@qq.com',
+    [seller.SellerEmail], fail_silently=False)
 				seller.save()
 				request.session['UserType'] = cf.cleaned_data['identity']
 				request.session['UserAccount'] = cf.cleaned_data['CustomerAccount']
@@ -122,18 +134,33 @@ def register(request):
 def mail_verification(request):
 	usr_url=request.get_full_path()
 	urlList=usr_url.split("/")
-	CustomerList=Customer.objects.get(CustomerEmail=urlList[3])
-	if CustomerList.CustomerEmailCode==urlList[2]:
-		CustomerList.CustomerEmailCodeFlag=True
-		randomCode=string.join(random.sample(['z','y','x','w','v','u','t','s','r','q','p','o','n','m','l','k','j','i','h','g','f','e','d','c','b','a'], 8)).replace(' ','')
-		CustomerList.CustomerEmailCode=randomCode
-		CustomerList.save()
-		request.session['UserType'] = 'C'
-		request.session['UserAccount'] = CustomerList.CustomerAccount
-		request.session['UserID'] = CustomerList.id
-		return HttpResponseRedirect('/')
+	if urlList[3]=="c":
+		List=Customer.objects.filter(CustomerEmail=urlList[4])
+		if len(List):	
+			CustomerList=List[0]
+			if CustomerList.CustomerEmailCode==urlList[2]:
+				CustomerList.CustomerEmailCodeFlag=True
+				randomCode=string.join(random.sample(['z','y','x','w','v','u','t','s','r','q','p','o','n','m','l','k','j','i','h','g','f','e','d','c','b','a'], 8)).replace(' ','')
+				CustomerList.CustomerEmailCode=randomCode
+				CustomerList.save()
+				request.session['UserType'] = 'C'
+				request.session['UserAccount'] = CustomerList.CustomerAccount
+				request.session['UserID'] = CustomerList.id
+				return HttpResponseRedirect('/')
 	else:
-		return render_to_response('cuole.html')
+		List=Seller.objects.filter(SellerEmail=urlList[4])
+		if len(List):
+			SellerList=List[0]
+			if SellerList.SellerEmailCode==urlList[2]:
+				SellerList.SellerEmailCodeFlag=True
+				randomCode=string.join(random.sample(['z','y','x','w','v','u','t','s','r','q','p','o','n','m','l','k','j','i','h','g','f','e','d','c','b','a'], 8)).replace(' ','')
+				SellerList.SellerEmailCode=randomCode
+				SellerList.save()
+				request.session['UserType'] = 'S'
+				request.session['UserAccount'] = SellerList.SellerAccount
+				request.session['UserID'] = SellerList.id
+				return HttpResponseRedirect('/')
+	return render_to_response('cuole.html')
 #/myinfo
 def info(request):
 	UserID = request.session['UserID']
@@ -232,12 +259,14 @@ def login(request):
 			else:
 				try:
 					user = Seller.objects.get(SellerAccount__exact = UserAccount, SellerPassword__exact = UserPassword)
-					if user:
+					if user and user.SellerEmailCodeFlag:
 						request.session['UserType'] = uf.cleaned_data['identity']
 						request.session['UserAccount'] = UserAccount
 						request.session['UserID'] = user.id
 						#return render_to_response('index.html',{'customer':user})
 						return HttpResponseRedirect('/seller/home')#sellerHomepage 代表entershop
+					elif user:
+						return render_to_response('cuole.html')
 					else:
 						wrongpw = True
 						return render_to_response('login.html', locals(), context_instance=RequestContext(request))
