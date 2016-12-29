@@ -134,6 +134,9 @@ def mail_verification(request):
 		return HttpResponseRedirect('/')
 	else:
 		return render_to_response('cuole.html')
+
+def authorization(request):
+	return render_to_response('sellercuole.html')
 #/myinfo
 def info(request):
 	UserID = request.session['UserID']
