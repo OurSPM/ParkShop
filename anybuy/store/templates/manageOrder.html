@@ -19,6 +19,7 @@
 			<th >Price</th>
 			<th >Counts</th>
 			<th >Total</th>
+			<th >CustomerInfo</th>
 			<th >Status</th>
 			<th >Refund</th>
 			<th >Comment</th>
@@ -96,7 +97,10 @@
 		<td>{{ ol.CommodityID.SellPrice }} HK$</td>
 		<td>{{ ol.OrderAmount}}</td>
 		<td>{% widthratio ol.CommodityID.SellPrice 1 ol.OrderAmount %} HK$</td>
-
+		<td>Name:{{ ol.CustomerOrderID.CustomerID.CustomerName}}<br>
+							Tel:{{ ol.CommodityAddressID.CommodityTelephone}}<br>
+							Email:{{ ol.CustomerOrderID.CustomerID.CustomerEmail}}<br>
+							Addr:{{ ol.CommodityAddressID.CommodityAddress }}</td>
 		{% if ol.OrderListState == 0 %}
 		<td>paying</td>
 		{% endif %}
@@ -149,7 +153,7 @@
 		{% if ol.OrderListState >= 7 %}
             <td>Aready Confirmed</td>
 		{% else %}
-            <td><br><a class="btn btn-primary" onclick="confirm('{{ol.id}}')"><b>Confirm and pay</b></a></td>
+            <td><br><a class="btn btn-primary" onclick="confirm('{{ol.id}}')"><b>Pay</b></a></td>
         {% endif %}
     </tr>
 		{% endfor %}
