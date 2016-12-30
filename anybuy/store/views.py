@@ -323,14 +323,15 @@ def sellerentershop(request): #需要返回shoplist，shopadvlist，commodityadv
         UserAccount = request.session['UserAccount']
     else:
         return HttpResponseRedirect('/login/')
-    seller = Seller.objects.get(id=UserID)
     try:
+        seller = Seller.objects.get(id=UserID)
         shop = Shop.objects.get(SellerID = seller)
         commoditylist = Commodity.objects.filter(ShopID = shop)
         shopadvlist = Shop.objects.filter(SellerID = seller, IsAdv = True)
         commodityadvlist = Commodity.objects.filter(ShopID = shop, IsAdv = True)
     except:
         shop = None
+        return HttpResponseRedirect('/index')
     if seller and seller.Authorzation==False:
         return render_to_response('authorzation.html',locals(), context_instance=RequestContext(request))
     else:

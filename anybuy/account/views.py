@@ -46,6 +46,7 @@ class UserForm(forms.Form):
 # Create your views here.
 
 def register(request):
+	print 'in to register'
 	AccountDuplicate=False
 	EmailDuplicate=False
 	if request.method == "POST":
@@ -76,9 +77,9 @@ def register(request):
 				customer.CustomerEmailCode=randomCode
 				customer.CustomerEmailCodeFlag=False
 				#write into db
-				customer_href="http://10.170.66.177:8000/verification/"+randomCode+"/c/"+customer.CustomerEmail
+				customer_href="http://10.170.69.64:8000/verification/"+randomCode+"/c/"+customer.CustomerEmail
 				# message=<a href=customer_href>Click the link to verifivation!</a>
-				send_mail(u'parknshop confirm', customer_href, '352754106@qq.com',
+				send_mail(u'parknshop confirm', customer_href, '2473490238@qq.com',
     [customer.CustomerEmail], fail_silently=False)
 				customer.save()
 				request.session['UserType'] = cf.cleaned_data['identity']
@@ -114,9 +115,9 @@ def register(request):
 				seller.SellerEmailCode=randomCode
 				seller.SellerEmailCodeFlag=False
 				#write into db
-				customer_href="http://10.170.66.177:8000/verification/"+randomCode+"/s/"+seller.SellerEmail
+				customer_href="http://10.170.69.64:8000/verification/"+randomCode+"/s/"+seller.SellerEmail
 				# message=<a href=customer_href>Click the link to verifivation!</a>
-				send_mail(u'parknshop confirm', customer_href, '352754106@qq.com',
+				send_mail(u'parknshop confirm', customer_href, '2473490238@qq.com',
     [seller.SellerEmail], fail_silently=False)
 				seller.save()
 				request.session['UserType'] = cf.cleaned_data['identity']
@@ -166,64 +167,67 @@ def info(request):
 	UserID = request.session['UserID']
 	UserType = request.session['UserType']
 	#UserName = request.session['UserName']
-	if request.method == "POST":
-		cf = CustomerForm2(request.POST)
-		if cf.is_valid():
+	try:
+		if request.method == "POST":
+			cf = CustomerForm2(request.POST)
+			if cf.is_valid():
 			#get form
-			if UserType == 'C':
-				customer = Customer.objects.get(id = UserID)
-				customer.CustomerAccount = cf.cleaned_data['CustomerAccount']
-				customer.CustomerName = cf.cleaned_data['CustomerName']
-				pw = cf.cleaned_data['CustomerPassword']
-				pw_md5 = hashlib.md5(pw).hexdigest()
-				customer.CustomerPassword = pw_md5
-				customer.CustomerEmail = cf.cleaned_data['CustomerEmail']
-				customer.CustomerAddress = cf.cleaned_data['CustomerAddress']
-				customer.CustomerTelephone = cf.cleaned_data['CustomerTelephone']
+				if UserType == 'C':
+					customer = Customer.objects.get(id = UserID)
+					customer.CustomerAccount = cf.cleaned_data['CustomerAccount']
+					customer.CustomerName = cf.cleaned_data['CustomerName']
+					pw = cf.cleaned_data['CustomerPassword']
+					pw_md5 = hashlib.md5(pw).hexdigest()
+					customer.CustomerPassword = pw_md5
+					customer.CustomerEmail = cf.cleaned_data['CustomerEmail']
+					customer.CustomerAddress = cf.cleaned_data['CustomerAddress']
+					customer.CustomerTelephone = cf.cleaned_data['CustomerTelephone']
 				#write into db
-				customer.save()
-				return render_to_response('success.html',{'UserType':'C','UserName':customer.CustomerName})
-			else: 
-				seller = Seller.objects.get(id = UserID)
+					customer.save()
+					return render_to_response('success.html',{'UserType':'C','UserName':customer.CustomerName})
+				else: 
+					seller = Seller.objects.get(id = UserID)
 
-				seller.SellerAccount = cf.cleaned_data['CustomerAccount']
-				seller.SellerName = cf.cleaned_data['CustomerName']
-				pw = cf.cleaned_data['CustomerPassword']
-				pw_md5 = hashlib.md5(pw).hexdigest()
-				seller.SellerPassword = pw_md5
-				seller.SellerEmail = cf.cleaned_data['CustomerEmail']
-				seller.SellerAddress = cf.cleaned_data['CustomerAddress']
-				seller.SellerTelephone = cf.cleaned_data['CustomerTelephone']
+					seller.SellerAccount = cf.cleaned_data['CustomerAccount']
+					seller.SellerName = cf.cleaned_data['CustomerName']
+					pw = cf.cleaned_data['CustomerPassword']
+					pw_md5 = hashlib.md5(pw).hexdigest()
+					seller.SellerPassword = pw_md5
+					seller.SellerEmail = cf.cleaned_data['CustomerEmail']
+					seller.SellerAddress = cf.cleaned_data['CustomerAddress']
+					seller.SellerTelephone = cf.cleaned_data['CustomerTelephone']
 				#write into db
-				seller.save()
-				return render_to_response('success.html',{'UserType':'S','UserName':seller.SellerName})
-	else:
-		if UserType == 'C':
-			user = Customer.objects.get(id=UserID)
-			shop=""
-			UserAccount = user.CustomerAccount
-			UserEmail = user.CustomerEmail
-			UserAddress = user.CustomerAddress
-			UserTel = user.CustomerTelephone
-			UserName = user.CustomerName
+					seller.save()
+					return render_to_response('success.html',{'UserType':'S','UserName':seller.SellerName})
 		else:
-			user = Seller.objects.get(id=UserID)
-			shop=Shop.objects.get(SellerID=user)
-			UserAccount = user.SellerAccount
-			UserEmail = user.SellerEmail
-			UserAddress = user.SellerAddress
-			UserTel = user.SellerTelephone
-			UserName = user.SellerName
-		data = {
-			'identity':UserType,
-			'CustomerAccount':UserAccount,
-			'CustomerName':UserName,
-			'CustomerEmail':UserEmail,
-			'CustomerAddress':UserAddress,
-			'CustomerTelephone':UserTel,
-			}
-		cf = CustomerForm2(data)
-	return render_to_response('myinfo.html',locals(), context_instance=RequestContext(request))
+			if UserType == 'C':
+				user = Customer.objects.get(id=UserID)
+				shop=""
+				UserAccount = user.CustomerAccount
+				UserEmail = user.CustomerEmail
+				UserAddress = user.CustomerAddress
+				UserTel = user.CustomerTelephone
+				UserName = user.CustomerName
+			else:
+				user = Seller.objects.get(id=UserID)
+				shop=Shop.objects.get(SellerID=user)
+				UserAccount = user.SellerAccount
+				UserEmail = user.SellerEmail
+				UserAddress = user.SellerAddress
+				UserTel = user.SellerTelephone
+				UserName = user.SellerName
+			data = {
+				'identity':UserType,
+				'CustomerAccount':UserAccount,
+				'CustomerName':UserName,
+				'CustomerEmail':UserEmail,
+				'CustomerAddress':UserAddress,
+				'CustomerTelephone':UserTel,
+				}
+			cf = CustomerForm2(data)
+		return render_to_response('myinfo.html',locals(), context_instance=RequestContext(request))
+	except:
+		return HttpResponseRedirect('/index')
 
 def getCommodity(request, id):  #/commodity/id/ 返回ID=id 的Commodity
 	
@@ -283,20 +287,22 @@ def index(request):
 	homeshopadv = HomeShopAdv.objects.filter(ApplyState=True)
 	homecommodityadv = HomeCommodityAdv.objects.filter(ApplyState=True)
 	#bulletin = System.objects.get(id = 1)
-	if UserID and UserType == 'C':
-		user = Customer.objects.get(id = UserID)
-		UserName = user.CustomerName
+	try:
+		if UserID and UserType == 'C':
+			user = Customer.objects.get(id = UserID)
+			UserName = user.CustomerName
 		#locals() -> {'UserName': UserName, 'UserType': UserType, 'UserID':UserID}
 		#return HttpResponse(user.CustomerAccount)
-		return render_to_response('Homepage.html', locals(), context_instance=RequestContext(request))
-	elif UserID and UserType == 'S':
-		user = Seller.objects.get(id = UserID)
-		UserName = user.SellerName
+			return render_to_response('Homepage.html', locals(), context_instance=RequestContext(request))
+		elif UserID and UserType == 'S':
+			user = Seller.objects.get(id = UserID)
+			UserName = user.SellerName
 		#locals() -> {'UserName': UserName, 'UserType': UserType, 'UserID':UserID}
+			return render_to_response('Homepage.html', locals(), context_instance=RequestContext(request))
+		else:
+			return render_to_response('Homepage.html', locals(), context_instance=RequestContext(request))
+	except:
 		return render_to_response('Homepage.html', locals(), context_instance=RequestContext(request))
-	else:
-		return render_to_response('Homepage.html', locals(), context_instance=RequestContext(request))
-
 
 def logout(request):
 	session = request.session.get('UserID', False)

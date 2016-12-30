@@ -69,6 +69,14 @@
 							function add_Address() {
 								$('#address').val($('#add').val()+'.'+$('#phone').val());
 							}
+							$('form').submit(function(event) {
+								if($('input:radio[name="cont"]:checked').val()=="on"){
+									alert("your address or telephone is null");
+									return false;
+								}else{
+									return true;
+								}
+							});
 							</script>
 							
 							
