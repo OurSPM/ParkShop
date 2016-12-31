@@ -13,15 +13,15 @@
 		<thead>
 			<tr class="yanse">
 			<th>OrderNo.</th>
-			<th >CommodityPicture</th>
-			<th >CommodityName</th>
+			<th >Commodity Picture</th>
+			<th >Commodity Name</th>
 			<th >OrderTime</th>
 			<th >Price</th>
 			<th >Counts</th>
 			<th >Total</th>
-			<th >CustomerInfo</th>
+			<th >Customer Info</th>
 			<th >Status</th>
-			<th >Refund</th>
+			<!-- <th >Refund</th> -->
 			<th >Comment</th>
             <th >Confirm</th>
 			</tr>
@@ -60,30 +60,30 @@
 
 		<script type="text/javascript">
 		function comment(id1,id2){
-			if($('#myText{{ ol.CommodityID.id }}:[disabled=""]')){
-				alert("yijinpinglun");
-			}
+
 			xmlhttp= new XMLHttpRequest();
 			xmlhttp.onreadystatechange=function()
 			{
-				if(xmlhttp.readyState==4 && xmlhttp.status==200)
+				
+				if(xmlhttp.readyState==4)
 				{
-					alert('Comment successfully!');
-					document.getElementById("myText"+id2).disabled=true;
+					$('textarea').val(""); 
+					window.location.reload();
 				}
 			}
-			content = document.getElementById("myText"+id2).value;
+			var content = document.getElementById("myText"+id2).value;
 			xmlhttp.open("GET","/add_comment?id="+id1 + "&content="+content, true);
 			xmlhttp.send();
+			
 		}
         function confirm(id1){
 			xmlhttp= new XMLHttpRequest();
 			xmlhttp.onreadystatechange=function()
 			{
-				if(xmlhttp.readyState==4 && xmlhttp.status==200)
+				if(xmlhttp.readyState==4)
 				{
 					alert('Confirm successfully!');
-                    location.reload()
+                    window.location.reload();
 				}
 			}
 			xmlhttp.open("GET","/confirm?id="+id1, true);
@@ -94,7 +94,7 @@
 		{% for ol in orderList %}
 		<tr class="yanse" id="item{{ ol.CommodityID.id }}">
 		<td>{{ ol.id }}</td>
-		<td><a href="/commodity/id/{{ ol.CommodityID.id }}" style = "color:#3299CC"><img src="/file/{{ ol.CommodityID.CommodityImage }}" style = "height:90px;"/></a></td>
+		<td><a href="/commodity/id/{{ ol.CommodityID.id }}" style = "color:#3299CC"><img src="/file/{{ ol.CommodityID.CommodityImage }}" style = "width:90px;"/></a></td>
 		<td><a href="/commodity/id/{{ ol.CommodityID.id }}" style = "color:#3299CC">{{ ol.CommodityID.CommodityName }}</a></td>
 		<td>{{ ol.OrderListDate }}</td>
 		<td>{{ ol.CommodityID.SellPrice }} HK$</td>
@@ -103,7 +103,7 @@
 		<td>Name:{{ ol.CustomerOrderID.CustomerID.CustomerName}}<br>
 							Tel:{{ ol.CommodityAddressID.CommodityTelephone}}<br>
 							Email:{{ ol.CustomerOrderID.CustomerID.CustomerEmail}}<br>
-							Addr:{{ ol.CommodityAddressID.CommodityAddress }}</td>
+							Addr:<br>{{ ol.CommodityAddressID.CommodityAddress }}</td>
 		{% if ol.OrderListState == 0 %}
 		<td>paying</td>
 		{% endif %}
@@ -132,11 +132,11 @@
 		<td>commented</td>
 		{% endif %}
 
-		{% if ol.OrderListState == 4 %}
+		<!-- {% if ol.OrderListState == 4 %}
 		<td><a style = "color:#3299CC" onclick="cancelRefund('{{ol.id}}')"><b>CancelRefund</b></a></td>
 		{% else %}
 		<td><a style = "color:#3299CC" onclick="applyRefund('{{ol.id}}')"><b>ApplyRefund</b></a></td>
-		{% endif %}
+		{% endif %} -->
 
 		<!-- {% if ol.OrderListState == 4 %}
 		<td style = "color:#3299CC"><b>CancelRefund</b></td>
@@ -150,7 +150,7 @@
         {% elif ol.OrderListState < 7 %}
             <td>Confirm before Comment</td>
 		{% else %}
-            <td><textarea id='myText{{ ol.CommodityID.id }}' rows="5" cols="20" placeholder="Input comment here"></textarea><br><a style = "color:#3299CC" onclick="comment('{{ol.id}}','{{ ol.CommodityID.id }}')"><b>Comment</b></a></td>
+            <td><textarea id='myText{{ ol.CommodityID.id }}' maxlength="50" rows="5" cols="20" placeholder="Input comment here"></textarea><br><a style = "color:#3299CC" onclick="comment('{{ol.id}}','{{ ol.CommodityID.id }}')"><b>Comment</b></a></td>
 {#            <td><br><a class="btn btn-primary" onclick="comment('{{ol.id}}','{{ ol.CommodityID.id }}')"><b>Confirm and pay the money</b></a></td>#}
         {% endif %}
 		{% if ol.OrderListState >= 7 %}
@@ -163,6 +163,6 @@
 	</table>
 </div>
 <script type="text/javascript">
-	$('img').attr('style', 'width:180px');
+	$('img').attr('style', 'width:140px');
 </script>
 {% endblock %}

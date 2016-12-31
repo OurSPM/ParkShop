@@ -58,22 +58,20 @@
                                     lkeyword = document.
                                     getElementById("little_search").
                                     value.replace(/\s/ig,'');
-                                    alert(lkeyword);
+                                    
                                     if(lkeyword=="")
                                     alert("Search Content Should Not Be Empty!");
                                     else{
-                                    alert(top.location.href='/searchInShop/'+lkeyword);
+                                    top.location.href='/searchInShop/'+lkeyword;
                                         }
                                     }
                                     </script>
                                         <div class="col-md-10 column">
-                                        <form class="navbar-form" style="margin-left:-30px" action='/searchInShop/'>
-                                            <div class="form-group">
-                                            <input class="form-control" type="text" id="little_search" name="search" onblur="searchInShop()" placeholder="search in shop">
+                                        
+                                            <div class="form-group col-md-4" style="margin-left: -30px;margin-top: 15px;">
+                                            <input  maxlength="10" class="form-control" type="text" id="little_search" name="search" onblur="searchInShop()" placeholder="search in shop">
                                             </div>
-                                                                                    </form>
-                                       
-</div>
+                                            </div>
 <input type='hidden' id='current_page' />
 
     <input type='hidden' id='show_per_page' />
@@ -89,7 +87,7 @@
 
 			                        </div>
                                     <div style="display:inline" id="page_navigation"></div>
-                                    <input class="form-control" style="width:40px;height:30px;display:inline" type="text" onblur="go_to_page(this.value-1)">
+                                    <input  maxlength="3" class="form-control" value="1" style="width:40px;height:30px;display:inline" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" type="text" onblur="go_to_page(this.value-1)">
 		                        </div>
 	                        </div>
                         </div>
@@ -98,21 +96,24 @@
 				</div>
 			</div>
 </div>
-<script type="text/javascript">
+<script type="text/javascript"> 
+var number_of_items = $('#content').children().size();
+var show_per_page = 6; 
+var number_of_pages = Math.ceil(number_of_items/show_per_page);
 $(document).ready(function(){
      
     //每页显示的数目
-    var show_per_page = 5; 
+    
     //获取content对象里面，数据的数量
-    var number_of_items = $('#content').children().size();
+    
     //计算页面显示的数量
-    var number_of_pages = Math.ceil(number_of_items/show_per_page);
+   
      
     //隐藏域默认值
     $('#current_page').val(0);
     $('#show_per_page').val(show_per_page);
      
-    var navigation_html = '<a class="btn btn-default" href="javascript:previous();">上一页</a>';
+    var navigation_html = '<a class="btn btn-default" href="javascript:previous();">Pre</a>';
     var current_link = 0;
     if (number_of_pages==0) {
         navigation_html += '<a class="page_link" href="javascript:go_to_page(1)" longdesc="1">1</a>';
@@ -121,7 +122,7 @@ $(document).ready(function(){
         navigation_html += '<a class="page_link" href="javascript:go_to_page(' + current_link +')" longdesc="' + current_link +'">'+ (current_link + 1) +'</a>';
         current_link++;
     }
-    navigation_html += '<a class="btn btn-default" href="javascript:next();">下一页</a>';
+    navigation_html += '<a class="btn btn-default" href="javascript:next();">Next</a>';
      
     $('#page_navigation').html(navigation_html);
      
@@ -156,6 +157,12 @@ function next(){
 }
 //跳转某一页
 function go_to_page(page_num){
+    if ((page_num+1)>number_of_pages) {
+        page_num = number_of_pages-1;
+    }
+    if (page_num<0) {
+        page_num = 0;
+    }
     //get the number of items shown per page
     var show_per_page = parseInt($('#show_per_page').val());
      

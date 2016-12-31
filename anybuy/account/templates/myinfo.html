@@ -65,5 +65,19 @@
 	parent.appendChild(btn);
 	var x = $("form > ul");
 	x.remove();
+	$('form').submit(function(event) {
+		var input = $('input');
+		var flag = true;
+		for (var i = input.length - 1; i >= 2; i--) {
+			if(!input.get(i).value)
+			{
+				flag = false;
+			}
+		}
+		if (!flag) {
+			alert('Table should not be empty!');
+		}
+		return flag;
+	});
 </script>
 {% endblock %}

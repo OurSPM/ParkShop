@@ -32,13 +32,19 @@
 						</thead>
 						<script type="text/javascript">
 						function confirmOrder(id1,id2){
+							if (!$('#myText'+id2).val()) {
+								alert('ShipNo should not be empty!');
+								return false;
+							}
 							xmlhttp= new XMLHttpRequest();
 							xmlhttp.onreadystatechange=function()
 							{
-								if(xmlhttp.readyState==4 && xmlhttp.status==200)
+								if(xmlhttp.readyState==4)
 								{
-									document.getElementById("myText"+id2).disabled=true
-									$('#item'+id).fadeOut()
+									document.getElementById("myText"+id2).disabled=true;
+									window.location.reload();
+									$('#item'+id).fadeOut();
+
 								}
 							}
 							content = document.getElementById("myText"+id2).value;
@@ -88,7 +94,7 @@
 						<td>commented</td>
 						{% endif %}
 
-						<td class="text-center"><input type="text" id='myText{{ ol.CommodityID.id }}'size="10" placeholder="Input ShipNo" /><br><br><a class='btn btn-info btn-xs' onclick="confirmOrder('{{ol.id}}','{{ ol.CommodityID.id }}')"><span class="glyphicon"><b>Confirm</b></span></a></td>
+						<td class="text-center"><input type="text" id='myText{{ ol.CommodityID.id }}' size="10" placeholder="Input ShipNo" maxlength="10" /><br><br><a class='btn btn-info btn-xs' onclick="confirmOrder('{{ol.id}}','{{ ol.CommodityID.id }}')"><span class="glyphicon"><b>Confirm</b></span></a></td>
 						{% endfor %}
 						</table>
 						

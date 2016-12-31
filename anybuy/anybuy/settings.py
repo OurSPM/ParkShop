@@ -112,13 +112,13 @@ EMAIL_HOST = 'smtp.qq.com'
 
 EMAIL_PORT =587                                      
 
-EMAIL_HOST_USER = '2473490238@qq.com'       
+EMAIL_HOST_USER = '462428585@qq.com'       
 
-EMAIL_HOST_PASSWORD = 'jewhfwfsfvjidhhg'
-#qciwfkczbmuobjbc                 
+EMAIL_HOST_PASSWORD ='ntbruvkzeagdcabd'
+#ntbruvkzeagdcabd            
 
 EMAIL_SUBJECT_PREFIX = u'[Parkning]'           
 
 EMAIL_USE_TLS = True                            
 
-SERVER_EMAIL = '2473490238@qq.com' 
+SERVER_EMAIL = '462428585@qq.com' 

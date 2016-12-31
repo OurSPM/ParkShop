@@ -115,6 +115,9 @@ def cart(request):
         UserAccount = None
     cartList = Cart.objects.filter(CustomerID = UserID)
     total=0
+    carEmpty=0
+    if len(cartList)==0:
+        carEmpty=1
     for cart in cartList:
         total = total+cart.CartCommodityAmount*cart.CommodityID.SellPrice
     return render_to_response('Customer_MyCart.html', locals())
@@ -193,15 +196,12 @@ def refreshcart(request):
         UserAccount = None
         user = None
     if 'id' in request.GET:
-        print request.GET['amount']
         commodity = Commodity.objects.get(id = request.GET['id'])
         cart = Cart.objects.get(CustomerID = user, CommodityID = commodity)
         cart.CartCommodityAmount = int(request.GET['amount'])
         cart.save()
-        print "commodity amount has change!"
     else:
         commodity = None
-    print "This will return a message"
     return HttpResponse('You refresh: '+commodity.CommodityName)
 
 def checkoutcart(request,cid):
@@ -224,8 +224,20 @@ def checkoutcart(request,cid):
     # 从购物车中删除，现在是将checkbox注释了，所以这里是删除购物车中所有物品
     commoditylist = Cart.objects.filter(CustomerID=user)
     shoporder = ShopOrder.objects.create(CommodityAddressID=AddressID,ShopOrderState=0, ShopOrderDate=date, ShopID=commoditylist[0].CommodityID.ShopID)
+    
     for commodity in commoditylist:
+        print 'in for commoditylist'
         orderlist = OrderList.objects.create(CommodityAddressID=AddressID,OrderListState=0, OrderListDate=date, OrderAmount = commodity.CartCommodityAmount, CustomerOrderID=cutomerorder, ShopOrderID=shoporder, CommodityID = commodity.CommodityID, )
+        print commodity.CommodityID
+        try:
+            print 'in try'
+            perCommodity=Commodity.objects.get(id=commodity.CommodityID.id)
+            perCommodity.CommodityAmount-=commodity.CartCommodityAmount
+            print 'commodity.CartCommodityAmount:%d' %(commodity.CartCommodityAmount)
+            print 'perCommodity.CommodityAmount:%d' %(perCommodity.CommodityAmount)
+            perCommodity.save()
+        except:
+            pass
         # 从购物车中删除，现在是将checkbox注释了，所以这里是删除购物车中所有物品
     Cart.objects.filter(CustomerID = user).delete()
     return HttpResponseRedirect('/')
@@ -315,25 +327,47 @@ def searchInShop(request, lkeyword):
         shop = None
     return render_to_response('Seller_EnterShop.html', locals())
 
+def CustomerSearchInShop(request, lkeyword,cid):
+    print "customer in little search!"
+    if request.session.get('UserID', False):
+        UserID = request.session['UserID']
+        UserType = request.session['UserType']
+        UserAccount = request.session['UserAccount']
+    else:
+        UserID = None
+        UserType = None
+        UserAccount = None
+        return HttpResponseRedirect('/login/')
+    try:
+        shop=Shop.objects.get( id= cid)
+        commodityList = Commodity.objects.filter(ShopID = cid,CommodityName__contains=lkeyword)
+    except:
+        pass
+    return render_to_response('Customer_EnterShop.html', locals())
+
 def sellerentershop(request): #需要返回shoplist，shopadvlist，commodityadvlist
     print 'go into enter shop'
     if request.session.get('UserID', False):
         UserID = request.session['UserID']
         UserType = request.session['UserType']
         UserAccount = request.session['UserAccount']
+        print UserID
     else:
         return HttpResponseRedirect('/login/')
-    try:
+    print UserID
+    try:       
         seller = Seller.objects.get(id=UserID)
+        print seller
         shop = Shop.objects.get(SellerID = seller)
         commoditylist = Commodity.objects.filter(ShopID = shop)
         shopadvlist = Shop.objects.filter(SellerID = seller, IsAdv = True)
         commodityadvlist = Commodity.objects.filter(ShopID = shop, IsAdv = True)
     except:
-        shop = None
-        return HttpResponseRedirect('/index')
-    if seller and seller.Authorzation==False:
-        return render_to_response('authorzation.html',locals(), context_instance=RequestContext(request))
+        shop=None
+    if seller and not shop:
+        return HttpResponseRedirect('/addshop')
+    elif seller and seller.Authorzation==False:
+        return render_to_response('authorzation.html',locals())
     else:
         return render_to_response('Seller_EnterShop.html', locals())
 
@@ -579,6 +613,12 @@ def add_and_modify_shop(request): # cid==0时添加新项目， !=0时修改cid�
         sf = ShopForm(request.POST, request.FILES)
         if sf.is_valid():
             #get form
+            shopexist=Shop.objects.filter(SellerID=seller)
+            if shopexist:
+                print 'get shop evial post'
+                return render_to_response('shopexist.html')
+            else:
+                print 'add shop continue'
             shop = Shop()
             shop.ShopName = sf.cleaned_data['ShopName']
             shop.ShopDescription = sf.cleaned_data['ShopDescription']

@@ -22,7 +22,7 @@
 
                             <div class="col-md-3 column">commodity count:</div>
                             <div class="col-md-1 column">
-                                <input id="num" type="text" value="1" class="input-small" style="width:30px;" ></div>
+                                <input id="num" type="text" maxlength="3" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" value="1" class="input-small" style="width:30px;" ></div>
                             <div class="col-md-8 column">
                                 pairs(last {{ commodity.CommodityAmount }})
                                 <!--这里是Commodity里的CommodityAmount--> </div>
@@ -37,6 +37,10 @@
 
                 <script language="javascript">
             function addtocart() {
+                if(!$('#num').val()){
+                    alert('commodity number should not be empty!');
+                    return;
+                }
 
                 num = $('#num')[0].value;
                 if (num<0) {
@@ -154,4 +158,5 @@
     </div>
 </div>
 </div>
+
 {% endblock %}
