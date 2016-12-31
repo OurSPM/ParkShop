@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/file/Css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/file/Css/bootstrap-responsive.css" />
+    <link rel="stylesheet" type="text/css" href="/file/Css/style.css" />
+    <script type="text/javascript" src="/file/Js/jquery2.js"></script>
+    <script type="text/javascript" src="/file/Js/jquery2.sorted.js"></script>
+    <script type="text/javascript" src="/file/Js/bootstrap.js"></script>
+    <script type="text/javascript" src="/file/Js/ckform.js"></script>
+    <script type="text/javascript" src="/file/Js/common.js"></script>
+
+    <style type="text/css">
+        body {font-size: 20px;
+        font-size: 20px;
+            padding-bottom: 40px;
+            background-color:#e9e7ef;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+</head>
+<body >
+
+    <form class="form-inline definewidth m20" action="/allshopowner" method="get"> {% csrf_token %} <font color="#777777"><strong>sellerName：</strong></font> 
+        <input type="text" name="sellerName" id="menuname" class="abc input-default" placeholder="sellerName" value="123">
+        &nbsp;&nbsp;
+        <button type="submit" class="btn btn-primary">Query</button>
+        &nbsp;&nbsp;
+        <a href="videosAdd.html" class="btn btn-default">Add</a>
+    </form>
+    <div><h3 style="text-align: center;color: #3a87ad">All Shop Owner</h3></div>
+        <table class="table table-bordered table-hover definewidth m10">
+            <thead>
+                <tr>
+                    <th>SellerName</th>
+                    <th>SellerTelephone</th>
+                    <th>SellerEmail</th>
+                    <th>SellerAddress</th>
+                </tr>
+            </thead>
+            <form>
+                <tr>
+                    <td><a href="studentdetail.html">huangchaoming</a></td>
+                    <td>122222222234</td>
+                    <td>123123@qq.com</td>
+                    <td>Central and Western District</td>
+                    <td>
+                        <a>
+                            <button class="btn btn-default" type="submit">Del</button>
+                        </a>
+                    </td>
+                </tr>
+            </form>
+        </table>
+</body>
+    </html>

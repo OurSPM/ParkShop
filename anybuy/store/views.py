@@ -323,15 +323,19 @@ def sellerentershop(request): #需要返回shoplist，shopadvlist，commodityadv
         UserAccount = request.session['UserAccount']
     else:
         return HttpResponseRedirect('/login/')
-    seller = Seller.objects.get(id=UserID)
     try:
+        seller = Seller.objects.get(id=UserID)
         shop = Shop.objects.get(SellerID = seller)
         commoditylist = Commodity.objects.filter(ShopID = shop)
         shopadvlist = Shop.objects.filter(SellerID = seller, IsAdv = True)
         commodityadvlist = Commodity.objects.filter(ShopID = shop, IsAdv = True)
     except:
         shop = None
-    return render_to_response('Seller_EnterShop.html', locals())
+        return HttpResponseRedirect('/index')
+    if seller and seller.Authorzation==False:
+        return render_to_response('authorzation.html',locals(), context_instance=RequestContext(request))
+    else:
+        return render_to_response('Seller_EnterShop.html', locals())
 
 def delfromshop(request, cid):
     Commodity.objects.get(id = cid).delete()
@@ -585,7 +589,10 @@ def add_and_modify_shop(request): # cid==0时添加新项目， !=0时修改cid�
             shop.IsHomeAdv = True
             shop.ShopState = 1
             shop.save()
-            return HttpResponseRedirect('/seller/home')
+            if seller.SellerEmailCodeFlag:
+                return HttpResponseRedirect('/')
+            else:
+                return render_to_response('cuole.html')
     else:
         sf = ShopForm()
     return render_to_response('addshop.html',locals(), context_instance=RequestContext(request))

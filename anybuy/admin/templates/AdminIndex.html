@@ -1,0 +1,318 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Any-Buy|admin</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/file/Css/adminStyle.css" rel="stylesheet" type="text/css" />
+<link rel="shortcut icon" href="/file/images/favicon.png">
+<script type="text/javascript" src="/file/Js/jquery1.js"></script>
+<script type="text/javascript">
+	$(document).ready(
+			function() {
+				$(".div2").click(
+						function() {
+							$(this).next("div").slideToggle("slow").siblings(
+									".div3:visible").slideUp("slow");
+						});
+			});
+	function openurl(url) {
+		var rframe = parent.document.getElementById("rightFrame");
+		rframe.src = url;
+	}
+</script>
+<style>
+body {
+	margin: 0;
+	font-family: 微软雅黑;
+	background-image: url(/file/image/.jpg);
+	background-repeat: no-repea;
+	background-size: cover;
+	background-attachment: fixed;
+	background-color: #DDDDDD
+	
+}
+
+.top1 {
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	height: 20px;
+	text-align: center;
+	color: #FFFFFF;
+	font-size: 17px;
+	font-height: 20px;
+	font-family: 楷体;
+	background-color: #888888
+}
+
+.title {
+float:left;
+    margin:-20px 20px;
+	font-size: 40px;
+	color: #FFFFFF;
+	font-height: 55px;
+	font-family: 隶书;
+}
+
+.top2 {
+	position: absolute;
+	
+	width: 100%;
+	height: 97px;
+	text-align: center;
+	color: #ccffff;
+	background-color: #002e71
+}
+
+.left {
+	position: absolute;
+	left: 0px;
+	top: 97px;
+	width: 200px;
+	height: 85%;
+	border-right: 1px solid #9370DB;
+	color: #000000;
+	font-size: 20px;
+	text-align: center;
+	background-color: #cccccc
+}
+
+.right {
+	position: absolute;
+	left: 200px;
+	top:97px;
+	width: 85.2%;
+	height: 85%;
+	border-top: 0px solid #484860;
+	font-size: 14px;
+	text-align: center;
+}
+
+.end {
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+	height: 30px;
+	text-align: center;
+	color: #556B2F;
+	font-size: 17px;
+	font-height: 20px;
+	font-family: 楷体;
+	background-color: #C0C0C0
+}
+
+.div1 {
+	text-align: center;
+	width: 200px;
+	padding-top: 10px;
+}
+
+.div2 {
+	height: 40px;
+	line-height: 40px;
+	cursor: pointer;
+	font-size: 18px;
+	position: relative;
+	border-bottom: #ccc 0px dotted;
+}
+
+.spgl {
+	position: absolute;
+	height: 20px;
+	width: 20px;
+	left: 6px;
+	top: 10px;
+	background: url(/file/image/1.png);
+}
+
+.yhgl {
+	position: absolute;
+	height: 20px;
+	width: 20px;
+	left: 40px;
+	top: 10px;
+	background: url(/file/image/4.png);
+}
+
+.gggl {
+	position: absolute;
+	height: 20px;
+	width: 20px;
+	left: 40px;
+	top: 10px;
+	background: url(/file/image/4.png);
+}
+
+.zlgl {
+	position: absolute;
+	height: 20px;
+	width: 20px;
+	left: 40px;
+	top: 10px;
+	background: url(/file/image/4.png);
+}
+
+.pjgl {
+	position: absolute;
+	height: 20px;
+	width: 20px;
+	left: 40px;
+	top: 10px;
+	background: url(/file/image/4.png);
+}
+
+.tcht {
+	position: absolute;
+	height: 20px;
+	width: 20px;
+	left: 6px;
+	top: 10px;
+	background: url(/file/image/2.png);
+}
+
+.div3 {
+	display: none;
+	cursor: pointer;
+	font-size: 15px;
+}
+
+.div3 ul {
+	margin: 0;
+	padding: 0;
+}
+
+.div3 li {
+	height: 30px;
+	line-height: 30px;
+	list-style: none;
+	border-bottom: #ccc 1px dotted;
+	text-align: center;
+}
+
+.a {
+	text-decoration: none;
+	color: #000000;
+	font-size: 15px;
+}
+
+.a1 {
+	text-decoration: none;
+	color: #000000;
+	font-size: 18px;
+}
+</style>
+</head>
+<body>
+	<div class="top2">
+		<div class="logo">
+			<img src="/file/image/anybuy_logo.jpg" title="parkshop" />
+		</div>
+		<div class="title" >
+			<h2>ParkShop Management System</h2>
+		</div>
+		<div class="fr top-link">
+			<a href="admin_list.html" target="mainCont" title="DeathGhost"><i
+				class="adminIcon"></i><span>Administrator：yangchen</span></a> 
+		</div>
+	</div>
+
+	<div class="left">
+		<div class="div1">
+           <div class="div2">
+				<div class="spgl"></div>
+				<span>Manage Shop Owner</span>
+			</div>
+			<div class="div3">
+				<li><a class="a" href="javascript:void(0);"
+					onClick="openurl('/allshopowner/');">All Shop Owner</a></li>
+				<li><a class="a" href="javascript:void(0);"
+					onClick="openurl('/approve/');">Approve</a></li>
+				<li><a class="a" href="javascript:void(0);"
+					onClick="openurl('/sblacklist/');">Blacklist</a></li>
+			   	
+			</div>
+			<div class="div2">
+				<div class="spgl"></div>
+				<span>Manage Customer</span>
+			</div>
+			<div class="div3">
+				<ul>
+					<li><a class="a" href="javascript:void(0);"
+						onClick="openurl('/allcustomer/');">All Customer</a></li>
+						<li><a class="a" href="javascript:void(0);"
+						onClick="openurl('/cblacklist/');">Blacklist</a></li>
+					
+				</ul>
+			</div>
+			<div class="div2">
+				<div class="spgl"></div>
+				<span>&nbsp;&nbsp;&nbsp;Manage Advertisement</span>
+			</div>
+			<div class="div3">
+				<ul>
+					<li><a class="a" href="javascript:void(0);"
+						onClick="openurl('classQuery.html');">top5 Stores</a></li>
+					<li><a class="a" href="javascript:void(0);"
+						onClick="openurl('classQuery.html');">Top 10 Products</a></li>
+				</ul>
+			</div>
+			<div class="div2">
+				<div class="spgl"></div>
+				<span>Backup Database</span>
+			</div>
+			<div class="div3">
+				<ul>
+					<li><a class="a" href="javascript:void(0);"
+						onClick="openurl('studentQuery.html');">学生管理</a></li>
+					<li><a class="a" href="javascript:void(0);"
+						onClick="openurl('teacherQuery.html');">老师管理</a></li>
+				</ul>
+			</div>
+			
+			<div class="div2">
+				<div class="spgl"></div>
+				<span>Sales History</span> 
+			</div>
+			<div class="div3">
+
+				<ul>
+					<li><a class="a" href="javascript:void(0);"
+						onClick="openurl('deletecomment.html');">评价删除</a></li>
+					<li><a class="a" href="javascript:void(0);"
+						onClick="openurl('useredit.html');">用户禁言</a></li>
+				</ul>
+
+			</div>
+			<div class="div2">
+				<div class="spgl"></div>
+				<span>Commission</span>
+			</div>
+			<div class="div3">
+				<ul>
+					<li><a class="a" href="javascript:void(0);"
+						onClick="openurl('afficheQuery.html');">查看公告</a></li>
+					<li><a class="a" href="javascript:void(0);"
+						onClick="openurl('afficheAdd.html');">添加公告</a></li>
+				</ul>
+			</div>
+			<a class="a1" href="login.html"><div class="div2">
+					<div class="tcht"></div>
+					<span>Quit</span>
+				</div></a>
+		</div>
+	</div>
+
+	<div class="right">
+		<iframe id="rightFrame" name="rightFrame" width="100%" height="100%"
+			scrolling="auto" marginheight="0" marginwidth="0" align="center"
+			style="border: 0px solid #CCC; margin: 0; padding: 0;"></iframe>
+	</div>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'store',
     'account',
     'container',
+    'admin'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -77,6 +78,8 @@ TEMPLATE_DIRS=(
     os.path.join(BASE_DIR, 'store', 'templates'),
     os.path.join(BASE_DIR, 'base_template'),
     os.path.join(BASE_DIR, 'system', 'templates'),
+    os.path.join(BASE_DIR, 'admin', 'templates'),
+
 )
 
 # Internationalization
@@ -109,13 +112,13 @@ EMAIL_HOST = 'smtp.qq.com'
 
 EMAIL_PORT =587                                      
 
-EMAIL_HOST_USER = '352754106@qq.com'       
+EMAIL_HOST_USER = '2473490238@qq.com'       
 
-EMAIL_HOST_PASSWORD = 'ctawngrrwlcfbjih'  
-#passwd:axstihidonefbggi                
+EMAIL_HOST_PASSWORD = 'jewhfwfsfvjidhhg'
+#qciwfkczbmuobjbc                 
 
 EMAIL_SUBJECT_PREFIX = u'[Parkning]'           
 
 EMAIL_USE_TLS = True                            
 
-SERVER_EMAIL = '352754106@qq.com' 
+SERVER_EMAIL = '2473490238@qq.com' 

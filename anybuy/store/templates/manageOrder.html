@@ -60,6 +60,9 @@
 
 		<script type="text/javascript">
 		function comment(id1,id2){
+			if($('#myText{{ ol.CommodityID.id }}:[disabled=""]')){
+				alert("yijinpinglun");
+			}
 			xmlhttp= new XMLHttpRequest();
 			xmlhttp.onreadystatechange=function()
 			{

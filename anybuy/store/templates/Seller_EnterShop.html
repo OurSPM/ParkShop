@@ -114,6 +114,9 @@ $(document).ready(function(){
      
     var navigation_html = '<a class="btn btn-default" href="javascript:previous();">上一页</a>';
     var current_link = 0;
+    if (number_of_pages==0) {
+        navigation_html += '<a class="page_link" href="javascript:go_to_page(1)" longdesc="1">1</a>';
+    }
     while(number_of_pages > current_link){
         navigation_html += '<a class="page_link" href="javascript:go_to_page(' + current_link +')" longdesc="' + current_link +'">'+ (current_link + 1) +'</a>';
         current_link++;
