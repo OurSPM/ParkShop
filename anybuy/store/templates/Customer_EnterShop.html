@@ -3,134 +3,100 @@
 
 {% block content %}
 
+<style>
+#page_navigation a{
+    padding:3px;
+    border:1px solid gray;
+    margin:2px;
+    color:black;
+    text-decoration:none
+}
+.active_page{
+    background:lightblue;
+    color:white !important;
+}
+</style>
 <div class="container">
 	<div class="row clearfix">
 		<div class="col-md-12 column">
-			<!-- <ul class="nav nav-tabs">
-				<li class="active">
-					<a href="#">My shop</a>
-				</li>
-			</ul> -->
 			<div class="carousel slide" id="carousel-112879">
-
 				<div class="carousel-inner">
 					<div class="item active">
 					<h2 class="text-primary">
 								{{ shop.ShopName }}
-							</h2>
+					</h2>
 						<img alt="" src="/file/{{ shop.BigImage }}" />
-						<div class="carousel-caption">
-							
-							
+						<div class="carousel-caption">	
 						</div>
 					</div>
-<p class="text-primary">
-								{{ shop.ShopDescription }}
-							</p>
+                    <p class="text-primary">
+					   {{ shop.ShopDescription }}
+					</p>
 				</div>
 			</div>
          </div>
-     </div>
+    </div>
 </div>
             <br><br><br><br><br>
  <div class="container">
 	<div class="row clearfix">
-		<!-- <div class="col-md-2 column">
-			<div class="list-group">
-{#				 <a class="list-group-item active" href="#">Home</a>#}
-{#				<div class="list-group-item">#}
-{#					comodity list#}
-{#				</div>#}
-{#				<div class="list-group-item">#}
-{#						modify store#}
-{#				</div>#}
-{#				<div class="list-group-item">#}
-{#					manage ads#}
-{#				</div> <a class="list-group-item ">Help</a>#}
-			</div>
-		</div> -->
 		<input type='hidden' id='current_page' />
+        <input type='hidden' id='show_per_page' />
 
-    <input type='hidden' id='show_per_page' />
-    <h3 class="text-primary" style="margin-left: 30px;">HOT SELLER<span style="font-size:40px;color:red;">!!!</span></h3>
+        <h3 class="text-primary" style="margin-left: 30px;">
+            HOT SELLER
+            <span style="font-size:40px;color:red;">!!!</span>
+            <input  maxlength="10" type="text" class="form-control" style="width: 253px;" id="little_search" name="search" placeholder="search in shop" onblur="CustomerSearchInShop()" >
+        </h3>
 <div id="content" class="col-md-12 column">
-		
-        <!-- <h1>{{ shop.ShopName }}</h1>
-        <p>
-            {{ shop.ShopDescription }}
-		</p> -->
-
 		
 			{% for commodity in commodityList %}
 
-            <a href="/commodity/id/{{ commodity.id }}" class="col-md-3 column" style = "color:#3299CC;margin-bottom: 20px;"><img class="img-thumbnail" alt="140x140" src="/file/{{ commodity.CommodityImage }}" style = "height:240px;width:270px;"/></a>
+            <a href="/commodity/id/{{ commodity.id }}" 
+            class="col-md-3 column" 
+            style = "color:#3299CC;margin-bottom: 20px;">
+                <img class="img-thumbnail" 
+                alt="140x140" src="/file/{{ commodity.CommodityImage }}" 
+                style = "height:240px;width:270px;"/>
+            </a>
             {% endfor %}
 		</div>
 		
 	</div>
 	<div style="display:inline;margin-left: 16px;" id="page_navigation"></div>
-                                    <input class="form-control" style="width:40px;height:30px;display:inline" type="text" onblur="go_to_page(this.value-1)">
+                                    <input  maxlength="3" class="form-control" value="1" style="width:40px;height:30px;display:inline" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" type="text" onblur="go_to_page(this.value-1)">
 	<div class="row clearfix">
 		
-		<!--<div class="col-md-4 column">
-			<ul class="pagination">
-				<li>
-					<a href="#">Prev</a>
-				</li>
-				<li>
-					<a href="#">1</a>
-				</li>
-				<li>
-					<a href="#">2</a>
-				</li>
-				<li>
-					<a href="#">3</a>
-				</li>
-				<li>
-					<a href="#">4</a>
-				</li>
-				<li>
-					<a href="#">5</a>
-				</li>
-				<li>
-					<a href="#">Next</a>
-				</li>
-			</ul>
-		</div>-->
-		
 	</div>
-    <!-- <div class="row clearfix">
-    		<div class="col-md-12 column">
-        <h3 style="color:#3a87ad">
-        My other shops
-        </h3>
-            {% for shop in shopList %}
-                 <a href="/shop/id/{{ shop.id }}" style = "color:#3299CC"><img class="img-thumbnail" alt="140x140" src="/file/{{ shop.ShopImage }}" style = "height:270px;"/></a>
-            {% endfor %}
-    		</div>
-    	</div> -->
+    
 </div>
 <script type="text/javascript">
-$(document).ready(function(){
-     
+
+
     //每页显示的数目
     var show_per_page = 8; 
     //获取content对象里面，数据的数量
     var number_of_items = $('#content').children().size();
     //计算页面显示的数量
     var number_of_pages = Math.ceil(number_of_items/show_per_page);
+
+$(document).ready(function(){
+     
      
     //隐藏域默认值
     $('#current_page').val(0);
     $('#show_per_page').val(show_per_page);
      
-    var navigation_html = '<a class="btn btn-default" href="javascript:previous();">上一页</a>';
+    var navigation_html = '<a class="btn btn-default" href="javascript:previous();">Pre</a>';
     var current_link = 0;
+    if (number_of_pages==0) {
+        navigation_html += '<a class="page_link" href="javascript:go_to_page(1)" longdesc="1">1</a>';
+    }
     while(number_of_pages > current_link){
         navigation_html += '<a class="page_link" href="javascript:go_to_page(' + current_link +')" longdesc="' + current_link +'">'+ (current_link + 1) +'</a>';
         current_link++;
     }
-    navigation_html += '<a class="btn btn-default" href="javascript:next();">下一页</a>';
+    navigation_html += '<a class="btn btn-default" href="javascript:next();">Next</a>';
      
     $('#page_navigation').html(navigation_html);
      
@@ -143,7 +109,7 @@ $(document).ready(function(){
     //显示第n（show_per_page）元素
     $('#content').children().slice(0, show_per_page).css('display', 'block');
      
-});
+}); 
  
 //上一页
 function previous(){
@@ -165,6 +131,12 @@ function next(){
 }
 //跳转某一页
 function go_to_page(page_num){
+    if ((page_num+1)>number_of_pages) {
+        page_num = number_of_pages-1;
+    }
+    if (page_num<0) {
+        page_num = 0;
+    }
     //get the number of items shown per page
     var show_per_page = parseInt($('#show_per_page').val());
      
@@ -183,6 +155,16 @@ function go_to_page(page_num){
      
     //update the current page input field
     $('#current_page').val(page_num);
+}
+function CustomerSearchInShop() 
+{
+    var lkeyword = document.
+    getElementById("little_search").value.replace(/\s/ig,'');
+    if(lkeyword=="")
+        alert("Search Content Should Not Be Empty!");
+    else{
+        top.location.href='/CustomerSearchInShop/'+lkeyword+'/{{shop.id}}';
+    }
 }
 </script>
 {% endblock %}

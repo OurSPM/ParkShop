@@ -30,13 +30,13 @@ class CustomerForm(forms.Form):
 
 class CustomerForm2(forms.Form):
 	#identity = forms.ChoiceField(label='your identity:', choices=IDENTITY)
-	CustomerAccount = forms.CharField(label='Account:', max_length=64)
-	CustomerName = forms.CharField(label='YourName:', max_length=64)
-	CustomerPassword = forms.CharField(label='Password:', widget=forms.PasswordInput(), max_length=16)
+	CustomerAccount = forms.CharField(label='Account:', max_length=10)
+	CustomerName = forms.CharField(label='YourName:', max_length=10)
+	CustomerPassword = forms.CharField(label='Password:', widget=forms.PasswordInput(), max_length=10)
 	#CustomerType = forms.CharField(label='Type：', max_length=1, choices=CustomerTypeChoices,blank=True)
-	CustomerTelephone = forms.CharField(label='Phone:',max_length=64)
-	CustomerEmail = forms.EmailField(label=   'E-mail:')
-	CustomerAddress = forms.CharField(label=  'Address:')
+	CustomerTelephone = forms.CharField(label='Phone:',max_length=11)
+	CustomerEmail = forms.EmailField(label=   'E-mail:',max_length=20)
+	CustomerAddress = forms.CharField(label=  'Address:',max_length=25)
 
 class UserForm(forms.Form):
 	identity = forms.ChoiceField(label=  'identity:', choices=IDENTITY)
@@ -77,18 +77,14 @@ def register(request):
 				customer.CustomerEmailCode=randomCode
 				customer.CustomerEmailCodeFlag=False
 				#write into db
-				customer_href="http://10.170.69.64:8000/verification/"+randomCode+"/c/"+customer.CustomerEmail
+				customer_href="http://10.170.67.139:8000/verification/"+randomCode+"/c/"+customer.CustomerEmail
 				# message=<a href=customer_href>Click the link to verifivation!</a>
-				send_mail(u'parknshop confirm', customer_href, '2473490238@qq.com',
+				send_mail(u'parknshop confirm', customer_href, '462428585@qq.com',
     [customer.CustomerEmail], fail_silently=False)
 				customer.save()
 				request.session['UserType'] = cf.cleaned_data['identity']
 				request.session['UserAccount'] = cf.cleaned_data['CustomerAccount']
 				request.session['UserID'] = customer.id
-				CommodityReceiveAddress.objects.create(CustomerID = customer, CommodityAddress = 'xian', CommodityTelephone='18717310592')
-				CommodityReceiveAddress.objects.create(CustomerID = customer, CommodityAddress = 'shenzheng', CommodityTelephone='18717310592')
-				CommodityReceiveAddress.objects.create(CustomerID = customer, CommodityAddress = 'xiameng', CommodityTelephone='18717310592')
-				return HttpResponseRedirect('https://mail.qq.com/')
 				# return render_to_response('Homepage.html', locals(), context_instance=RequestContext(request))
 			else: 
 			#返回注册成功页面
@@ -115,9 +111,9 @@ def register(request):
 				seller.SellerEmailCode=randomCode
 				seller.SellerEmailCodeFlag=False
 				#write into db
-				customer_href="http://10.170.69.64:8000/verification/"+randomCode+"/s/"+seller.SellerEmail
+				customer_href="http://10.170.67.139:8000/verification/"+randomCode+"/s/"+seller.SellerEmail
 				# message=<a href=customer_href>Click the link to verifivation!</a>
-				send_mail(u'parknshop confirm', customer_href, '2473490238@qq.com',
+				send_mail(u'parknshop confirm', customer_href, '462428585@qq.com',
     [seller.SellerEmail], fail_silently=False)
 				seller.save()
 				request.session['UserType'] = cf.cleaned_data['identity']
@@ -168,7 +164,9 @@ def info(request):
 	UserType = request.session['UserType']
 	#UserName = request.session['UserName']
 	try:
+		print 'in try'
 		if request.method == "POST":
+			print "in post"
 			cf = CustomerForm2(request.POST)
 			if cf.is_valid():
 			#get form
@@ -198,7 +196,8 @@ def info(request):
 					seller.SellerTelephone = cf.cleaned_data['CustomerTelephone']
 				#write into db
 					seller.save()
-					return render_to_response('success.html',{'UserType':'S','UserName':seller.SellerName})
+					return HttpResponseRedirect('/login')
+					# return render_to_response('success.html',{'UserType':'S','UserName':seller.SellerName})
 		else:
 			if UserType == 'C':
 				user = Customer.objects.get(id=UserID)
@@ -210,7 +209,10 @@ def info(request):
 				UserName = user.CustomerName
 			else:
 				user = Seller.objects.get(id=UserID)
-				shop=Shop.objects.get(SellerID=user)
+				try:
+					shop=Shop.objects.get(SellerID=user)
+				except:
+					shop=None
 				UserAccount = user.SellerAccount
 				UserEmail = user.SellerEmail
 				UserAddress = user.SellerAddress
@@ -227,6 +229,7 @@ def info(request):
 			cf = CustomerForm2(data)
 		return render_to_response('myinfo.html',locals(), context_instance=RequestContext(request))
 	except:
+		print "in except"
 		return HttpResponseRedirect('/index')
 
 def getCommodity(request, id):  #/commodity/id/ 返回ID=id 的Commodity

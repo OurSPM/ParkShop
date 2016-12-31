@@ -18,13 +18,15 @@
 							<label for="id_Address" class="col-sm-2 control-label">
 								<input type="radio" name="cont" value="{{ rootAddr.CustomerAddress }}.{{rootAddr.CustomerTelephone}}"></label>
 							<div class="col-sm-6">
-								<input type="text" 
+								<input type="text"
+								 maxlength="10" 
 								class="form-control"
 								value="{{ rootAddr.CustomerAddress }}"
 								readonly="true" 
 								></div>
 							<div class="col-sm-4">
-								<input type="text" 
+								<input type="text"
+								 maxlength="10" 
 								class="form-control"
 								value="{{ rootAddr.CustomerTelephone }}"
 								readonly="true"
@@ -35,13 +37,15 @@
 								<label for="id_Address" class="col-sm-2 control-label">
 									<input type="radio" name="cont" value="{{ addr.CommodityAddress }}.{{addr.CommodityTelephone}}"></label>
 								<div class="col-sm-6">
-									<input type="text" 
+									<input type="text"
+									 maxlength="10" 
 									class="form-control"
 									value="{{ addr.CommodityAddress }}"
 									readonly="true"
 									></div>
 								<div class="col-sm-4">
 									<input type="text" 
+									 maxlength="10"
 									class="form-control"
 									value="{{ addr.CommodityTelephone }}"
 									readonly="true"
@@ -52,16 +56,19 @@
 								<label class="col-sm-2 control-label">
 									<input checked="true" id="address" type="radio" name="cont"></label>
 								<div class="col-sm-6">
-									<input type="text" 
+									<input type="text"
+									 maxlength="25" 
 									class="form-control" 
 									placeholder="your address"
 									id="add" 
+									onblur="add_Address()"
 									></div>
 								<div class="col-sm-4">
 									<input type="text" 
+									 maxlength="11"
 									class="form-control" 
 									placeholder="your phonenumber"
-									id="phone" 
+									id="phone" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')"
 									onblur="add_Address()" 
 									></div>
 							</div>
@@ -70,7 +77,10 @@
 								$('#address').val($('#add').val()+'.'+$('#phone').val());
 							}
 							$('form').submit(function(event) {
-								if($('input:radio[name="cont"]:checked').val()=="on"){
+								if($('input:radio[name="cont"]:checked').val()=="on"
+									||$('input:radio[name="cont"]:checked').val()=="."
+									||$('input:radio[name="cont"]:checked').val()==('.'+$('#phone').val())
+									||$('input:radio[name="cont"]:checked').val()==($('#add').val()+'.')){
 									alert("your address or telephone is null");
 									return false;
 								}else{
