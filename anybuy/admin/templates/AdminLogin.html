@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>管理员登录</title>
 
-<link rel="stylesheet" type="text/css" href="css/styles.css">
+<link rel="stylesheet" type="text/css" href="/file/Css/styles.css">
 
 </head>
 <body>
@@ -14,10 +14,11 @@
 
 	<div class="container">
 		<h1>管理员登录</h1>
-		<form class="form">
-			<input type="text" placeholder="Username">
-			<input type="password" placeholder="Password"><br>
-			<button type="submit" id="login-button" onclick="window.location.href='index.html';"><strong>登陆</strong></button>
+		<form class="form" method="post" action="/adminlogin/">
+		 {% csrf_token %} 
+			<input type="text" name="adminName" placeholder="Username">
+			<input type="password" name="adminPassword" placeholder="Password"><br>
+			<button type="submit" id="login-button"><strong>登陆</strong></button>
 		</form>
 
 	</div>

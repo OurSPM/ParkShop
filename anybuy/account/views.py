@@ -78,7 +78,8 @@ def register(request):
 				customer.CustomerEmailCodeFlag=False
 				#write into db
 
-				customer_href="http://10.170.18.129:8000/verification/"+randomCode+"/c/"+customer.CustomerEmail
+
+				customer_href="http://10.170.69.37:8000/verification/"+randomCode+"/c/"+customer.CustomerEmail
 				# message=<a href=customer_href>Click the link to verifivation!</a>
 				try:
 					send_mail(u'parknshop confirm', customer_href, '462428585@qq.com',[customer.CustomerEmail], fail_silently=False)
@@ -116,7 +117,8 @@ def register(request):
 				seller.SellerEmailCodeFlag=False
 				#write into db
 
-				customer_href="http://10.170.18.129:8000/verification/"+randomCode+"/s/"+seller.SellerEmail
+
+				customer_href="http://10.170.69.37:8000/verification/"+randomCode+"/s/"+seller.SellerEmail
 
 				# message=<a href=customer_href>Click the link to verifivation!</a>
 				try:

@@ -43,32 +43,42 @@
                                         <div class="form-group">
                                             <label for="id_CustomerAccount" class="col-sm-2 control-label">Account</label>
                                             <div class="col-sm-10">
-                                                <input  maxlength="10" type="text" class="form-control" name="CustomerAccount" id="id_CustomerAccount" placeholder="Account"></div>
+                                                <input  maxlength="10" type="text" class="form-control" name="CustomerAccount" id="id_CustomerAccount" placeholder="Account name should less then 10 character"></div>
                                         </div>
                                         <div class="form-group">
                                             <label for="id_CustomerName" class="col-sm-2 control-label">Realname</label>
                                             <div class="col-sm-10">
-                                                <input  maxlength="10" type="text" class="form-control" name="CustomerName" id="id_CustomerName" placeholder="Realname"></div>
+                                                <input  maxlength="20" type="text" class="form-control" name="CustomerName" id="id_CustomerName" placeholder="Realname should less then 20 character"></div>
                                         </div>
                                         <div class="form-group">
                                             <label for="id_CustomerPassword" class="col-sm-2 control-label">Password</label>
                                             <div class="col-sm-10">
-                                                <input  maxlength="10" type="password" class="form-control" id="id_CustomerPassword" name="CustomerPassword" placeholder="Password"></div>
+                                                <input  maxlength="10" type="password" class="form-control" id="id_CustomerPassword" name="CustomerPassword" placeholder="Password should less then 10 character"></div>
                                         </div>
                                         <div class="form-group">
                                             <label for="id_CustomerPassword2" class="col-sm-2 control-label">Repassword</label>
                                             <div class="col-sm-10">
-                                                <input  maxlength="10" type="password" class="form-control" name="CustomerPassword2" id="id_CustomerPassword2" placeholder="RePassword"></div>
+                                                <input  maxlength="10" type="password" class="form-control" name="CustomerPassword2" onblur="check()" id="id_CustomerPassword2" placeholder="RePassword"></div>
                                         </div>
+                                        <script>
+                                        function check(argument) {
+                                            if($('#id_CustomerPassword2').val()!=$('#id_CustomerPassword').val()){
+                                                alert('two password not equal');
+                                                $('#id_CustomerPassword2').val('');
+                                                return false;
+                                            }
+                                        }
+                                            
+                                        </script>
                                         <div class="form-group">
                                             <label for="id_CustomerTelephone" class="col-sm-2 control-label">User Tel.</label>
                                             <div class="col-sm-10">
-                                                <input  maxlength="10" type="text" class="form-control" name="CustomerTelephone" id="id_CustomerTelephone" placeholder="User Tel."></div>
+                                                <input  maxlength="11" type="text" class="form-control" name="CustomerTelephone" id="id_CustomerTelephone" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="User Tel. should less then 10 character"></div>
                                         </div>
                                         <div class="form-group">
                                             <label for="id_CustomerEmail" class="col-sm-2 control-label">Email</label>
                                             <div class="col-sm-10">
-                                                <input  maxlength="20" type="email" class="form-control" id="id_CustomerEmail" name="CustomerEmail" placeholder="Email Address"></div>
+                                                <input  maxlength="30" type="email" class="form-control" id="id_CustomerEmail" name="CustomerEmail" placeholder="Email Address"></div>
                                         </div>
                                         
                                         <div class="form-group">
