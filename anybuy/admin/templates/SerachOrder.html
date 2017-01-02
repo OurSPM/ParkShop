@@ -36,49 +36,56 @@
 </head>
 <body >
 
-    <form class="form-inline definewidth m20" action="/allshopownerquery" method="get">
-        {% csrf_token %} <font color="#777777"><strong>sellerName：</strong></font> 
-        <input type="text" name="sellerName" class="abc input-default" placeholder="sellerName">
+    <form class="form-inline definewidth m20" action="/serachorder" method="get">
+        {% csrf_token %} <font color="#777777"><strong>OrderId：</strong></font> 
+        <input type="text" name="orderId" class="abc input-default" placeholder="order id">
         &nbsp;&nbsp;
         <button type="submit" class="btn btn-primary">Query</button>
     </form>
     <div>
-        <h3 style="text-align: center;color: #3a87ad">All Shop Owner</h3>
+        <h3 style="text-align: center;color: #3a87ad">All Order</h3>
     </div>
     <table class="table table-bordered table-hover definewidth m10">
         <thead>
             <tr>
-                <th>SellerAccount</th>
-                <th>SellerTelephone</th>
-                <th>SellerEmail</th>
-                <th>SellerAddress</th>
-                <th>Authorzation</th>
+                <th>OrderId</th>
+                <th>OrderDate</th>
+                <th>CommodityName</th>
+                <th>CommodityAmount</th>
+                <th>CommodityPrice</th>
+                <th>CommodityAddress</th>
+                <th>CustomerName</th>
+                <th>CustomerOrderState</th>
+                <th>SellerName</th>
+                <th>ShopName</th>
+                <th>SellerOrderState</th>
+                
             </tr>
         </thead>
-        {% for seller in sellerlist%}
+        {% for order in orderlist%}
         <tr>
-            <td>{{seller.SellerAccount}}</td>
+            <td>{{seller.SellerName}}</td>
             <td>{{seller.SellerTelephone}}</td>
             <td>{{seller.SellerEmail}}</td>
             <td>{{seller.SellerAddress}}</td>
             <td>
                 <form action="/authorzation/" method="get" >
                     {% csrf_token %}
-                    <button class="btn btn-lg btn-default" id="{{seller.SellerAccount}}" type="submit" name="Authorzation" value="{{seller.SellerAccount}}.{{seller.Authorzation}}">{{seller.Authorzation}}</button>
+                    <button class="btn btn-lg btn-default" id="{{seller.SellerName}}" type="submit" name="Authorzation" value="{{seller.SellerName}}.{{seller.Authorzation}}">{{seller.Authorzation}}</button>
                 </form>
             </td>
             <script type="text/javascript">
-                    if ($('#{{seller.SellerAccount}}').html().toLowerCase()=='false') {
-                        $('#{{seller.SellerAccount}}').html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+                    if ($('#{{seller.SellerName}}').html().toLowerCase()=='false') {
+                        $('#{{seller.SellerName}}').html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
                     }else{
-                        $('#{{seller.SellerAccount}}').html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+                        $('#{{seller.SellerName}}').html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
                     }
                     </script>
             <form action="/delseller/" method="post">
                 {% csrf_token %}
                 <td>
                     <a>
-                        <input type="hidden" name='sellerName' value="{{seller.SellerAccount}}">
+                        <input type="hidden" name='sellerName' value="{{seller.SellerName}}">
                         <button class="btn btn-primary" type="submit">Del</button>
                     </a>
                 </td>

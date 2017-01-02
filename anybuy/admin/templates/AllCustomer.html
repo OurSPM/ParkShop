@@ -36,36 +36,41 @@
 </head>
 <body >
 
-    <form class="form-inline definewidth m20" action="#" method="get"> <font color="#777777"><strong>sellerName：</strong></font> 
-        <input type="text" name="menuname" id="menuname" class="abc input-default" placeholder="" value="">
+    <form class="form-inline definewidth m20" action="/allcustomerquery" method="get">
+        {% csrf_token %} <font color="#777777"><strong>sellerName：</strong></font> 
+        <input type="text" name="customerName" class="abc input-default" placeholder="customername">
         &nbsp;&nbsp;
         <button type="submit" class="btn btn-primary">Query</button>
-        &nbsp;&nbsp;
-        <a href="videosAdd.html" class="btn btn-default">Add</a>
     </form>
-    <div><h3 style="text-align: center;color: #3a87ad">All Customer</h3></div>
-        <table class="table table-bordered table-hover definewidth m10">
-            <thead>
-                <tr>
-                    <th>SellerName</th>
-                    <th>SellerTelephone</th>
-                    <th>SellerEmail</th>
-                    <th>SellerAddress</th>
-                </tr>
-            </thead>
-            <form>
-                <tr>
-                    <td><a href="studentdetail.html">huangchaoming</a></td>
-                    <td>122222222234</td>
-                    <td>123123@qq.com</td>
-                    <td>Central and Western District</td>
-                    <td>
-                        <a>
-                            <button class="btn btn-default" type="submit">Del</button>
-                        </a>
-                    </td>
-                </tr>
+    <div>
+        <h3 style="text-align: center;color: #3a87ad">All Customer</h3>
+    </div>
+    <table class="table table-bordered table-hover definewidth m10">
+        <thead>
+            <tr>
+                <th>SellerName</th>
+                <th>SellerTelephone</th>
+                <th>SellerEmail</th>
+                <th>SellerAddress</th>
+            </tr>
+        </thead>
+        {% for customer in customerlist %}
+        <tr>
+            <td>{{customer.CustomerName}}</td>
+            <td>{{customer.CustomerTelephone}}</td>
+            <td>{{customer.CustomerEmail}}</td>
+            <td>{{customer.CustomerAddress}}</td>
+            <form action="/delcustomer/" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="customerName" value="{{customer.CustomerName}}">
+                <td>
+                    <a>
+                        <button class="btn btn-default" type="submit">Del</button>
+                    </a>
+                </td>
             </form>
-        </table>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
-    </html>
+</html>
