@@ -78,10 +78,13 @@ def register(request):
 				customer.CustomerEmailCodeFlag=False
 				#write into db
 
-				customer_href="http://10.170.67.139:8000/verification/"+randomCode+"/c/"+customer.CustomerEmail
+				customer_href="http://10.170.18.129:8000/verification/"+randomCode+"/c/"+customer.CustomerEmail
 				# message=<a href=customer_href>Click the link to verifivation!</a>
-				send_mail(u'parknshop confirm', customer_href, '462428585@qq.com',
-    [customer.CustomerEmail], fail_silently=False)
+				try:
+					send_mail(u'parknshop confirm', customer_href, '462428585@qq.com',[customer.CustomerEmail], fail_silently=False)
+				except:
+					print 'send mail to customer failed!'
+					return render_to_response('sendMailfailed.html',locals())
 				customer.save()
 				request.session['UserType'] = cf.cleaned_data['identity']
 				request.session['UserAccount'] = cf.cleaned_data['CustomerAccount']
@@ -113,11 +116,14 @@ def register(request):
 				seller.SellerEmailCodeFlag=False
 				#write into db
 
-				customer_href="http://10.170.67.139:8000/verification/"+randomCode+"/s/"+seller.SellerEmail
+				customer_href="http://10.170.18.129:8000/verification/"+randomCode+"/s/"+seller.SellerEmail
 
 				# message=<a href=customer_href>Click the link to verifivation!</a>
-				send_mail(u'parknshop confirm', customer_href, '462428585@qq.com',
-    [seller.SellerEmail], fail_silently=False)
+				try:
+					send_mail(u'parknshop confirm', customer_href, '462428585@qq.com',[seller.SellerEmail], fail_silently=False)
+				except:
+					print 'send mail to seller failed!'
+					return render_to_response('sendMailfailed.html',locals())
 				seller.save()
 				request.session['UserType'] = cf.cleaned_data['identity']
 				request.session['UserAccount'] = cf.cleaned_data['CustomerAccount']

@@ -31,7 +31,7 @@ def sblacklist(request):
 def allshopowner(request):
 
 	print request.GET.get('sellerName')
-    return render_to_response('AllShopOwner.html', locals(),context_instance=RequestContext(request))
+	return render_to_response('AllShopOwner.html', locals(),context_instance=RequestContext(request))
 
 def approve(request):
     print request.GET.get('sellerName')
