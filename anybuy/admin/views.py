@@ -73,11 +73,6 @@ def sblacklist(request):
     return render_to_response('sBlackList.html', locals(),context_instance=RequestContext(request))
 
 def allshopowner(request):
-
-<<<<<<< HEAD
-	print request.GET.get('sellerName')
-	return render_to_response('AllShopOwner.html', locals(),context_instance=RequestContext(request))
-=======
 	name=request.GET.get('sellerName')
 	try:
 		sellerlist=Seller.objects.all()
@@ -88,6 +83,7 @@ def allshopowner(request):
 	except:
 		pass
 	return render_to_response('AllShopOwner.html', locals(),context_instance=RequestContext(request))
+
 def delseller(request):
 	try:
 		name=request.POST.get('sellerName')
@@ -110,7 +106,6 @@ def delcustomer(request):
 		print 'except'
 	customer.delete()
 	return HttpResponseRedirect('/allcustomer/')
->>>>>>> 79cc0ef0806c4611a0e564454edf7ddbd9d0ac2c
 
 def approve(request):
 #     print request.GET.get('sellerName')

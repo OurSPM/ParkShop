@@ -116,10 +116,7 @@ def register(request):
 				seller.SellerEmailCode=randomCode
 				seller.SellerEmailCodeFlag=False
 				#write into db
-
-
 				customer_href="http://10.170.69.37:8000/verification/"+randomCode+"/s/"+seller.SellerEmail
-
 				# message=<a href=customer_href>Click the link to verifivation!</a>
 				try:
 					send_mail(u'parknshop confirm', customer_href, '462428585@qq.com',[seller.SellerEmail], fail_silently=False)
@@ -136,7 +133,6 @@ def register(request):
 		cf = CustomerForm()
 		#cf = CustomerForm(request.POST)
 	return render_to_response('register.html',{'cf':cf}, context_instance=RequestContext(request))
-
 
 #/verifiacation
 def mail_verification(request):
@@ -241,7 +237,7 @@ def info(request):
 		return render_to_response('myinfo.html',locals(), context_instance=RequestContext(request))
 	except:
 		print "in except"
-		return HttpResponseRedirect('/index')
+		return HttpResponseRedirect('/login/')
 
 def getCommodity(request, id):  #/commodity/id/ 返回ID=id 的Commodity
 	
@@ -340,6 +336,10 @@ def salesHistory(request, time):
 		UserID = None
 		UserType = None
 		UserAccount = None
+	try:
+		seller = Seller.objects.get(id=UserID)
+	except:
+		return HttpResponseRedirect('/login/')
 	shopID = Shop.objects.get(SellerID = UserID)
 	shopOrder = ShopOrder.objects.filter(ShopID = shopID)
 	SalesHistoryList = []
@@ -394,6 +394,10 @@ def checkOrder(request):
 		UserID = None
 		UserType = None
 		UserAccount = None
+	try:
+		seller = Seller.objects.get(id=UserID)
+	except:
+		return HttpResponseRedirect('/login/')
 	shopID = Shop.objects.get(SellerID = UserID)
 	shopOrder = ShopOrder.objects.filter(ShopID = shopID, ShopOrderState = 0)
 	orderList = []

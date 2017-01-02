@@ -21,7 +21,10 @@ def addr(request):
             UserName = UserAccount
     else:
         return HttpResponseRedirect('/login/')
-
+    try:
+        checkcustomer=Customer.objects.get(id=UserID)
+    except:
+        return HttpResponseRedirect('/login/')
     currentCustomer=Customer.objects.get(CustomerAccount=UserName)
     if request.method=='POST':
         print 'in post'
@@ -100,6 +103,10 @@ def favorite(request):
         UserID = None
         UserType = None
         UserAccount = None
+    try:
+        customer=Customer.objects.get(id=UserID)
+    except:
+        return HttpResponseRedirect('/login/')
     favoriteList = Favorite.objects.filter(CustomerID = UserID)
     return render_to_response('Customer_Favorite.html', locals())
 
@@ -113,6 +120,10 @@ def cart(request):
         UserID = None
         UserType = None
         UserAccount = None
+    try:
+        customer=Customer.objects.get(id=UserID)
+    except:
+        return HttpResponseRedirect('/login')
     cartList = Cart.objects.filter(CustomerID = UserID)
     total=0
     carEmpty=0
@@ -134,6 +145,10 @@ def add_to_cart(request, cid, amount, source):
         UserID = None
         UserType = None
         UserAccount = None
+    try:
+        customer=Customer.objects.get(id=UserID)
+    except:
+        return HttpResponseRedirect('/login/')
     try:
         cart = Cart.objects.get(CustomerID = user, CommodityID = commodity)
         cart.CartCommodityAmount = cart.CartCommodityAmount+1
@@ -176,6 +191,10 @@ def rm_from_cart(request):
         UserType = None
         UserAccount = None
         user = None
+    try:
+        customer=Customer.objects.get(id=UserID)
+    except:
+        return HttpResponseRedirect('/login/')
     if 'id' in request.GET:
         commodity = Commodity.objects.get(id = request.GET['id'])
         Cart.objects.get(CustomerID = user, CommodityID = commodity).delete()
@@ -284,6 +303,10 @@ def rm_from_favorite(request):
         UserType = None
         UserAccount = None
         user = None
+    try:
+        customer=Customer.objects.get(id=UserID)
+    except:
+        return HttpResponseRedirect('/login/')
     if 'id' in request.GET:
         commodity = Commodity.objects.get(id = request.GET['id'])
         Favorite.objects.get(CustomerID = user, CommodityID = commodity).delete()
@@ -317,7 +340,10 @@ def searchInShop(request, lkeyword):
         UserType = None
         UserAccount = None
         return HttpResponseRedirect('/login/')
-    seller = Seller.objects.get(id=UserID)
+    try:
+        seller = Seller.objects.get(id=UserID)
+    except:
+        return HttpResponseRedirect('/login/')
     try:
         shop = Shop.objects.get(SellerID = seller)
         commoditylist = Commodity.objects.filter(ShopID = shop,CommodityName__contains=lkeyword)
@@ -354,24 +380,36 @@ def sellerentershop(request): #需要返回shoplist，shopadvlist，commodityadv
         print UserID
     else:
         return HttpResponseRedirect('/login/')
-    print UserID
-    try:       
+    try:
         seller = Seller.objects.get(id=UserID)
-        print seller
+    except:
+        return HttpResponseRedirect('/login/')
+    
+    try:
         shop = Shop.objects.get(SellerID = seller)
+    except:
+        shop=None
+     
+    if shop is None:
+        return HttpResponseRedirect('/addshop')
+    elif seller.Authorzation==False:
+        return render_to_response('authorzation.html',locals())
+    else:
         commoditylist = Commodity.objects.filter(ShopID = shop)
         shopadvlist = Shop.objects.filter(SellerID = seller, IsAdv = True)
         commodityadvlist = Commodity.objects.filter(ShopID = shop, IsAdv = True)
-    except:
-        shop=None
-    if seller and not shop:
-        return HttpResponseRedirect('/addshop')
-    elif seller and seller.Authorzation==False:
-        return render_to_response('authorzation.html',locals())
-    else:
         return render_to_response('Seller_EnterShop.html', locals())
 
 def delfromshop(request, cid):
+    if request.session.get('UserID', False):
+        UserID = request.session['UserID']
+        UserType = request.session['UserType']
+        UserAccount = request.session['UserAccount']
+        UserName = UserAccount
+    else:
+        UserID = None
+        UserType = None
+        UserAccount = None
     Commodity.objects.get(id = cid).delete()
     return HttpResponse('You have deleted a commodity!!!')
 
@@ -386,6 +424,10 @@ def buysHistory(request, time):
         UserID = None
         UserType = None
         UserAccount = None
+    try:
+        customer=Customer.objects.get(id=UserID)
+    except:
+        return HttpResponseRedirect('/login/')
     # shopID = Customer.objects.get(Customer = UserID)
     shopOrder = CustomerOrder.objects.filter(CustomerID = UserID)
     BuysHistoryList = []
@@ -417,7 +459,10 @@ def manageAD(request):
         UserName = UserAccount
     else:
         return HttpResponseRedirect('/login/')
-    seller = Seller.objects.get(id=UserID)
+    try:
+        seller = Seller.objects.get(id=UserID)
+    except:
+        return HttpResponseRedirect('/login/')
     try:
         shop = Shop.objects.get(SellerID = seller)
         commoditylist = Commodity.objects.filter(ShopID = shop)
@@ -544,7 +589,10 @@ def add_and_modify(request, cid): # cid==0时添加新项目， !=0时修改cid�
         UserName = UserAccount
     else:
         return HttpResponseRedirect('/login/')
-    seller = Seller.objects.get(id=UserID)
+    try:
+        seller = Seller.objects.get(id=UserID)
+    except:
+        return HttpResponseRedirect('/login/')
     try:
         shop = Shop.objects.get(SellerID = seller)
         commoditylist = Commodity.objects.filter(ShopID = shop)
@@ -608,7 +656,11 @@ def add_and_modify_shop(request): # cid==0时添加新项目， !=0时修改cid�
         UserName = UserAccount
     else:
         return HttpResponseRedirect('/login/')
-    seller = Seller.objects.get(id=UserID) 
+    try:
+        seller = Seller.objects.get(id=UserID) 
+    except:
+        print 'add shop except'
+        return HttpResponseRedirect('/login/')
     if request.method == 'POST':
         sf = ShopForm(request.POST, request.FILES)
         if sf.is_valid():
@@ -649,6 +701,10 @@ def manageOrder(request):
         UserID = None
         UserType = None
         UserAccount = None
+    try:
+        customer=Customer.objects.get(id=UserID)
+    except:
+        return HttpResponseRedirect('/login/')
     customerOrder = CustomerOrder.objects.filter(CustomerID = UserID)
     orderList = []
     for so in customerOrder:
