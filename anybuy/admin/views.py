@@ -73,7 +73,6 @@ def sblacklist(request):
     return render_to_response('sBlackList.html', locals(),context_instance=RequestContext(request))
 
 def allshopowner(request):
-
 	name=request.GET.get('sellerName')
 	try:
 		sellerlist=Seller.objects.all()
@@ -84,6 +83,7 @@ def allshopowner(request):
 	except:
 		pass
 	return render_to_response('AllShopOwner.html', locals(),context_instance=RequestContext(request))
+
 def delseller(request):
 	try:
 		account=request.POST.get('sellerAccount')
