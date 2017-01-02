@@ -14,7 +14,7 @@
 
     <style type="text/css">
         body {font-size: 20px;
-		font-size: 20px;
+        font-size: 20px;
             padding-bottom: 40px;
             background-color:#e9e7ef;
         }
@@ -35,40 +35,28 @@
     </style>
 </head>
 <body >
-<form class="form-inline definewidth m20" action="#" method="get">
-    <font color="#777777"><strong>SellerName：</strong></font>
-    <input type="text" name="sellerName" id="menuname"class="abc input-default" placeholder="" value="">&nbsp;&nbsp; 
-    <button type="submit" class="btn btn-primary">Query</button>&nbsp;&nbsp; 
-	<button type="button" class="btn btn-default" id="addnew"><a href="videosAdd.html">Add</a></button>
-</form>
-<div><h3 style="text-align: center;color: #3a87ad">Approve</h3></div>
-<table class="table table-bordered table-hover definewidth m10">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>SellerName</th>
-        
-        <th>ShopName</th>
-        <th>Description</th>
-        
-        
-        
-        <th>Manage</th>
-    </tr>
-    </thead>
-	     
+    <div>
+        <h3 style="text-align: center;color: #3a87ad">Shop Info</h3>
+    </div>
+    <table class="table table-bordered table-hover definewidth m10">
+        <thead>
+            <tr>
+                <th>SellerName</th>
+                <th>ShopImg</th>
+                <th>ShopName</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        {% for shop in shoplist%}
         <tr>
-        <form action="">
-                <td>1</td>
-                <td><a href="studentdetail.html">hcm</a></td>
-                <td>hem de dian</td>
-                <td>haoduohaodongxi</td>
-                <td> <button class="btn btn-default" type="submit">Del</button></td>
-        </form>       
+            <td>{{shop.SellerID.SellerName}}</td>
+            <td><img class="img-thumbnail" style="width: 200px" alt="140x140" src="/file/{{ shop.ShopImage }}"/></td>
+            <td>{{shop.ShopName}}</td>
+            <td>{{shop.ShopDescription}}</td>
         </tr>
-           
-       
-       </table>
-
+        {% endfor %}
+    </table>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/allshopowner/" class="btn btn-lg btn-primary">back</a>
 </body>
 </html>

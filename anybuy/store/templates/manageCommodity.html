@@ -88,5 +88,13 @@
 	// 	if(discount.value>10||discount.value<0){
  //  		discount.value = 10;
 	// }
+	$('#id_CommodityName').attr('maxlength', '30');
+	$('#id_CommodityDescription').attr('maxlength', '30');
+	$('#id_CommodityAmount').attr('maxlength', '5').attr('onkeyup', "this.value=this.value.replace(/\D/g,'')").attr('onkeyup', "this.value=this.value.replace(/\D/g,'')");
+	$('#id_SoldAmount').attr('maxlength', '5').attr('onkeyup', "this.value=this.value.replace(/\D/g,'')").attr('onkeyup', "this.value=this.value.replace(/\D/g,'')");
+	$('#id_PurchasePrice').attr('maxlength', '9').attr('onkeyup', "this.value=this.value.replace(/\D/g,'')").attr('onkeyup', "this.value=this.value.replace(/\D/g,'')");
+	$('#id_SellPrice').attr('maxlength', '9').attr('onkeyup', "this.value=this.value.replace(/\D/g,'')").attr('onkeyup', "this.value=this.value.replace(/\D/g,'')");
+	$('#id_CommodityDiscount').attr('maxlength', '1').attr('onkeyup', "this.value=this.value.replace(/\D/g,'')").attr('onkeyup', "this.value=this.value.replace(/\D/g,'')");
+	$("input[type='number']").attr('type', 'text');
 </script>
 {% endblock %}

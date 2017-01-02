@@ -85,5 +85,8 @@ urlpatterns = patterns('',
     url(r'^allcustomerquery/$', 'admin.views.allcustomerquery'),
     url(r'^serachorder/$', 'admin.views.serachorder'),
     url(r'^allorder/$', 'admin.views.allorder'),
+    url(r'^salehistory/$', 'admin.views.salehistory'),
+    url(r'^backupdatabase/$', 'admin.views.backupdatabase'),
+    url(r'^shopinfo/$', 'admin.views.shopinfo'),
 
 )

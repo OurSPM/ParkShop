@@ -48,17 +48,14 @@
     <table class="table table-bordered table-hover definewidth m10">
         <thead>
             <tr>
-                <th>OrderId</th>
-                <th>OrderDate</th>
-                <th>CommodityName</th>
-                <th>CommodityAmount</th>
-                <th>CommodityPrice</th>
-                <th>CommodityAddress</th>
-                <th>CustomerName</th>
-                <th>CustomerOrderState</th>
-                <th>SellerName</th>
-                <th>ShopName</th>
-                <th>SellerOrderState</th>
+                <th>Order<br>Id</th>
+                <th>Order<br>Date</th>
+                <th>Commodity<br>Name</th>
+                <th>Commodity<br>Address</th>
+                <th>Customer<br>Account</th>
+                <th>Seller<br>Account</th>
+                <th>Shop<br>Name</th>
+                <th>Order<br>State</th>
                 
             </tr>
         </thead>
@@ -67,31 +64,39 @@
             <td>{{order.id}}</td>
             <td>{{order.OrderListDate}}</td>
             <td>{{order.CommodityID.CommodityName}}</td>
-            <td>{{order.CommodityID.SellPrice}}</td>
             <td>{{order.CommodityAddressID.CommodityAddress}}</td>
-            <td>{{order.CommodityAddressID.CommodityAddress}}</td>
-            <td>
-                <form action="/authorzation/" method="get" >
-                    {% csrf_token %}
-                    <button class="btn btn-lg btn-default" id="{{seller.SellerName}}" type="submit" name="Authorzation" value="{{seller.SellerName}}.{{seller.Authorzation}}">{{seller.Authorzation}}</button>
-                </form>
-            </td>
-            <script type="text/javascript">
-                    if ($('#{{seller.SellerName}}').html().toLowerCase()=='false') {
-                        $('#{{seller.SellerName}}').html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-                    }else{
-                        $('#{{seller.SellerName}}').html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-                    }
-                    </script>
-            <form action="/delseller/" method="post">
-                {% csrf_token %}
-                <td>
-                    <a>
-                        <input type="hidden" name='sellerName' value="{{seller.SellerName}}">
-                        <button class="btn btn-primary" type="submit">Del</button>
-                    </a>
-                </td>
-            </form>
+            <td>{{order.CustomerOrderID.CustomerID.CustomerName}}</td>
+            <td>{{order.ShopOrderID.ShopID.SellerID.SellerAccount}}</td>
+            <td>{{order.ShopOrderID.ShopID.ShopName}}</td>
+            
+            {% if order.ShopOrderID.ShopOrderState == 0 %}
+        <td>paying</td>
+        {% endif %}
+        {% if order.ShopOrderID.ShopOrderState == 1 %}
+        <td>shipping<br>ShipNo:{{ ol.ShipNo }}</td>
+        {% endif %}
+        {% if order.ShopOrderID.ShopOrderState == 2 %}
+        <td>signing</td>
+        {% endif %}
+        {% if order.ShopOrderID.ShopOrderState == 3 %}
+        <td>commenting</td>
+        {% endif %}
+        {% if order.ShopOrderID.ShopOrderState == 4 %}
+        <td>refunding</td>
+        {% endif %}
+        {% if order.ShopOrderID.ShopOrderState == 5 %}
+        <td>refunded</td>
+        {% endif %}
+        {% if order.ShopOrderID.ShopOrderState == 6 %}
+        <td>refused refunded</td>
+        {% endif %}
+        {% if order.ShopOrderID.ShopOrderState == 7 %}
+        <td>finish</td>
+        {% endif %}
+        {% if order.ShopOrderID.ShopOrderState == 8 %}
+        <td>commented</td>
+        {% endif %}
+            
         </tr>
         {% endfor %}
     </table>

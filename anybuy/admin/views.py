@@ -86,8 +86,8 @@ def allshopowner(request):
 	return render_to_response('AllShopOwner.html', locals(),context_instance=RequestContext(request))
 def delseller(request):
 	try:
-		name=request.POST.get('sellerName')
-		seller=Seller.objects.get(SellerName=name)
+		account=request.POST.get('sellerAccount')
+		seller=Seller.objects.get(SellerAccount=account)
 		shop=Shop.objects.filter(SellerID=seller).delete()
 		Commodity.objects.filter(ShopID=shop).delete()
 	except:
@@ -129,9 +129,9 @@ def allcustomer(request):
 
 def allshopownerquery(request):
 	if request.method=='GET':
-		name=request.GET.get('sellerName')
+		account=request.GET.get('sellerAccount')
 		try:
-			sellerlist=Seller.objects.filter(SellerName__contains=name)
+			sellerlist=Seller.objects.filter(SellerAccount__contains=account)
 		except:
 			pass
 	return render_to_response('AllShopOwner.html', locals(),context_instance=RequestContext(request))
@@ -155,5 +155,28 @@ def allorder(request):
 
 
 def serachorder(request):
+	if request.method=='GET':
+		orderid=request.GET.get('orderId')
+		try:
+			orderlist=OrderList.objects.filter(id__contains=orderid)
+		except:
+			pass
+	return render_to_response('AllOrder.html', locals(),context_instance=RequestContext(request))
 
-	return render_to_response('SerachOrder.html', locals(),context_instance=RequestContext(request))
+def salehistory(request):
+	
+
+	return render_to_response('SaleHistory.html', locals(),context_instance=RequestContext(request))
+
+def backupdatabase(request):
+
+	return render_to_response('BackUpDataBase.html', locals(),context_instance=RequestContext(request))
+
+def shopinfo(request):
+	selleraccount=request.GET.get('selleraccount')
+	try:
+		seller=Seller.objects.get(SellerAccount=selleraccount)
+		shoplist=Shop.objects.filter(SellerID=seller)
+	except:
+		pass
+	return render_to_response('ShopInfo.html', locals(),context_instance=RequestContext(request))

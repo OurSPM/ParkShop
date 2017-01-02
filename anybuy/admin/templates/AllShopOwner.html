@@ -37,8 +37,8 @@
 <body >
 
     <form class="form-inline definewidth m20" action="/allshopownerquery" method="get">
-        {% csrf_token %} <font color="#777777"><strong>sellerName：</strong></font> 
-        <input type="text" name="sellerName" class="abc input-default" placeholder="sellerName">
+        {% csrf_token %} <font color="#777777"><strong>SellerAccount：</strong></font> 
+        <input type="text" name="sellerAccount" class="abc input-default" placeholder="SellerAccount">
         &nbsp;&nbsp;
         <button type="submit" class="btn btn-primary">Query</button>
     </form>
@@ -57,7 +57,10 @@
         </thead>
         {% for seller in sellerlist%}
         <tr>
-            <td>{{seller.SellerAccount}}</td>
+            <td><form action="/shopinfo/" method="get">
+                <input type="hidden" name="selleraccount" value="{{seller.SellerAccount}}">
+                <button class="btn btn-lg btn-default" type="submit">{{seller.SellerAccount}}</button>
+            </form></td>
             <td>{{seller.SellerTelephone}}</td>
             <td>{{seller.SellerEmail}}</td>
             <td>{{seller.SellerAddress}}</td>
@@ -78,7 +81,7 @@
                 {% csrf_token %}
                 <td>
                     <a>
-                        <input type="hidden" name='sellerName' value="{{seller.SellerAccount}}">
+                        <input type="hidden" name='sellerAccount' value="{{seller.SellerAccount}}">
                         <button class="btn btn-primary" type="submit">Del</button>
                     </a>
                 </td>

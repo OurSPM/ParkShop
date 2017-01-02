@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/file/Css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/file/Css/bootstrap-responsive.css" />
+    <link rel="stylesheet" type="text/css" href="/file/Css/style.css" />
+    <script type="text/javascript" src="/file/Js/jquery2.js"></script>
+    <script type="text/javascript" src="/file/Js/jquery2.sorted.js"></script>
+    <script type="text/javascript" src="/file/Js/bootstrap.js"></script>
+    <script type="text/javascript" src="/file/Js/ckform.js"></script>
+    <script type="text/javascript" src="/file/Js/common.js"></script>
+
+    <style type="text/css">
+        body {font-size: 20px;
+        font-size: 20px;
+            padding-bottom: 40px;
+            background-color:#e9e7ef;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+</head>
+<body >
+
+    <!-- <form class="form-inline definewidth m20" action="/serachorder" method="get">
+        {% csrf_token %} <font color="#777777"><strong>OrderId：</strong></font> 
+        <input type="text" name="orderId" class="abc input-default" placeholder="order id">
+        &nbsp;&nbsp;
+        <button type="submit" class="btn btn-primary">Query</button>
+    </form> -->
+    <div>
+        <h3 style="text-align: center;color: #3a87ad">All Order</h3>
+    </div>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="/admin/salehistory/all">
+        <button class='btn btn-info btn-xs'>All Sales</button>
+    </a>
+    <a href="/admin/salehistory/year">
+        <button class='btn btn-info btn-xs'>Year Sales</button>
+    </a>
+    <a href="/admin/salehistory/month">
+        <button class='btn btn-info btn-xs'>Month Sales</button>
+    </a>
+    <a href="/admin/salehistory/day">
+        <button class='btn btn-info btn-xs'>Weekly Sales</button>
+    </a>
+    <a href="/admin/salehistory/day">
+        <button class='btn btn-info btn-xs'>Day Sales</button>
+    </a>
+    <table class="table table-bordered table-hover definewidth m10">
+
+        <thead>
+            <tr>
+                <th>Order No.</th>
+                <th>Commodity Name</th>
+                <th>Order Time</th>
+                <th>Unit Price</th>
+                <th>Counts</th>
+                <th>Actual Money</th>
+                <th>Customer Info</th>
+                <th>Status</th>
+                <th>Remaining Time</th>
+            </tr>
+        </thead>
+        {% for salesHistory in SalesHistoryList %}
+        <tr class="yanse" id="item{{salesHistory.CommodityID.id}}">
+            <td>{{ salesHistory.id }}</td>
+            <td>{{ salesHistory.CommodityID.CommodityName }}</td>
+            <td>{{ salesHistory.OrderListDate }}</td>
+            <td>{{ salesHistory.CommodityID.SellPrice }}HK$</td>
+            <td>{{ salesHistory.OrderAmount }}</td>
+            <td>
+                {% widthratio salesHistory.CommodityID.SellPrice 1 salesHistory.OrderAmount %}HK$
+            </td>
+            <td>
+                Name:{{ salesHistory.CustomerOrderID.CustomerID.CustomerName}}
+                <br>
+                Tel:{{ salesHistory.CustomerOrderID.CustomerID.CustomerTelephone}}
+                <br>
+                Email:{{ salesHistory.CustomerOrderID.CustomerID.CustomerEmail}}
+                <br>
+                Addr:{{ salesHistory.CustomerOrderID.CustomerID.CustomerAddress }}
+            </td>
+            {% if salesHistory.OrderListState == 0 %}
+            <td>paying</td>
+            {% endif %}
+                    {% if salesHistory.OrderListState == 1 %}
+            <td>
+                shipping
+                <br>ShipNo:{{ salesHistory.ShipNo }}</td>
+            {% endif %}
+                    {% if salesHistory.OrderListState == 2 %}
+            <td>signing</td>
+            {% endif %}
+                    {% if salesHistory.OrderListState == 3 %}
+            <td>commenting</td>
+            {% endif %}
+                    {% if salesHistory.OrderListState == 4 %}
+            <td>refunding</td>
+            {% endif %}
+                    {% if salesHistory.OrderListState == 5 %}
+            <td>refunded</td>
+            {% endif %}
+                    {% if salesHistory.OrderListState == 6 %}
+            <td>refused refunded</td>
+            {% endif %}
+                    {% if salesHistory.OrderListState == 7 %}
+            <td>finish</td>
+            {% endif %}
+                    {% if salesHistory.OrderListState == 8 %}
+            <td>commented</td>
+            {% endif %}
+            <td>0</td>
+        </tr>
+        {% endfor %}
+    </table>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <b>Total Value: {{totalvalue}}HK$</b>
+</body>
+</html>
