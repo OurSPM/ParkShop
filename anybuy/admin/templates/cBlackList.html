@@ -35,14 +35,11 @@
     </style>
 </head>
 <body >
-    <form class="form-inline definewidth m20" action="#" method="get"> <font color="#777777"><strong>SellerName：</strong></font> 
-        <input type="text" name="customerName" id="menuname"class="abc input-default" placeholder="" value="">
+    <form class="form-inline definewidth m20" action="/querycblacklist/" method="get"> <font color="#777777"><strong>CustormerAccount：</strong></font> 
+        <input type="text" name="customerAccount" id="menuname"class="abc input-default" placeholder="custormeraccount">
         &nbsp;&nbsp;
         <button type="submit" class="btn btn-primary">Query</button>
         &nbsp;&nbsp;
-        <button type="button" class="btn btn-default"  id="addnew">
-            <a href="videosAdd.html">Add</a>
-        </button>
     </form>
     <div>
         <h3 style="text-align: center;color: #3a87ad">Customer BlackList</h3>
@@ -70,14 +67,16 @@
             <td>
                 &nbsp;&nbsp;&nbsp;
                 <form action="/addcblacklist/" style="display: inline-block;">
-                    <input type="hidden" name="customerId" value="{{customer.id}}">
-                    <button class="btn btn-default" type="submit">Del</button>
+                    <input type="hidden" name="customerAccount" value="{{customer.CustomerAccount}}">
+                    <button id="{{customer.id}}" class="btn btn-default" type="submit">{{IsIn}}</button>
                 </form>
-                &nbsp;&nbsp;&nbsp;
-                <form action="/delcblacklist/" style="display: inline-block;">
-                    <input type="hidden" name="customerId" value="{{customer.id}}">
-                    <button class="btn btn-default" type="submit">Del</button>
-                </form>
+                <script type="text/javascript">
+                    if ($('#{{customer.id}}').html().toLowerCase()=='0') {
+                        $('#{{customer.id}}').html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;add&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+                    }else{
+                        $('#{{customer.id}}').html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;del&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+                    }
+                </script>
             </td>
 
         </tr>

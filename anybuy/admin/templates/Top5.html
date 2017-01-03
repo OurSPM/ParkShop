@@ -36,12 +36,12 @@
 </head>
 <body >
 
-	<form class="form-inline definewidth m20" action="/allshopownerquery" method="get">
+	<!-- <form class="form-inline definewidth m20" action="/allshopownerquery" method="get">
 		{% csrf_token %} <font color="#777777"><strong>SellerAccount：</strong></font> 
 		<input type="text" name="sellerAccount" class="abc input-default" placeholder="SellerAccount">
 		&nbsp;&nbsp;
 		<button type="submit" class="btn btn-primary">Query</button>
-	</form>
+	</form> -->
 	<div>
 		<h3 style="text-align: center;color: #3a87ad">Top5</h3>
 	</div>
@@ -76,7 +76,7 @@
                     </script>
 			-->
 			<td>
-				<input type="checkbox" name="top5"></td>
+				<input type="checkbox" name="top5" value="{{shop.id}}"></td>
 		</tr>
 		{% endfor %}
 	</table>
@@ -85,8 +85,11 @@
 </form>
 </body>
 <script type="text/javascript">
-	$('#addtop10').submit(function(event) {
-		alert($('input[name=top10]:checked').length);
+	$('#addtop5').submit(function(event) {
+		if($('input:checkbox[name=top5]:checked').length>5){;
+			alert('please choose less than 5 shop!')
+			return false;
+		}
 	});
 </script>
 </html>

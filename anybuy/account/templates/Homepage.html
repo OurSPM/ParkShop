@@ -97,12 +97,23 @@
 							</p>
 						</div>
 					</div>
+					{% for shop in shoplist	%}
+					<div class="item">              <!--网站介绍3-->
+						<a href="/shop/id/{{shop.id}}"><img alt="" src="/file/{{shop.BigImage}}" style="height:400px;"></a>
+						<div class="carousel-caption">
+							<h4>
+							</h4>
+							<p>
+							</p>
+						</div>
+					</div>
+					{% endfor %}
 				</div> <a class="left carousel-control" href="#carousel-449960" data-slide="prev"><span class="glyphicon"></span></a> <a class="right carousel-control" href="#carousel-449960" data-slide="next"><span class="glyphicon"></span></a>
 			</div>
 		</div>
 	</div>
 	
-	<div class="col-md-8 column mycenter">
+<!-- 	<div class="col-md-8 column mycenter">
 				<div class="tabbable" id="tabs-412305">
 					<ul class="nav nav-tabs">
 						<li class="active">
@@ -113,14 +124,14 @@
 						</li>
 					</ul>
 					<div id="top" class="tab-content">
-						<div class="tab-pane active" id="panel-22874">      <!--TP 10 商品-->
+						<div class="tab-pane active" id="panel-22874">      TP 10 商品
 							{% for commodityadv in homecommodityadv %}
                                 <a href = "/commodity/id/{{ commodityadv.CommodityID.id }}/">
                                     <img src="/file/{{ commodityadv.CommodityID.CommodityImage }}" class="logo">
                                 </a>
                             {% endfor %}
 						</div>
-						<div class="tab-pane" id="panel-71918">			    <!--TP 10 店铺-->
+						<div class="tab-pane" id="panel-71918">			    TP 10 店铺
                             {% for shopadv in homeshopadv %}
                                 <a href = "/shop/id/{{ shopadv.ShopID.id }}">
                                     <img src="/file/{{ shopadv.ShopID.ShopImage }}" class="logo">
@@ -130,7 +141,7 @@
 					</div>
 				</div>
 			</div>
-	
+	 -->
 
 	
 <div  style = "background-color: #f8f8f8">

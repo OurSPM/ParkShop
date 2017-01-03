@@ -64,7 +64,7 @@
 						<td>Name:{{ ol.CustomerOrderID.CustomerID.CustomerName}}<br>
 							Tel:{{ ol.CommodityAddressID.CommodityTelephone}}<br>
 							Email:{{ ol.CustomerOrderID.CustomerID.CustomerEmail}}<br>
-							Addr:{{ ol.CommodityAddressID.CommodityAddress }}</td>
+							Addr:<br>{{ ol.CommodityAddressID.CommodityAddress }}</td>
 
 						{% if ol.OrderListState == 0 %}
 						<td>paying</td>
@@ -94,7 +94,17 @@
 						<td>commented</td>
 						{% endif %}
 
-						<td class="text-center"><input type="text" id='myText{{ ol.id }}' size="10" placeholder="Input ShipNo" maxlength="10" /><br><br><a class='btn btn-info btn-xs' onclick="confirmOrder('{{ol.id}}','{{ ol.id }}')"><span class="glyphicon"><b>Confirm</b></span></a></td>
+						<td class="text-center">
+						<form id="aaa" action="/removeOrderList/">
+							{% csrf_token %}
+							<input type="text" onkeyup="value=value.replace(/[^0-9a-zA-Z]/ig,'')" id='myText{{ ol.id }}' size="10" placeholder="Input ShipNo" name="content" maxlength="10" />	
+							<br>						
+							<br>						
+							<input type="hidden" name="id"  value="{{ ol.id }}">						
+							<button type="submit" class="glyphicon">Confirm</button>
+						</form>
+						<!-- <a class='btn btn-info btn-xs' onclick="confirmOrder('{{ol.id}}','{{ ol.id }}')"><span class="glyphicon"><b>Confirm</b></span></a> --></td>
+						</tr>
 						{% endfor %}
 						</table>
 						
@@ -104,4 +114,12 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+	$('#aaa').submit(function(event) {
+		if (!$('input[type=text]').val()) {
+			alert('ShipNo should not be empty!');
+			return false;
+		}
+	});
+</script>
 {% endblock %}

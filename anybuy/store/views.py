@@ -25,7 +25,10 @@ def addr(request):
         checkcustomer=Customer.objects.get(id=UserID)
     except:
         return HttpResponseRedirect('/login/')
-    currentCustomer=Customer.objects.get(CustomerAccount=UserName)
+    try:
+        currentCustomer=Customer.objects.get(CustomerAccount=UserName)
+    except:
+        return HttpResponseRedirect('/index')
     if request.method=='POST':
         print 'in post'
         content=request.POST.get('cont').split('.')
@@ -69,9 +72,12 @@ def getCommodity(request, cid):
         UserID = None
         UserType = None
         UserAccount = None
-    commodity = Commodity.objects.get(id=cid)
-    shop = commodity.ShopID
-    commentlist = Comment.objects.filter(CommodityID = cid)
+    try:
+        commodity = Commodity.objects.get(id=cid)
+        shop = commodity.ShopID
+        commentlist = Comment.objects.filter(CommodityID = cid)
+    except:
+        return HttpResponseRedirect('/index')
     try:
         isfavorite = Favorite.objects.get(CommodityID = cid, CustomerID = UserID)
     except Favorite.DoesNotExist:
@@ -88,9 +94,12 @@ def getShop(request, cid):
         UserID = None
         UserType = None
         UserAccount = None
-    shop = Shop.objects.get(id=cid)
-    commodityList = Commodity.objects.filter(ShopID = shop,IsAdv=True)
-    shopList = Shop.objects.filter(SellerID = shop.SellerID)
+    try:
+        shop = Shop.objects.get(id=cid)
+        commodityList = Commodity.objects.filter(ShopID = shop,IsAdv=True)
+        shopList = Shop.objects.filter(SellerID = shop.SellerID)
+    except:
+        return HttpResponseRedirect('/index')
     return render_to_response('Customer_EnterShop.html', locals())
 
 def favorite(request):
@@ -140,7 +149,10 @@ def add_to_cart(request, cid, amount, source):
         UserAccount = request.session['UserAccount']
         UserName = UserAccount
         user = Customer.objects.get(id=UserID)
-        commodity = Commodity.objects.get(id = cid)
+        try:
+            commodity = Commodity.objects.get(id = cid)
+        except:
+            return HttpResponseRedirect('/index')
     else:
         UserID = None
         UserType = None
@@ -168,15 +180,21 @@ def add_to_favorite(request):
         UserType = request.session['UserType']
         UserAccount = request.session['UserAccount']
         UserName = UserAccount
-        user = Customer.objects.get(id=UserID)
+        try:
+            user = Customer.objects.get(id=UserID)
+        except:
+            return HttpResponseRedirect('/index')
     else:
         UserID = None
         UserType = None
         UserAccount = None
         user = None
-    commodity = Commodity.objects.get(id = request.GET['id'])
-    date = time.strftime('%Y-%m-%d',time.localtime(time.time()))
-    Favorite.objects.create(FavoriteDate=date, CustomerID = user, CommodityID = commodity)
+    try:
+        commodity = Commodity.objects.get(id = request.GET['id'])
+        date = time.strftime('%Y-%m-%d',time.localtime(time.time()))
+        Favorite.objects.create(FavoriteDate=date, CustomerID = user, CommodityID = commodity)
+    except:
+        return HttpResponseRedirect('/index')
     return HttpResponse('You add: '+commodity.CommodityName)
 
 def rm_from_cart(request):
@@ -185,7 +203,10 @@ def rm_from_cart(request):
         UserType = request.session['UserType']
         UserAccount = request.session['UserAccount']
         UserName = UserAccount
-        user = Customer.objects.get(id=UserID)
+        try:
+            user = Customer.objects.get(id=UserID)
+        except:
+            return HttpResponseRedirect('/index')
     else:
         UserID = None
         UserType = None
@@ -196,8 +217,11 @@ def rm_from_cart(request):
     except:
         return HttpResponseRedirect('/login/')
     if 'id' in request.GET:
-        commodity = Commodity.objects.get(id = request.GET['id'])
-        Cart.objects.get(CustomerID = user, CommodityID = commodity).delete()
+        try:
+            commodity = Commodity.objects.get(id = request.GET['id'])
+            Cart.objects.get(CustomerID = user, CommodityID = commodity).delete()
+        except:
+            return HttpResponseRedirect('/index')
     else:
         commodity = None
     return HttpResponse('You removed: '+commodity.CommodityName)
@@ -208,17 +232,23 @@ def refreshcart(request):
         UserType = request.session['UserType']
         UserAccount = request.session['UserAccount']
         UserName = UserAccount
-        user = Customer.objects.get(id=UserID)
+        try:
+            user = Customer.objects.get(id=UserID)
+        except:
+            return HttpResponseRedirect('/index')
     else:
         UserID = None
         UserType = None
         UserAccount = None
         user = None
     if 'id' in request.GET:
-        commodity = Commodity.objects.get(id = request.GET['id'])
-        cart = Cart.objects.get(CustomerID = user, CommodityID = commodity)
-        cart.CartCommodityAmount = int(request.GET['amount'])
-        cart.save()
+        try:
+            commodity = Commodity.objects.get(id = request.GET['id'])
+            cart = Cart.objects.get(CustomerID = user, CommodityID = commodity)
+            cart.CartCommodityAmount = int(request.GET['amount'])
+            cart.save()
+        except:
+            return HttpResponseRedirect('/index')
     else:
         commodity = None
     return HttpResponse('You refresh: '+commodity.CommodityName)
@@ -231,22 +261,35 @@ def checkoutcart(request,cid):
         UserType = request.session['UserType']
         UserAccount = request.session['UserAccount']
         UserName = UserAccount
-        user = Customer.objects.get(id=UserID)
+        try:
+            user = Customer.objects.get(id=UserID)
+        except:
+            return HttpResponseRedirect('/index')
     else:
         UserID = None
         UserType = None
         UserAccount = None
         user = None
     date = time.strftime('%Y-%m-%d',time.localtime(time.time()))
-    AddressID=CommodityReceiveAddress.objects.get(id=cid)
-    cutomerorder = CustomerOrder.objects.create(CommodityAddressID=AddressID,CustomerOrderState=0, CustomerOrderDate=date, CustomerID=user)
-    # 从购物车中删除，现在是将checkbox注释了，所以这里是删除购物车中所有物品
+    try:
+        AddressID=CommodityReceiveAddress.objects.get(id=cid)
+        cutomerorder = CustomerOrder.objects.create(CommodityAddressID=AddressID,CustomerOrderState=0, CustomerOrderDate=date, CustomerID=user)
+    except:
+        return HttpResponseRedirect('/index')
+        # 从购物车中删除，现在是将checkbox注释了，所以这里是删除购物车中所有物品
     commoditylist = Cart.objects.filter(CustomerID=user)
-    shoporder = ShopOrder.objects.create(CommodityAddressID=AddressID,ShopOrderState=0, ShopOrderDate=date, ShopID=commoditylist[0].CommodityID.ShopID)
+    index=0
+    shoporderlist=[]
+    for commodity in commoditylist:
+        shoporder= ShopOrder.objects.create(CommodityAddressID=AddressID,ShopOrderState=0, ShopOrderDate=date, ShopID=commoditylist[index].CommodityID.ShopID)
+        shoporderlist.append(shoporder) 
+        index+=1
     
+    index=0
     for commodity in commoditylist:
         print 'in for commoditylist'
-        orderlist = OrderList.objects.create(CommodityAddressID=AddressID,OrderListState=0, OrderListDate=date, OrderAmount = commodity.CartCommodityAmount, CustomerOrderID=cutomerorder, ShopOrderID=shoporder,CommodityName=commodity.CommodityID.CommodityName,SellPrice=commodity.CommodityID.SellPrice,CommodityImage=commodity.CommodityID.CommodityImage )
+        orderlist = OrderList.objects.create(CommodityAddressID=AddressID,OrderListState=0, OrderListDate=date, OrderAmount = commodity.CartCommodityAmount, CustomerOrderID=cutomerorder, ShopOrderID=shoporderlist[index],CommodityName=commodity.CommodityID.CommodityName,SellPrice=commodity.CommodityID.SellPrice,CommodityImage=commodity.CommodityID.CommodityImage )
+        index+=1
         print commodity.CommodityID
         try:
             print 'in try'
@@ -267,7 +310,10 @@ def bank(request):
         UserType = request.session['UserType']
         UserAccount = request.session['UserAccount']
         UserName = UserAccount
+    try:
         user = Customer.objects.get(id=UserID)
+    except:
+        return HttpResponseRedirect('/index')
     else:
         UserID = None
         UserType = None
@@ -297,7 +343,10 @@ def rm_from_favorite(request):
         UserType = request.session['UserType']
         UserAccount = request.session['UserAccount']
         UserName = UserAccount
-        user = Customer.objects.get(id=UserID)
+        try:
+            user = Customer.objects.get(id=UserID)
+        except:
+            return HttpResponseRedirect('/index')
     else:
         UserID = None
         UserType = None
@@ -308,8 +357,11 @@ def rm_from_favorite(request):
     except:
         return HttpResponseRedirect('/login/')
     if 'id' in request.GET:
-        commodity = Commodity.objects.get(id = request.GET['id'])
-        Favorite.objects.get(CustomerID = user, CommodityID = commodity).delete()
+        try:
+            commodity = Commodity.objects.get(id = request.GET['id'])
+            Favorite.objects.get(CustomerID = user, CommodityID = commodity).delete()
+        except:
+            return HttpResponseRedirect('/index')
     else:
         commodity = None
     return HttpResponse('You removed: '+commodity.CommodityName+'from favorite')
@@ -410,7 +462,10 @@ def delfromshop(request, cid):
         UserID = None
         UserType = None
         UserAccount = None
-    Commodity.objects.get(id = cid).delete()
+    try:
+        Commodity.objects.get(id = cid).delete()
+    except:
+        return HttpResponseRedirect('/index')
     return HttpResponse('You have deleted a commodity!!!')
 
 #查看购买历史
@@ -485,7 +540,10 @@ def changead(request):
         UserName = UserAccount
     else:
         return HttpResponseRedirect('/login/')
-    seller = Seller.objects.get(id=UserID)
+    try:
+        seller = Seller.objects.get(id=UserID)
+    except:
+        return HttpResponseRedirect('/index')
     try:
         shop = Shop.objects.get(SellerID = seller)
         commoditylist = Commodity.objects.filter(ShopID = shop)
@@ -494,8 +552,11 @@ def changead(request):
     except:
         shop = None
     cid = request.GET['id']
-    commodity = Commodity.objects.get(id=cid)
-    isadv = commodity.IsAdv
+    try:
+        commodity = Commodity.objects.get(id=cid)
+        isadv = commodity.IsAdv
+    except:
+        return HttpResponseRedirect('/index')
     if isadv:
         commodity.IsAdv = False
     else:
@@ -511,7 +572,10 @@ def applyhomeshopadv(request):
         UserName = UserAccount
     else:
         return HttpResponseRedirect('/login/')
-    seller = Seller.objects.get(id=UserID)
+    try:
+        seller = Seller.objects.get(id=UserID)
+    except:
+        return HttpResponseRedirect('/index')
     try:
         shop = Shop.objects.get(SellerID = seller)
     except:
@@ -606,7 +670,10 @@ def add_and_modify(request, cid): # cid==0时添加新项目， !=0时修改cid�
             if int(cid) == 0:
                 commodity = Commodity()
             else:
-                commodity = Commodity.objects.get(id = cid)
+                try:
+                    commodity = Commodity.objects.get(id = cid)
+                except:
+                    return HttpResponseRedirect('/index')
             commodity.CommodityName = cf.cleaned_data['CommodityName']
             commodity.CommodityDescription = cf.cleaned_data['CommodityDescription']
             commodity.CommodityAmount = cf.cleaned_data['CommodityAmount']
@@ -625,7 +692,10 @@ def add_and_modify(request, cid): # cid==0时添加新项目， !=0时修改cid�
     else:
         cf = CommodityForm()
         if int(cid) != 0: # 如果cid!=0 就代表要修改的CommodityID
-            commodity = Commodity.objects.get(id = cid)
+            try:
+                commodity = Commodity.objects.get(id = cid)
+            except:
+                return HttpResponseRedirect('/index')
             data={
             'CommodityName' : commodity.CommodityName,
             'CommodityDescription' : commodity.CommodityDescription,
@@ -773,16 +843,19 @@ def add_comment(request):
         UserType = None
         UserAccount = None
     if 'id' in request.GET:
-        ol = OrderList.objects.get(id = request.GET['id'])
-        ol.OrderListState = 8
-        ol.save()
-        so = ShopOrder.objects.get(id = ol.ShopOrderID.id)
-        so.ShopOrderState = 8
-        so.save()
-        co = CustomerOrder.objects.get(id = ol.CustomerOrderID.id)
-        co.CustomerOrderState = 8
-        co.save()
-        content = request.GET['content']
+        try:
+            ol = OrderList.objects.get(id = request.GET['id'])
+            ol.OrderListState = 8
+            ol.save()
+            so = ShopOrder.objects.get(id = ol.ShopOrderID.id)
+            so.ShopOrderState = 8
+            so.save()
+            co = CustomerOrder.objects.get(id = ol.CustomerOrderID.id)
+            co.CustomerOrderState = 8
+            co.save()
+            content = request.GET['content']
+        except:
+            return HttpResponseRedirect('/index')
         try:
             commodity=Commodity.objects.get(CommodityImage=ol.CommodityImage)
         except:
@@ -804,16 +877,19 @@ def confirm(request):
         UserType = None
         UserAccount = None
     if 'id' in request.GET:
-        ol = OrderList.objects.get(id = request.GET['id'])
-        ol.OrderListState = 7 # change to 7 for easy operation
-        ol.save()
-        so = ShopOrder.objects.get(id = ol.ShopOrderID.id)
-        so.ShopOrderState = 7
-        so.save()
-        co = CustomerOrder.objects.get(id = ol.CustomerOrderID.id)
-        co.CustomerOrderState = 7
-        co.save()
-        content = request.GET['content']
+        try:
+            ol = OrderList.objects.get(id = request.GET['id'])
+            ol.OrderListState = 7 # change to 7 for easy operation
+            ol.save()
+            so = ShopOrder.objects.get(id = ol.ShopOrderID.id)
+            so.ShopOrderState = 7
+            so.save()
+            co = CustomerOrder.objects.get(id = ol.CustomerOrderID.id)
+            co.CustomerOrderState = 7
+            co.save()
+            content = request.GET['content']
+        except:
+            return HttpResponseRedirect('/index')
         try:
             commodity=Commodity.objects.get(CommodityImage=ol.CommodityImage)
         except:

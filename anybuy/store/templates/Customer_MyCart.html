@@ -40,15 +40,21 @@
                 xmlhttp.open("GET","/rmfromcart?id="+id,true);
                 xmlhttp.send();
             }
-            function refresh(id, amount) {
+            function refresh(id, amount,total) {
+
             	if (amount==0) {
-            		$('#qq').val(1);
+            		$('#qq'+id).val(1);
             		amount = 1;
             	}
             	
-                 if (amount>{{ cart.CommodityID.CommodityAmount }}) {
-                  amount = {{ cart.CommodityID.CommodityAmount }}
+                 if (amount>total) {
+                  amount = total;
                   }
+                var qq = $('#qq'+id).val();
+                if (qq>total) {
+                	$('#qq'+id).val(total);
+                	alert('Insufficient inventory!');
+                }
                 xmlhttp=new XMLHttpRequest();
                 xmlhttp.onreadystatechange=function()
                 {
@@ -84,18 +90,9 @@
 								</div>
 							</td>
 							<td data-th="Price">HK${{ cart.CommodityID.SellPrice }}</td>
-							<script type="text/javascript">
-							function qq(argument) {
-								var qq = $('#qq').val();
-                    			if (qq>{{ cart.CommodityID.CommodityAmount }}) {
-                    				
-                    				$('#qq').val('{{ cart.CommodityID.CommodityAmount }}');alert('Insufficient inventory!');
-                    			}
-							}
-                    				
-                    		</script>
+							
                             <td data-th="Quantity">
-								<input id="qq" onchange="refresh({{ cart.CommodityID.id }}, this.value)" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength="3" class="form-control text-center" value="{{ cart.CartCommodityAmount }}">
+								<input id="qq{{ cart.CommodityID.id }}" onchange="refresh({{ cart.CommodityID.id }}, this.value,{{ cart.CommodityID.CommodityAmount }})" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength="3" class="form-control text-center" value="{{ cart.CartCommodityAmount }}">
 							</td>
 
 							<td id="subtotal{{ cart.CommodityID.id }}" data-th="Subtotal" class="text-center">{% widthratio cart.CommodityID.SellPrice 1 cart.CartCommodityAmount %}HK$</td>
@@ -107,16 +104,21 @@
 								<!--<input type=checkbox checked="true">-->
 							</td>
 						</tr>
+						<script type="text/javascript">
+							if ($('#qq{{ cart.CommodityID.id }}').val()>{{ cart.CommodityID.CommodityAmount }}) {
+								$('#qq{{ cart.CommodityID.id }}').val({{ cart.CommodityID.CommodityAmount }});
+							}
+                    	</script>
                     {% endfor %}
 					</tbody>
 					<tfoot>
 						<tr>
 							<td colspan="3" class="hidden-xs"></td>
 							<td id="total" class="hidden-xs text-center"><strong>Total {{ total }}HK$</strong></td>
-							<td class="actions" data-th="">
-								<!--<button class="btn btn-info btn-sm"><i class="glyphicon glyphicon-refresh"></i></button>-->
+							<!-- <td class="actions" data-th="">
+								<button class="btn btn-info btn-sm"><i class="glyphicon glyphicon-refresh"></i></button>
 								<button class="btn btn-danger btn-sm" ><img src = "/file/images/delete.png" style = "width:20px; height:20px"/></button>
-							</td>
+							</td> -->
 							<td>
 								<!--<input type=checkbox checked="true">-->
 							</td>

@@ -69,16 +69,29 @@ def authorzation(request):
 	# return render_to_response('AllShopOwner.html',locals(),context_instance=RequestContext(request))
 
 def sblacklist(request):
-    sellerlist=Seller.objects.all()
-    return render_to_response('sBlackList.html', locals(),context_instance=RequestContext(request))
+	sellerlist=[]
+	sellerlistN=Seller.objects.all()
+	for seller in sellerlistN:
+		if len(BlacklistSeller.objects.filter(SellerID=seller))!=0:
+			sellerlist.append(seller)
+	return render_to_response('sBlackList.html', locals(),context_instance=RequestContext(request))
 
 def delsblacklist(request):
-    customerId=request.GET.get('sellerId')
-    return render_to_response('sBlackList.html', locals(),context_instance=RequestContext(request))
+	customerId=request.GET.get('sellerId')
+	return render_to_response('sBlackList.html', locals(),context_instance=RequestContext(request))
 
 def addsblacklist(request):
-    customerId=request.GET.get('sellerId')
-    return render_to_response('sBlackList.html', locals(),context_instance=RequestContext(request))
+	sellerAccount=request.GET.get('sellerAccount')
+	try:
+		seller=Seller.objects.get(SellerAccount=sellerAccount)
+		IsIn=BlacklistSeller.objects.filter(SellerID=seller)
+		if len(IsIn)!=0:
+			IsIn.delete()
+		else:
+			BlacklistSeller.objects.create(BlacklistSellerReason='no reason',SellerID=seller)
+	except:
+		print 'add blacklist'
+	return render_to_response('sBlackList.html', locals(),context_instance=RequestContext(request))
 
 def allshopowner(request):
 	name=request.GET.get('sellerName')
@@ -120,21 +133,29 @@ def approve(request):
     return render_to_response('Approve.html', locals(),context_instance=RequestContext(request))
 
 def cblacklist(request):
-    customerlist=Customer.objects.all()
-    return render_to_response('cBlackList.html', locals(),context_instance=RequestContext(request))
+	customerlist=[]
+	customerlistN=Customer.objects.all()
+	for customer in customerlistN:
+		if len(BlacklistCustomer.objects.filter(CustomerID=customer))!=0:
+			customerlist.append(customer)
+	return render_to_response('cBlackList.html', locals(),context_instance=RequestContext(request))
 
 def delcblacklist(request):
     customerId=request.GET.get('customerId')
     return render_to_response('cBlackList.html', locals(),context_instance=RequestContext(request))
 
 def addcblacklist(request):
-    customerId=request.GET.get('customerId')
-    try:
-    	customer=Customer.objects.get(id=customerId)
-    	BlacklistCustomer.objects.create(BlacklistCustomerReason='no reason',CustomerID=customer)
-    except:
-    	print 'add blacklist'
-    return render_to_response('cBlackList.html', locals(),context_instance=RequestContext(request))
+	customerAccount=request.GET.get('customerAccount')
+	try:
+		customer=Customer.objects.get(CustomerAccount=customerAccount)
+		IsIn=BlacklistCustomer.objects.filter(CustomerID=customer)
+		if len(IsIn)!=0:
+			IsIn.delete()
+		else:
+			BlacklistCustomer.objects.create(BlacklistCustomerReason='no reason',CustomerID=customer)
+	except:
+		print 'add blacklist'
+	return render_to_response('cBlackList.html', locals(),context_instance=RequestContext(request))
 
 def allcustomer(request):
 	if request.method=='GET':
@@ -214,8 +235,57 @@ def shopinfo(request):
 		pass
 	return render_to_response('ShopInfo.html', locals(),context_instance=RequestContext(request))
 
-def top5(request):
+def querycblacklist(request):
+	customerAccount=request.GET.get('customerAccount')
+	try:
+		customerlist=Customer.objects.filter(CustomerAccount=customerAccount)
+		for customer in customerlist:
+			IsExist=BlacklistCustomer.objects.filter(CustomerID=customer)
+			if len(IsExist)!=0:
+				IsIn=1
+			else:
+				IsIn=0
+	except:
+		print 'add blacklist'
+	return render_to_response('cBlackList.html',locals(),context_instance=RequestContext(request))
 
+def querysblacklist(request):
+	sellerAccount=request.GET.get('sellerAccount')
+	print sellerAccount
+	try:
+		sellerlist=Seller.objects.filter(SellerAccount=sellerAccount)
+		for seller in sellerlist:
+			IsExist=BlacklistSeller.objects.filter(SellerID=seller)
+			if len(IsExist)!=0:
+				IsIn=1
+			else:
+				IsIn=0
+			print IsIn
+	except:
+		print 'add blacklist'
+	return render_to_response('sBlackList.html',locals(),context_instance=RequestContext(request))
+
+def top5(request):
+	shoplist=Shop.objects.all()
+	return render_to_response('Top5.html', locals(),context_instance=RequestContext(request))
+
+def addtotop5(request):
+	toplist=request.POST.getlist('top5')
+	TopShop.objects.all().delete()
+	for top in toplist:
+		try:
+			shop=Shop.objects.get(id=top)
+			TopShop.objects.create(ShopID=shop,SellerID=shop.SellerID,IsTop=1)
+			top5list=TopShop.objects.all()
+			shoplist=[]
+			for top in top5list:
+				try:
+					shop=Shop.objects.get(id=top.ShopID.id)
+					shoplist.append(shop)
+				except:
+					pass
+		except:
+			pass
 	return render_to_response('Top5.html', locals(),context_instance=RequestContext(request))
 
 def top10(request):

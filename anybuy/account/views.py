@@ -79,7 +79,7 @@ def register(request):
 				#write into db
 
 
-				customer_href="http://10.170.69.37:8000/verification/"+randomCode+"/c/"+customer.CustomerEmail
+				customer_href="http://10.170.67.213:8000/verification/"+randomCode+"/c/"+customer.CustomerEmail
 				# message=<a href=customer_href>Click the link to verifivation!</a>
 				try:
 					send_mail(u'parknshop confirm', customer_href, '462428585@qq.com',[customer.CustomerEmail], fail_silently=False)
@@ -90,7 +90,7 @@ def register(request):
 				request.session['UserType'] = cf.cleaned_data['identity']
 				request.session['UserAccount'] = cf.cleaned_data['CustomerAccount']
 				request.session['UserID'] = customer.id
-				return HttpResponseRedirect('login')
+				return HttpResponseRedirect('/login/')
 				# return render_to_response('Homepage.html', locals(), context_instance=RequestContext(request))
 			else: 
 			#返回注册成功页面
@@ -117,7 +117,7 @@ def register(request):
 				seller.SellerEmailCode=randomCode
 				seller.SellerEmailCodeFlag=False
 				#write into db
-				customer_href="http://10.170.69.37:8000/verification/"+randomCode+"/s/"+seller.SellerEmail
+				customer_href="http://10.170.67.213:8000/verification/"+randomCode+"/s/"+seller.SellerEmail
 				# message=<a href=customer_href>Click the link to verifivation!</a>
 				try:
 					send_mail(u'parknshop confirm', customer_href, '462428585@qq.com',[seller.SellerEmail], fail_silently=False)
@@ -204,7 +204,7 @@ def info(request):
 					seller.SellerTelephone = cf.cleaned_data['CustomerTelephone']
 				#write into db
 					seller.save()
-					return HttpResponseRedirect('/login')
+					return HttpResponseRedirect('/login/')
 					# return render_to_response('success.html',{'UserType':'S','UserName':seller.SellerName})
 		else:
 			if UserType == 'C':
@@ -274,7 +274,7 @@ def login(request):
 						wrongpw = True
 						return render_to_response('login.html', locals(), context_instance=RequestContext(request))
 				except:
-					return HttpResponseRedirect('login/')
+					return HttpResponseRedirect('/login/')
 			else:
 				try:
 					user = Seller.objects.get(SellerAccount__exact = UserAccount, SellerPassword__exact = UserPassword)
@@ -305,6 +305,14 @@ def index(request):
 	UserAccount = request.session.get('UserAccount')
 	homeshopadv = HomeShopAdv.objects.filter(ApplyState=True)
 	homecommodityadv = HomeCommodityAdv.objects.filter(ApplyState=True)
+	top5list=TopShop.objects.all()
+	shoplist=[]
+	for top in top5list:
+		try:
+			shop=Shop.objects.get(id=top.ShopID.id)
+			shoplist.append(shop)
+		except:
+			pass
 	#bulletin = System.objects.get(id = 1)
 	try:
 		if UserID and UserType == 'C':
@@ -438,7 +446,9 @@ def removeOrderList(request):
 		UserAccount = None
 	if 'id' in request.GET:
 		content = request.GET['content']
+		print content
 		ol = OrderList.objects.get(id = request.GET['id'])
+		print ol.id
 		ol.OrderListState = 1
 		ol.ShipNo = content
 		ol.save()
@@ -448,15 +458,15 @@ def removeOrderList(request):
 		co = CustomerOrder.objects.get(id = ol.CustomerOrderID.id)
 		co.CustomerOrderState = 1
 		co.save()
-		income = 0
-		income = income + ol.SellPrice * ol.OrderAmount
-		incomeAmount = income * System.objects.get(id = 1).ComissionRate
-		tmp = Income.objects.get(id = 1)
-		tmp.IncomeAmount = tmp.IncomeAmount + incomeAmount
-		tmp.save()
+		# income = 0
+		# income = income + ol.SellPrice * ol.OrderAmount
+		# # incomeAmount = income * System.objects.get(id = 1).ComissionRate
+		# tmp = Income.objects.get(id = 1)
+		# tmp.IncomeAmount = tmp.IncomeAmount + incomeAmount
+		# tmp.save()
 	else:
 		ol = None
-	return HttpResponse("You modified: "+ ol.CommodityName+"from Orderlist")
+	return HttpResponseRedirect('/seller/order/')
 
 
 def refund(request):
