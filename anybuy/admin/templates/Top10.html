@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="/file/Css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="/file/Css/bootstrap-responsive.css" />
+	<link rel="stylesheet" type="text/css" href="/file/Css/style.css" />
+	<script type="text/javascript" src="/file/Js/jquery2.js"></script>
+	<script type="text/javascript" src="/file/Js/jquery2.sorted.js"></script>
+	<script type="text/javascript" src="/file/Js/bootstrap.js"></script>
+	<script type="text/javascript" src="/file/Js/ckform.js"></script>
+	<script type="text/javascript" src="/file/Js/common.js"></script>
+
+	<style type="text/css">
+        body {font-size: 20px;
+        font-size: 20px;
+            padding-bottom: 40px;
+            background-color:#e9e7ef;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+</head>
+<body >
+
+	<form class="form-inline definewidth m20" action="/allshopownerquery" method="get">
+		{% csrf_token %} <font color="#777777"><strong>SellerAccount：</strong></font> 
+		<input type="text" name="sellerAccount" class="abc input-default" placeholder="SellerAccount">
+		&nbsp;&nbsp;
+		<button type="submit" class="btn btn-primary">Query</button>
+	</form>
+	<div>
+		<h3 style="text-align: center;color: #3a87ad">Top10</h3>
+	</div>
+	<form id="addtop10" action="/addtotop10/" method="post">
+	{% csrf_token %}
+		<table class="table table-bordered table-hover definewidth m10">
+			<thead>
+				<tr>
+					<th>ProductID</th>
+					<th>ProductName</th>
+					<th>ShopName</th>
+					<th>AddToTop10</th>
+				</tr>
+			</thead>
+			{% for shop in shoplist%}
+			<tr>
+				<td>{{shop.id}}</td>
+				<td>{{shop.ShopName}}</td>
+				<td>{{shop.SellerID.SellerName}}</td>
+				<!-- <td>
+				<form action="/authorzation/" method="get" >
+					{% csrf_token %}
+					<button class="btn btn-lg btn-default" id="{{seller.SellerAccount}}" type="submit" name="Authorzation" value="{{seller.SellerAccount}}.{{seller.Authorzation}}">{{seller.Authorzation}}</button>
+				</form>
+			</td>
+			<script type="text/javascript">
+                    if ($('#{{seller.SellerAccount}}').html().toLowerCase()=='false') {
+                        $('#{{seller.SellerAccount}}').html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+                    }else{
+                        $('#{{seller.SellerAccount}}').html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+                    }
+                    </script>
+			-->
+            
+                {% csrf_token %}
+			<td>
+				<input type="checkbox" name="top10"></td>
+		</tr>
+		{% endfor %}
+	</table>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-primary" style="margin-top: 20px;">submit</button>
+</form>
+</body>
+<script type="text/javascript">
+	$('#addtop10').submit(function(event) {
+		alert($('input[name=top10]:checked').length);
+	});
+</script>
+</html>

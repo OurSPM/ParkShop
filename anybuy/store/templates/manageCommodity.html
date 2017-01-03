@@ -7,33 +7,33 @@
 	<hr>
 	<form id="ddd" method = 'post' enctype="multipart/form-data">
 		{% csrf_token %}
-		<!-- <div class="form-group">
+		<div class="form-group">
 			<label for="id_CommodityName">Commodity Name:</label>
-			<input class="form-control" name="CommodityName" id="id_CommodityName" type="text" placeholder="CommodityName" />
+			<input class="form-control" name="CommodityName" id="id_CommodityName" type="text" value="{{data.CommodityName}}" maxlength="25" placeholder="CommodityName" />
 		</div>
 		<div class="form-group">
 			<label for="id_CommodityDescription">Description:</label>
-			<input class="form-control" name="CommodityDescription" id="id_CommodityDescription" type="text" placeholder="Description" />
+			<input class="form-control" name="CommodityDescription" id="id_CommodityDescription" value="{{data.CommodityDescription}}" maxlength="25" type="text" placeholder="Description" />
 		</div>
 		<div class="form-group">
 			<label for="id_CommodityAmount">Amount:</label>
-			<input class="form-control" name="CommodityAmount" id="id_CommodityAmount" type="text" placeholder="Amount" />
+			<input class="form-control" value="{{data.CommodityAmount}}" maxlength="6" name="CommodityAmount" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" id="id_CommodityAmount" type="text" placeholder="Amount" />
 		</div>
 		<div class="form-group">
 			<label for="id_SoldAmount">Sold Amount:</label>
-			<input class="form-control" id="id_SoldAmount" name="SoldAmount" type="text" placeholder="Sold Amount" />
+			<input class="form-control" value="{{data.SoldAmount}}" maxlength="6" id="id_SoldAmount" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" name="SoldAmount" type="text" placeholder="Sold Amount" />
 		</div>
 		<div class="form-group">
 			<label for="id_PurchasePrice">Purchase Price:</label>
-			<input class="form-control" id="id_PurchasePrice" name="PurchasePrice" type="text" />
+			<input class="form-control" value="{{data.PurchasePrice}}"  maxlength="9" id="id_PurchasePrice" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" name="PurchasePrice" type="text" />
 		</div>
 		<div class="form-group">
 			<label for="id_SellPrice">Sell Price:</label>
-			<input class="form-control" id="id_SellPrice" name="SellPrice" type="text" placeholder="Sell Pirce" />
+			<input class="form-control" value="{{data.SellPrice}}" maxlength="9" id="id_SellPrice" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" name="SellPrice" type="text" placeholder="Sell Pirce" />
 		</div>
 		<div class="form-group">
 			<label for="id_CommodityType">Type:</label>
-			<select class="form-control span1" data-style="btn-primary" id="id_CommodityType" name="CommodityType">
+			<select class="form-control span1" data-style="btn-primary" id="id_CommodityType" value="{{data.CommodityType}}" name="CommodityType">
 				<option value="C">TV & Home Theater</option>
 				<option value="A">Computers & Tablets</option>
 				<option value="S">Cell Phones</option>
@@ -52,17 +52,20 @@
 		</div>
 		<div class="form-group">
 			<label for="id_CommodityDiscount">Discount:</label>
-			<input class="form-control" id="id_CommodityDiscount" name="CommodityDiscount" type="text"  placeholder="Discount" />
+			<input class="form-control" id="id_CommodityDiscount" value="{{data.CommodityDiscount}}" maxlength="1" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" name="CommodityDiscount" type="text"  placeholder="Discount" />
 		</div>
 		<div class="form-group">
 			<input id="id_IsAdv" name="IsAdv" type="checkbox" />
 			<label for="id_IsAdv">Is Adv?</label>
-		</div> -->
-		{{cf.as_p}}
+		</div>
+		<!-- {{cf.as_p}} -->
 		<input class="btn btn-primary" type="submit" value = "Save" />
 	</form>
 </div>
-<script type="text/javascript">
+<!-- <script>
+	alert($('input[type=text]').length;
+</script> -->
+<!-- <script type="text/javascript">
 	// var p = $('p');
 	// for (var i = 0; i < p.length; i++) {
 	// 	$('<div class="form-group"></div>').appendTo('form');
@@ -96,5 +99,5 @@
 	$('#id_SellPrice').attr('maxlength', '9').attr('onkeyup', "this.value=this.value.replace(/\D/g,'')").attr('onkeyup', "this.value=this.value.replace(/\D/g,'')");
 	$('#id_CommodityDiscount').attr('maxlength', '1').attr('onkeyup', "this.value=this.value.replace(/\D/g,'')").attr('onkeyup', "this.value=this.value.replace(/\D/g,'')");
 	$("input[type='number']").attr('type', 'text');
-</script>
+</script> -->
 {% endblock %}

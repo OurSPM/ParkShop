@@ -47,13 +47,13 @@
 					</tr>
 				</thead>
 				{% for buysHistory in BuysHistoryList %}
-				<tr class="yanse" id="item{{buysHistory.CommodityID.id}}">
+				<tr class="yanse" id="item{{buysHistory.id}}">
 					<td>{{buysHistory.id}}</td>
-					<td>{{buysHistory.CommodityID.CommodityName}}</td>
-					<td>{{buysHistory.CommodityID.SellPrice}}HK$</td>
+					<td>{{buysHistory.CommodityName}}</td>
+					<td>{{buysHistory.SellPrice}}HK$</td>
 					<td>{{buysHistory.OrderListDate}}</td>
 					<td>{{buysHistory.OrderAmount}}</td>
-					<td>{% widthratio buysHistory.CommodityID.SellPrice 1 buysHistory.OrderAmount %}HK$</td>
+					<td>{% widthratio buysHistory.SellPrice 1 buysHistory.OrderAmount %}HK$</td>
 					{% if buysHistory.OrderListState == 0 %}
 					<td>paying</td>
 					{% endif %}

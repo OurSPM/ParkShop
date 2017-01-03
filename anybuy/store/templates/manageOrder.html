@@ -92,14 +92,14 @@
 		</script>
 
 		{% for ol in orderList %}
-		<tr class="yanse" id="item{{ ol.CommodityID.id }}">
+		<tr class="yanse" id="item{{ ol.id }}">
 		<td>{{ ol.id }}</td>
-		<td><a href="/commodity/id/{{ ol.CommodityID.id }}" style = "color:#3299CC"><img src="/file/{{ ol.CommodityID.CommodityImage }}" style = "width:90px;"/></a></td>
-		<td><a href="/commodity/id/{{ ol.CommodityID.id }}" style = "color:#3299CC">{{ ol.CommodityID.CommodityName }}</a></td>
+		<td><img src="/file/{{ ol.CommodityImage }}" style = "width:90px;"/></td>
+		<td>{{ ol.CommodityName }}</td>
 		<td>{{ ol.OrderListDate }}</td>
-		<td>{{ ol.CommodityID.SellPrice }} HK$</td>
+		<td>{{ ol.SellPrice }} HK$</td>
 		<td>{{ ol.OrderAmount}}</td>
-		<td>{% widthratio ol.CommodityID.SellPrice 1 ol.OrderAmount %} HK$</td>
+		<td>{% widthratio ol.SellPrice 1 ol.OrderAmount %} HK$</td>
 		<td>Name:{{ ol.CustomerOrderID.CustomerID.CustomerName}}<br>
 							Tel:{{ ol.CommodityAddressID.CommodityTelephone}}<br>
 							Email:{{ ol.CustomerOrderID.CustomerID.CustomerEmail}}<br>
@@ -150,8 +150,8 @@
         {% elif ol.OrderListState < 7 %}
             <td>Confirm before Comment</td>
 		{% else %}
-            <td><textarea id='myText{{ ol.CommodityID.id }}' maxlength="50" rows="5" cols="20" placeholder="Input comment here"></textarea><br><a style = "color:#3299CC" onclick="comment('{{ol.id}}','{{ ol.CommodityID.id }}')"><b>Comment</b></a></td>
-{#            <td><br><a class="btn btn-primary" onclick="comment('{{ol.id}}','{{ ol.CommodityID.id }}')"><b>Confirm and pay the money</b></a></td>#}
+            <td><textarea id='myText{{ ol.id }}' maxlength="50" rows="5" cols="20" placeholder="Input comment here"></textarea><br><a style = "color:#3299CC" onclick="comment('{{ol.id}}','{{ ol.id }}')"><b>Comment</b></a></td>
+{#            <td><br><a class="btn btn-primary" onclick="comment('{{ol.id}}','{{ ol.id }}')"><b>Confirm and pay the money</b></a></td>#}
         {% endif %}
 		{% if ol.OrderListState >= 7 %}
             <td>Aready Confirmed</td>

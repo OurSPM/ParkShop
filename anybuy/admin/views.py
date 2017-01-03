@@ -164,8 +164,20 @@ def serachorder(request):
 	return render_to_response('AllOrder.html', locals(),context_instance=RequestContext(request))
 
 def salehistory(request):
-	
-
+	salehistorylist=OrderList.objects.all()
+	totalvalue=0
+	scommission=2
+	for salehistory in salehistorylist:
+		totalvalue+=salehistory.CommodityID.SellPrice*salehistory.OrderAmount
+	print totalvalue
+	if request.method=='GET':
+		commission=request.GET.get('commission')
+		print totalvalue
+		if not (commission is None):
+			ctotalvalue=int(commission)*totalvalue/100
+			scommission=commission
+		else:
+			ctotalvalue=int(scommission)*totalvalue/100
 	return render_to_response('SaleHistory.html', locals(),context_instance=RequestContext(request))
 
 def backupdatabase(request):
@@ -180,3 +192,15 @@ def shopinfo(request):
 	except:
 		pass
 	return render_to_response('ShopInfo.html', locals(),context_instance=RequestContext(request))
+
+def top5(request):
+
+	return render_to_response('Top5.html', locals(),context_instance=RequestContext(request))
+
+def top10(request):
+
+	return render_to_response('Top10.html', locals(),context_instance=RequestContext(request))
+
+def commission(request):
+
+	return render_to_response('Commission.html', locals(),context_instance=RequestContext(request))

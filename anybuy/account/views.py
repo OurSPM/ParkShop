@@ -360,7 +360,7 @@ def salesHistory(request, time):
 					SalesHistoryList.append(sl)
 	totalvalue = 0
 	for shl in SalesHistoryList:
-		totalvalue = totalvalue + shl.CommodityID.SellPrice * shl.OrderAmount
+		totalvalue = totalvalue + shl.SellPrice * shl.OrderAmount
 
 	SalesHistoryList1 = []
 	for so in shopOrder:
@@ -369,7 +369,7 @@ def salesHistory(request, time):
 			SalesHistoryList1.append(sl)
 	totalvalue1 = 0
 	for shl1 in SalesHistoryList1:
-		totalvalue1 = totalvalue1 + shl1.CommodityID.SellPrice * shl1.OrderAmount
+		totalvalue1 = totalvalue1 + shl1.SellPrice * shl1.OrderAmount
 
 
 	seller = Seller.objects.get(id=UserID)
@@ -440,14 +440,14 @@ def removeOrderList(request):
 		co.CustomerOrderState = 1
 		co.save()
 		income = 0
-		income = income + ol.CommodityID.SellPrice * ol.OrderAmount
+		income = income + ol.SellPrice * ol.OrderAmount
 		incomeAmount = income * System.objects.get(id = 1).ComissionRate
 		tmp = Income.objects.get(id = 1)
 		tmp.IncomeAmount = tmp.IncomeAmount + incomeAmount
 		tmp.save()
 	else:
 		ol = None
-	return HttpResponse("You modified: "+ ol.CommodityID.CommodityName+"from Orderlist")
+	return HttpResponse("You modified: "+ ol.CommodityName+"from Orderlist")
 
 
 def refund(request):
@@ -502,7 +502,7 @@ def modifyOrderList1(request):
 		co.save()
 	else:
 		ol = None
-	return HttpResponse("You modified: "+ ol.CommodityID.CommodityName+"from Orderlist")
+	return HttpResponse("You modified: "+ ol.CommodityName+"from Orderlist")
 
 def modifyOrderList2(request):
 	if request.session.get('UserID', False):
@@ -526,7 +526,7 @@ def modifyOrderList2(request):
 		co.save()
 	else:
 		ol = None
-	return HttpResponse("You modified: "+ ol.CommodityID.CommodityName+"from Orderlist")
+	return HttpResponse("You modified: "+ ol.CommodityName+"from Orderlist")
 
 
 def adminIncome(request, time):
@@ -552,7 +552,7 @@ def adminIncome(request, time):
 		conserveorderList.append(ol)
 	totalvalue = 0
 	for shl in orderList:
-		totalvalue = totalvalue + shl.CommodityID.SellPrice * shl.OrderAmount
+		totalvalue = totalvalue + shl.SellPrice * shl.OrderAmount
 	rate = System.objects.get(id=1)
 	totalcomission = totalvalue * rate.ComissionRate
 	#adv income from shopAdv

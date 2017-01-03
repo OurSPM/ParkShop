@@ -3,6 +3,10 @@ from system.models import *
 
 # Register your models here.
 
+class CommodityReceiveAddressAdmin(admin.ModelAdmin):
+    list_display=('id','CommodityAddress','CustomerID','CommodityTelephone')
+    search_fields=('id','CommodityAddress')
+
 class HomeShopAdvAdmin(admin.ModelAdmin):
     list_display = ('id','ShopID', 'AdvertisementContent', 'ApplyState')
     search_fields = ('id', 'AdvertisementContent')
@@ -54,3 +58,4 @@ admin.site.register(Favorite)
 admin.site.register(CustomerOrder)
 admin.site.register(BlacklistCustomer)
 admin.site.register(Income)
+admin.site.register(CommodityReceiveAddress,CommodityReceiveAddressAdmin)

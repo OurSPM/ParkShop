@@ -48,6 +48,13 @@ class Shop(models.Model):
 	IsHomeAdv = models.BooleanField()
 	def __unicode__(self): 
 		return '%s %s' %(self.id, self.ShopName)
+class TopShop(models.Model):
+	ShopID=models.ForeignKey(Shop)
+	SellerID=models.ForeignKey(Seller)
+	IsTop=models.IntegerField(blank=True,null=True)
+	def __unicode__(self): 
+		return '%s %s %s %s' %(self.id, self.ShopID, self.SellerID,self.IsTop)
+
 
 class Commodity(models.Model):
 	CommodityTypeChoices=(
@@ -76,6 +83,14 @@ class Commodity(models.Model):
 	IsHomeAdv = models.BooleanField()
 	def __unicode__(self):
 		return '%s %s %s %s' %(self.id, self.CommodityName, self.CommodityType, self.CommodityAmount)
+
+class TopCommodity(models.Model):
+	CommodityID=models.ForeignKey(Commodity)
+	ShopID=models.ForeignKey(Shop)
+	IsTop=models.IntegerField(blank=True,null=True)
+	def __unicode__(self): 
+		return '%s %s %s %s' %(self.id, self.CommodityID, self.ShopID,self.IsTop)
+
 
 class Administrator(models.Model):
 	AdministratorAccount = models.CharField(max_length=64)
@@ -127,9 +142,8 @@ class System(models.Model):
 class BlacklistSeller(models.Model):
 	BlacklistSellerReason = models.TextField()
 	SellerID = models.ForeignKey(Seller)
-	AdministratorID = models.ForeignKey(Administrator)
 	def __unicode__(self):
-		return '%s %s' %(self.id, self.BlacklistSellerReason)
+		return '%s %s %s' %(self.id,self.SellerID ,self.BlacklistSellerReason)
 
 class Discount(models.Model):
 	DiscountRate = models.FloatField(blank=True)
@@ -231,7 +245,10 @@ class OrderList(models.Model):
 	ShopOrderID = models.ForeignKey(ShopOrder)
 	CustomerOrderID = models.ForeignKey(CustomerOrder)
 	CommodityAddressID=models.ForeignKey(CommodityReceiveAddress)
-	CommodityID = models.ForeignKey(Commodity)
+	CommodityName = models.CharField(max_length=64)
+	SellPrice = models.FloatField(blank=True)
+	CommodityImage = models.ImageField(upload_to='images',max_length=255,blank=True,null=True)
+
 	def __unicode__(self):
 		return '%s %s %s' %(self.id, self.OrderListDate, self.OrderListState)
 
@@ -260,10 +277,9 @@ class Favorite(models.Model):
 
 class BlacklistCustomer(models.Model):
 	BlacklistCustomerReason = models.TextField()
-	AdministratorID = models.ForeignKey(Administrator)
 	CustomerID = models.ForeignKey(Customer)
 	def __unicode__(self):
-		return '%s %s' %(self.id, self.BlacklistCustomerReason)
+		return '%s %s %s' %(self.id, self.CustomerID, self.BlacklistCustomerReason)
 
 class Income(models.Model):
 	IncomeAmount = models.FloatField()

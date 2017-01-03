@@ -54,17 +54,17 @@
 					</tr>
 				</thead>
 				{% for salesHistory in SalesHistoryList %}
-				<tr class="yanse" id="item{{salesHistory.CommodityID.id}}">
+				<tr class="yanse" id="item{{salesHistory.id}}">
 					<td>{{ salesHistory.id }}</td>
-					<td>{{ salesHistory.CommodityID.CommodityName }}</td>
+					<td>{{ salesHistory.CommodityName }}</td>
 					<td>{{ salesHistory.OrderListDate }}</td>
-					<td>{{ salesHistory.CommodityID.SellPrice }}HK$</td>
+					<td>{{ salesHistory.SellPrice }}HK$</td>
 					<td>{{ salesHistory.OrderAmount }}</td>
-					<td>{% widthratio salesHistory.CommodityID.SellPrice 1 salesHistory.OrderAmount %}HK$</td>
+					<td>{% widthratio salesHistory.SellPrice 1 salesHistory.OrderAmount %}HK$</td>
 					<td>Name:{{ salesHistory.CustomerOrderID.CustomerID.CustomerName}}<br>
-						Tel:{{ salesHistory.CustomerOrderID.CustomerID.CustomerTelephone}}<br>
+						Tel:{{ salesHistory.CommodityAddressID.CommodityTelephone}}<br>
 						Email:{{ salesHistory.CustomerOrderID.CustomerID.CustomerEmail}}<br>
-						Addr:{{ salesHistory.CustomerOrderID.CustomerID.CustomerAddress }}</td>
+						Addr:{{ salesHistory.CommodityAddressID.CommodityAddress }}</td>
 					{% if salesHistory.OrderListState == 0 %}
 					<td>paying</td>
 					{% endif %}
@@ -142,17 +142,17 @@
 					</tr>
 				</thead>
 				{% for salesHistory in SalesHistoryList1 %}
-				<tr class="yanse" id="item{{salesHistory.CommodityID.id}}">
+				<tr class="yanse" id="item{{salesHistory.id}}">
 					<td>{{ salesHistory.id }}</td>
-					<td>{{ salesHistory.CommodityID.CommodityName }}</td>
+					<td>{{ salesHistory.CommodityName }}</td>
 					<td>{{ salesHistory.OrderListDate }}</td>
-					<td>{{ salesHistory.CommodityID.SellPrice }}HK$</td>
+					<td>{{ salesHistory.SellPrice }}HK$</td>
 					<td>{{ salesHistory.OrderAmount }}</td>
-					<td>{% widthratio salesHistory.CommodityID.SellPrice 1 salesHistory.OrderAmount %}HK$</td>
+					<td>{% widthratio salesHistory.SellPrice 1 salesHistory.OrderAmount %}HK$</td>
 					<td>Name:{{ salesHistory.CustomerOrderID.CustomerID.CustomerName}}<br>
-						Tel:{{ salesHistory.CustomerOrderID.CustomerID.CustomerTelephone}}<br>
+						Tel:{{ salesHistory.CommodityAddressID.CommodityTelephone}}<br>
 						Email:{{ salesHistory.CustomerOrderID.CustomerID.CustomerEmail}}<br>
-						Addr:{{ salesHistory.CustomerOrderID.CustomerID.CustomerAddress }}</td>
+						Addr:{{ salesHistory.CommodityAddressID.CommodityAddress }}</td>
 					{% if salesHistory.OrderListState == 0 %}
 					<td>paying</td>
 					{% endif %}

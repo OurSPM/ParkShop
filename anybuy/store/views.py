@@ -246,7 +246,7 @@ def checkoutcart(request,cid):
     
     for commodity in commoditylist:
         print 'in for commoditylist'
-        orderlist = OrderList.objects.create(CommodityAddressID=AddressID,OrderListState=0, OrderListDate=date, OrderAmount = commodity.CartCommodityAmount, CustomerOrderID=cutomerorder, ShopOrderID=shoporder, CommodityID = commodity.CommodityID, )
+        orderlist = OrderList.objects.create(CommodityAddressID=AddressID,OrderListState=0, OrderListDate=date, OrderAmount = commodity.CartCommodityAmount, CustomerOrderID=cutomerorder, ShopOrderID=shoporder,CommodityName=commodity.CommodityID.CommodityName,SellPrice=commodity.CommodityID.SellPrice,CommodityImage=commodity.CommodityID.CommodityImage )
         print commodity.CommodityID
         try:
             print 'in try'
@@ -723,8 +723,7 @@ def apply_refund(request):
     else:
         UserID = None
         UserType = None
-        UserAccount = None
-    if 'id' in request.GET:
+        UserAccount = None    if 'id' in request.GET:
         ol = OrderList.objects.get(id = request.GET['id'])
         ol.OrderListState = 4
         ol.save()
