@@ -91,5 +91,9 @@ urlpatterns = patterns('',
     url(r'^top5/$', 'admin.views.top5'),
     url(r'^top10/$', 'admin.views.top10'),
     url(r'^commission/$', 'admin.views.commission'),
+    url(r'^delcblacklist/$', 'admin.views.delcblacklist'),
+    url(r'^delsblacklist/$', 'admin.views.delsblacklist'),
+    url(r'^addsblacklist/$', 'admin.views.addsblacklist'),
+    url(r'^addcblacklist/$', 'admin.views.addcblacklist'),
 
 )

@@ -14,7 +14,7 @@
 
     <style type="text/css">
         body {font-size: 20px;
-		font-size: 20px;
+        font-size: 20px;
             padding-bottom: 40px;
             background-color:#e9e7ef;
         }
@@ -35,40 +35,54 @@
     </style>
 </head>
 <body >
-<form class="form-inline definewidth m20" action="#" method="get">
-    <font color="#777777"><strong>SellerName：</strong></font>
-    <input type="text" name="sellerName" id="menuname"class="abc input-default" placeholder="" value="">&nbsp;&nbsp; 
-    <button type="submit" class="btn btn-primary">Query</button>&nbsp;&nbsp; 
-	<button type="button" class="btn btn-default"  id="addnew"><a href="videosAdd.html">Add</a></button>
-</form>
-<div><h3 style="text-align: center;color: #3a87ad">Seller BlackList</h3></div>
-<table class="table table-bordered table-hover definewidth m10">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>SellerName</th>
-        
-        <th>ShopName</th>
-        <th>Description</th>
-        
-        
-        
-        <th>Manage</th>
-    </tr>
-    </thead>
-	     
+    <form class="form-inline definewidth m20" action="#" method="get"> <font color="#777777"><strong>SellerName：</strong></font> 
+        <input type="text" name="sellerName" id="menuname"class="abc input-default" placeholder="" value="">
+        &nbsp;&nbsp;
+        <button type="submit" class="btn btn-primary">Query</button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-default"  id="addnew">
+            <a href="videosAdd.html">Add</a>
+        </button>
+    </form>
+    <div>
+        <h3 style="text-align: center;color: #3a87ad">Seller BlackList</h3>
+    </div>
+    <table class="table table-bordered table-hover definewidth m10">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>SellerAccount</th>
+
+                <th>SellerTelephone</th>
+                <th>SellerEmail</th>
+                <th>SellerName</th>
+            </tr>
+        </thead>
+        {% for seller in sellerlist%}
         <tr>
-        <form action="">
-                <td>1</td>
-                <td>hcm</td>
-                <td>hem de dian</td>
-                <td>haoduohaodongxi</td>
-                <td> <button class="btn btn-default" type="submit">Del</button></td>
-        </form>       
+
+            <td>{{seller.id}}</td>
+            <td>{{seller.SellerAccount}}</td>
+            <td>{{seller.SellerTelephone}}</td>
+            <td>{{seller.SellerEmail}}</td>
+            <td>{{seller.SellerName}}</td>
+
+            <td>
+            &nbsp;&nbsp;&nbsp;
+                <form action="/addsblacklist/" style="display: inline-block;">
+                    <input type="hidden" name="sellerId" value="{{seller.id}}">
+                    <button class="btn btn-default" type="submit">Del</button>
+                </form>
+                &nbsp;&nbsp;&nbsp;
+                <form action="/delsblacklist/" style="display: inline-block;">
+                    <input type="hidden" name="sellerId" value="{{seller.id}}">
+                    <button class="btn btn-default" type="submit">Del</button>
+                </form>
+            </td>
+
         </tr>
-           
-       
-       </table>
+        {% endfor %}
+    </table>
 
 </body>
 </html>

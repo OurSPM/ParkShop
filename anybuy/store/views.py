@@ -448,7 +448,7 @@ def buysHistory(request, time):
                     BuysHistoryList.append(sl)
     totalvalue = 0
     for shl in BuysHistoryList:
-        totalvalue = totalvalue + shl.CommodityID.SellPrice * shl.OrderAmount
+        totalvalue = totalvalue + shl.SellPrice * shl.OrderAmount
     return render_to_response('Customer_BuyHistory.html', locals())
 
 def manageAD(request):
@@ -723,7 +723,8 @@ def apply_refund(request):
     else:
         UserID = None
         UserType = None
-        UserAccount = None    if 'id' in request.GET:
+        UserAccount = None
+    if 'id' in request.GET:
         ol = OrderList.objects.get(id = request.GET['id'])
         ol.OrderListState = 4
         ol.save()
@@ -735,7 +736,7 @@ def apply_refund(request):
         co.save()
     else:
         ol = None
-    return HttpResponse("You modified: "+ ol.CommodityID.CommodityName+"from Orderlist")
+    return HttpResponse("You modified: "+ ol.CommodityName+"from Orderlist")
 
 def cancel_refund(request):
     if request.session.get('UserID', False):
@@ -759,7 +760,7 @@ def cancel_refund(request):
         co.save()
     else:
         ol = None
-    return HttpResponse("You modified: "+ ol.CommodityID.CommodityName+"from Orderlist")
+    return HttpResponse("You modified: "+ ol.CommodityName+"from Orderlist")
 
 def add_comment(request):
     if request.session.get('UserID', False):
@@ -782,10 +783,15 @@ def add_comment(request):
         co.CustomerOrderState = 8
         co.save()
         content = request.GET['content']
-        Comment.objects.create(CommentContent = content, CustomerID = ol.CustomerOrderID.CustomerID, CommodityID = ol.CommodityID)
+        try:
+            commodity=Commodity.objects.get(CommodityImage=ol.CommodityImage)
+        except:
+            print 'comment '
+            commodity=None
+        Comment.objects.create(CommentContent = content, CustomerID = ol.CustomerOrderID.CustomerID, CommodityID = commodity)
     else:
         ol = None
-    return HttpResponse("You comment: "+ ol.CommodityID.CommodityName+"from Orderlist")
+    return HttpResponse("You comment: "+ ol.CommodityName+"from Orderlist")
 
 def confirm(request):
     if request.session.get('UserID', False):
@@ -808,8 +814,13 @@ def confirm(request):
         co.CustomerOrderState = 7
         co.save()
         content = request.GET['content']
-        Comment.objects.create(CommentContent = content, CustomerID = ol.CustomerOrderID.CustomerID, CommodityID = ol.CommodityID)
+        try:
+            commodity=Commodity.objects.get(CommodityImage=ol.CommodityImage)
+        except:
+            print 'confirm '
+            commodity=None
+        Comment.objects.create(CommentContent = content, CustomerID = ol.CustomerOrderID.CustomerID, CommodityID = commodity)
     else:
         ol = None
-    return HttpResponse("You comment: "+ ol.CommodityID.CommodityName+"from Orderlist")
+    return HttpResponse("You comment: "+ ol.CommodityName+"from Orderlist")
 

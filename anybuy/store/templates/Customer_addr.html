@@ -14,7 +14,7 @@
 
 						<form class="form-horizontal" method = 'post' enctype="multipart/form-data">
 						{% csrf_token %}
-						<div class="form-group">
+						<!-- <div class="form-group">
 							<label for="id_Address" class="col-sm-2 control-label">
 								<input type="radio" name="cont" value="{{ rootAddr.CustomerAddress }}.{{rootAddr.CustomerTelephone}}"></label>
 							<div class="col-sm-6">
@@ -31,7 +31,7 @@
 								value="{{ rootAddr.CustomerTelephone }}"
 								readonly="true"
 								></div>
-						</div>
+						</div> -->
 						{% for addr in AddrList %}
 							<div class="form-group">
 								<label for="id_Address" class="col-sm-2 control-label">

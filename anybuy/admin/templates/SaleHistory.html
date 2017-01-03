@@ -79,7 +79,7 @@
         {% for saleshistory in salehistorylist %}
         <tr class="yanse" id="item{{saleshistory.CommodityID.id}}">
             <td>{{ saleshistory.id }}</td>
-            <td>{{ saleshistory.CommodityID.CommodityName }}</td>
+            <td>{{ saleshistory.CommodityName }}</td>
             <td>{{ saleshistory.OrderListDate }}</td>
             <td>{{ saleshistory.CommodityID.SellPrice }}HK$</td>
             <td>{{ saleshistory.OrderAmount }}</td>
@@ -89,11 +89,11 @@
             <td>
                 Name:{{ saleshistory.CustomerOrderID.CustomerID.CustomerName}}
                 <br>
-                Tel:{{ saleshistory.CustomerOrderID.CustomerID.CustomerTelephone}}
+                Tel:{{ saleshistory.CommodityAddressID.CommodityTelephone}}
                 <br>
                 Email:{{ saleshistory.CustomerOrderID.CustomerID.CustomerEmail}}
                 <br>
-                Addr:{{ saleshistory.CustomerOrderID.CustomerID.CustomerAddress }}
+                Addr:{{ saleshistory.CommodityAddressID.CommodityAddress }}
             </td>
             {% if saleshistory.OrderListState == 0 %}
             <td>paying</td>
@@ -130,9 +130,11 @@
     </table>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <b>Total Value: {{totalvalue}}HK$</b>
-    <br>
+    <br><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <b>Admin Income: {{ctotalvalue}}HK$</b>
-    <br>
+    <br><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <b>Admin commission: {{scommission}}%</b>
 </body>
 </html>

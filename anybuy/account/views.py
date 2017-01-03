@@ -90,6 +90,7 @@ def register(request):
 				request.session['UserType'] = cf.cleaned_data['identity']
 				request.session['UserAccount'] = cf.cleaned_data['CustomerAccount']
 				request.session['UserID'] = customer.id
+				return HttpResponseRedirect('login')
 				# return render_to_response('Homepage.html', locals(), context_instance=RequestContext(request))
 			else: 
 			#返回注册成功页面
@@ -261,15 +262,19 @@ def login(request):
 						request.session['UserType'] = uf.cleaned_data['identity']
 						request.session['UserAccount'] = UserAccount
 						request.session['UserID'] = user.id
+						IsBlack=BlacklistCustomer.objects.filter(CustomerID=user)
+						if len(IsBlack)!=0:
+							return render_to_response('blacklist.html')
 						#return render_to_response('Homepage.html', locals(), context_instance=RequestContext(request))
-						return HttpResponseRedirect('/index/')
+						else:
+							return HttpResponseRedirect('/index/')
 					elif user:
 						return render_to_response('cuole.html')
 					else:
 						wrongpw = True
 						return render_to_response('login.html', locals(), context_instance=RequestContext(request))
 				except:
-					pass
+					return HttpResponseRedirect('login/')
 			else:
 				try:
 					user = Seller.objects.get(SellerAccount__exact = UserAccount, SellerPassword__exact = UserPassword)
@@ -278,7 +283,11 @@ def login(request):
 						request.session['UserAccount'] = UserAccount
 						request.session['UserID'] = user.id
 						#return render_to_response('index.html',{'customer':user})
-						return HttpResponseRedirect('/seller/home')#sellerHomepage 代表entershop
+						IsBlack=BlacklistSeller.objects.filter(SellerID=user)
+						if len(IsBlack)!=0:
+							return render_to_response('blacklist.html')
+						else:
+							return HttpResponseRedirect('/seller/home')#sellerHomepage 代表entershop
 					elif user:
 						return render_to_response('cuole.html')
 					else:

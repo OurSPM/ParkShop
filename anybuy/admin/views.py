@@ -69,7 +69,15 @@ def authorzation(request):
 	# return render_to_response('AllShopOwner.html',locals(),context_instance=RequestContext(request))
 
 def sblacklist(request):
-    
+    sellerlist=Seller.objects.all()
+    return render_to_response('sBlackList.html', locals(),context_instance=RequestContext(request))
+
+def delsblacklist(request):
+    customerId=request.GET.get('sellerId')
+    return render_to_response('sBlackList.html', locals(),context_instance=RequestContext(request))
+
+def addsblacklist(request):
+    customerId=request.GET.get('sellerId')
     return render_to_response('sBlackList.html', locals(),context_instance=RequestContext(request))
 
 def allshopowner(request):
@@ -112,7 +120,20 @@ def approve(request):
     return render_to_response('Approve.html', locals(),context_instance=RequestContext(request))
 
 def cblacklist(request):
-    
+    customerlist=Customer.objects.all()
+    return render_to_response('cBlackList.html', locals(),context_instance=RequestContext(request))
+
+def delcblacklist(request):
+    customerId=request.GET.get('customerId')
+    return render_to_response('cBlackList.html', locals(),context_instance=RequestContext(request))
+
+def addcblacklist(request):
+    customerId=request.GET.get('customerId')
+    try:
+    	customer=Customer.objects.get(id=customerId)
+    	BlacklistCustomer.objects.create(BlacklistCustomerReason='no reason',CustomerID=customer)
+    except:
+    	print 'add blacklist'
     return render_to_response('cBlackList.html', locals(),context_instance=RequestContext(request))
 
 def allcustomer(request):
@@ -168,7 +189,7 @@ def salehistory(request):
 	totalvalue=0
 	scommission=2
 	for salehistory in salehistorylist:
-		totalvalue+=salehistory.CommodityID.SellPrice*salehistory.OrderAmount
+		totalvalue+=salehistory.SellPrice*salehistory.OrderAmount
 	print totalvalue
 	if request.method=='GET':
 		commission=request.GET.get('commission')
